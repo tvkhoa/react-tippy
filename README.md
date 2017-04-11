@@ -1,6 +1,8 @@
 ## React Tippy
 
-Tooltip for React, using tippy.js
+Tooltip for React,
+
+Powered by tippy.js Popper.js
 
 ![Example](https://raw.githubusercontent.com/tvkhoa/react-tippy/master/doc/doc.gif)
 
