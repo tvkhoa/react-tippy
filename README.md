@@ -38,8 +38,8 @@ import {
   position="bottom"
   trigger="click"
 >
-  <p className="App-intro">
-    To get started, edit <code>src/App.js</code> and save to reload.
+  <p>
+    Click here to show popup
   </p>
 </Tooltip>
 
@@ -57,7 +57,7 @@ import {
 
 
 const Header = () => (
-  <h2>Welcome to React with tooltip</h2>
+  <h2>Header here</h2>
 );
 
 const HeaderWithTootip = withTooltip(Header, {
@@ -81,7 +81,6 @@ const HeaderWithTootip = withTooltip(Header, {
 |animateFill|true|true false|Adds a material design-esque filling animation. This is disabled if you have arrow set to true.|
 |duration|400|Any integer >= 0 (milliseconds)|Specifies how long the transition animation takes to complete when showing a tooltip.|
 |hideDuration|duration|Any integer >= 0 (milliseconds)|Specifies how long the transition animation takes to complete when hiding a tooltip.|
-|html|false|false or a template id|Allows you to add HTML to a tooltip. See Creating HTML templates.|
 |theme|'dark'|'dark' 'light'|The CSS styling theme. You can add your own easily. See Creating themes.|
 |offset|0|Any number (pixels)|Offsets the tooltip on its opposite axis. For position top and bottom, it acts as offsetX. For position left and right, it acts as offsetY.|
 |hideOnClick|true|true false|Specifies whether to hide a tooltip upon clicking its element after hovering over.|
@@ -89,3 +88,30 @@ const HeaderWithTootip = withTooltip(Header, {
 |followCursor|false|true false|Specifies whether to follow the user's mouse cursor (mouse devices only).|
 |inertia|false|true false|Modifies the transition-timing-function with a cubic bezier to create a "slingshot" intertial effect.|
 |popperOptions|{}|Object|Allows more control over tooltip positioning and behavior. See right below.|
+|id|null|It is template id|Just only use when you want to add HTML to a tooltip.|
+|content|null|react element|Tooltip content. If you don't define content, the title will be used|
+
+## Custom html content
+
+You need to pass option `id` and `content`
+
+```javascript
+import {
+  withTooltip,
+} from 'react-tippy';
+
+
+<Tooltip
+  id="my-template-id"
+  content={(
+    <div>
+      <strong>
+        Troi oi
+      </strong>
+    </div>
+  )}
+>
+  // ...
+</Tooltip>
+
+```
