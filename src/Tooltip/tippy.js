@@ -2,7 +2,7 @@ import Popper from 'popper.js'
 
 /**!
     * @file tippy.js | Pure JS Tooltip Library
-    * @version 0.3.1
+    * @version 0.3.2
     * @license MIT
 */
 
@@ -613,7 +613,7 @@ class Tippy {
             let listeners = []
 
             settings.trigger.forEach(event => {
-                listeners = this._createTrigger(event, tooltippedEl, methods, listeners)
+                listeners = this._createTrigger(event, tooltippedEl, methods, listeners) || []
             })
 
             this._pushIntoTippyBus({

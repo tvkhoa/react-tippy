@@ -294,7 +294,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**!
     * @file tippy.js | Pure JS Tooltip Library
-    * @version 0.3.1
+    * @version 0.3.2
     * @license MIT
 */
 
@@ -925,7 +925,7 @@ var Tippy = function () {
                 var listeners = [];
 
                 settings.trigger.forEach(function (event) {
-                    listeners = _this4._createTrigger(event, tooltippedEl, methods, listeners);
+                    listeners = _this4._createTrigger(event, tooltippedEl, methods, listeners) || [];
                 });
 
                 _this4._pushIntoTippyBus({
