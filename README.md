@@ -115,3 +115,6 @@ import {
 </Tooltip>
 
 ```
+
+# License
+MIT. Also check Popper.js' license.
