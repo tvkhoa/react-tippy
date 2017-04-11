@@ -67,7 +67,7 @@ const HeaderWithTootip = withTooltip(Header, {
 ```
 
 
-## Options
+## Options for HOC, Props for Component
 
 |Settingsettings|Defaultremove|Optionssettings_input_component|Rolebuild|
 |--- |--- |--- |--- |
