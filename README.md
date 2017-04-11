@@ -66,3 +66,5 @@ const HeaderWithTootip = withTooltip(Header, {
 
 
 ## Options
+
+Same as options of tippyJS `https://atomiks.github.io/tippyjs/#all-settings`
