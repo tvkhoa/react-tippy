@@ -294,7 +294,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**!
     * @file tippy.js | Pure JS Tooltip Library
-    * @version 0.3.2
+    * @version 0.3.5
     * @license MIT
 */
 
@@ -314,7 +314,6 @@ var Tippy = function () {
             animateFill: true,
             arrow: false,
             delay: 0,
-            hideDelay: 0,
             trigger: 'mouseenter focus',
             duration: 400,
             hideDuration: 400,
@@ -445,7 +444,7 @@ var Tippy = function () {
 
         /**
         * Hides all poppers
-        * @param {Object} - ref
+        * @param {Object} - currentRef
         */
 
     }, {
@@ -453,17 +452,19 @@ var Tippy = function () {
         value: function _hideAllPoppers() {
             var _this = this;
 
-            var ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+            var currentRef = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
-            Tippy.bus.refs.forEach(function (r) {
+            Tippy.bus.refs.forEach(function (ref) {
                 // Don't hide already hidden ones
-                if (!document.body.contains(r.popper)) return;
+                if (!document.body.contains(ref.popper)) return;
 
-                if (!ref) {
-                    _this.hide(r.popper, r.settings.hideDuration);
+                if (!currentRef) {
+                    if (ref.settings.hideOnClick && ref.settings.hideOnClick !== 'persistent') {
+                        _this.hide(ref.popper, ref.settings.hideDuration);
+                    }
                 } else {
-                    if (r.popper !== ref.popper) {
-                        _this.hide(r.popper, r.settings.hideDuration);
+                    if (ref.popper !== currentRef.popper && ref.settings.hideOnClick && ref.settings.hideOnClick !== 'persistent') {
+                        _this.hide(ref.popper, ref.settings.hideDuration);
                     }
                 }
             });
@@ -552,7 +553,7 @@ var Tippy = function () {
                         return _this2._hideAllPoppers(_ref);
                     }
 
-                    // If hideOnClick is false or it's triggered by a click don't hide poppers
+                    // If hideOnClick is false or triggered by a click don't hide poppers
                     if (!_ref.settings.hideOnClick || _ref.settings.trigger.indexOf('click') !== -1) return;
                 }
 
@@ -607,6 +608,11 @@ var Tippy = function () {
         value: function _createPopperElement(title, settings) {
             var popper = document.createElement('div');
             popper.setAttribute('class', this.classNames.popper);
+
+            // Fix for iOS animateFill
+            if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
+                popper.classList.add('tippy-iOS-fix');
+            }
 
             var tooltip = document.createElement('div');
             tooltip.setAttribute('class', this.classNames.tooltip + ' ' + settings.theme + ' leave');
@@ -694,10 +700,6 @@ var Tippy = function () {
             if (!delay && delay !== 0) delay = this.settings.delay;
 
             // 0, '0'
-            var hideDelay = parseInt(el.getAttribute('data-hidedelay'));
-            if (!hideDelay && hideDelay !== 0) hideDelay = this.settings.hideDelay;
-
-            // 0, '0'
             var duration = parseInt(el.getAttribute('data-duration'));
             if (!duration && duration !== 0) duration = this.settings.duration;
 
@@ -739,7 +741,6 @@ var Tippy = function () {
                 animateFill: animateFill,
                 arrow: arrow,
                 delay: delay,
-                hideDelay: hideDelay,
                 trigger: trigger,
                 duration: duration,
                 hideDuration: hideDuration,
@@ -780,14 +781,7 @@ var Tippy = function () {
             };
 
             var hide = function hide() {
-                if (settings.hideDelay) {
-                    var hideDelay = setTimeout(function () {
-                        return _this3.hide(popper, settings.hideDuration);
-                    }, settings.hideDelay);
-                    popper.setAttribute('data-hidedelay', hideDelay);
-                } else {
-                    _this3.hide(popper, settings.hideDuration);
-                }
+                return _this3.hide(popper, settings.hideDuration);
             };
 
             var handleTrigger = function handleTrigger(event) {
@@ -798,7 +792,7 @@ var Tippy = function () {
                 }
 
                 // Toggle show/hide when clicking click-triggered tooltips
-                if (event.type === 'click' && popper.style.visibility === 'visible' && settings.hideOnClick) {
+                if (event.type === 'click' && popper.style.visibility === 'visible' && settings.hideOnClick !== 'persistent') {
                     return hide();
                 }
 
@@ -1003,8 +997,6 @@ var Tippy = function () {
 
             var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.defaultSettings.duration;
 
-            // Clear unwanted timeouts due to `hideDelay` setting
-            clearTimeout(popper.getAttribute('data-hidedelay'));
 
             // Already visible
             if (popper.style.visibility === 'visible') return;
@@ -1027,9 +1019,10 @@ var Tippy = function () {
                     ref.tooltippedEl.addEventListener('mousemove', this._followCursor);
                 }
             } else {
-                ref.instance.update();
                 ref.instance.enableEventListeners();
             }
+
+            ref.instance.update();
 
             // Repaint is required for CSS transition when appending
             getComputedStyle(tooltip).opacity;
@@ -1079,7 +1072,7 @@ var Tippy = function () {
         value: function hide(popper) {
             var _this6 = this;
 
-            var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.settings.hideDuration;
+            var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.settings.duration;
 
             // Clear unwanted timeouts due to `delay` setting
             clearTimeout(popper.getAttribute('data-delay'));
@@ -1097,16 +1090,8 @@ var Tippy = function () {
 
             ref.tooltippedEl.classList.remove('active');
 
-            tooltip.classList.add('leave');
-            tooltip.classList.remove('enter');
-
-            if (circle) {
-                circle.classList.add('leave');
-                circle.classList.remove('enter');
-            }
-
             // Use the same duration as the show if it's the default
-            if (duration === this.defaultSettings.hideDuration) {
+            if (duration === this.settings.duration) {
                 if (tooltip.style.transitionDuration) {
                     duration = parseInt(tooltip.style.transitionDuration.replace('ms', ''));
                 } else if (tooltip.style.WebkitTransitionDuration) {
@@ -1119,6 +1104,13 @@ var Tippy = function () {
                     circle.style.WebkitTransitionDuration = duration + 'ms';
                     circle.style.transitionDuration = duration + 'ms';
                 }
+            }
+
+            tooltip.classList.add('leave');
+            tooltip.classList.remove('enter');
+            if (circle) {
+                circle.classList.add('leave');
+                circle.classList.remove('enter');
             }
 
             // Re-focus tooltipped element if it's a HTML popover

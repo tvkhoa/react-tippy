@@ -2,7 +2,7 @@ import Popper from 'popper.js'
 
 /**!
     * @file tippy.js | Pure JS Tooltip Library
-    * @version 0.3.2
+    * @version 0.3.5
     * @license MIT
 */
 
@@ -20,7 +20,6 @@ class Tippy {
             animateFill: true,
             arrow: false,
             delay: 0,
-            hideDelay: 0,
             trigger: 'mouseenter focus',
             duration: 400,
             hideDuration: 400,
@@ -145,20 +144,28 @@ class Tippy {
 
     /**
     * Hides all poppers
-    * @param {Object} - ref
+    * @param {Object} - currentRef
     */
-    _hideAllPoppers(ref = null) {
-        Tippy.bus.refs.forEach(r => {
+    _hideAllPoppers(currentRef = null) {
+        Tippy.bus.refs.forEach(ref => {
             // Don't hide already hidden ones
-            if (!document.body.contains(r.popper)) return
+            if (!document.body.contains(ref.popper)) return
 
-            if (!ref) {
-                this.hide(r.popper, r.settings.hideDuration)
+            if (!currentRef) {
+                if (ref.settings.hideOnClick && ref.settings.hideOnClick !== 'persistent') {
+                    this.hide(ref.popper, ref.settings.hideDuration)
+                }
             } else {
-                if (r.popper !== ref.popper) {
-                    this.hide(r.popper, r.settings.hideDuration)
+                if (
+                    ref.popper !== currentRef.popper
+                    && ref.settings.hideOnClick
+                    && ref.settings.hideOnClick !== 'persistent'
+                    )
+                {
+                    this.hide(ref.popper, ref.settings.hideDuration)
                 }
             }
+
         })
     }
 
@@ -245,7 +252,7 @@ class Tippy {
                     return this._hideAllPoppers(ref)
                 }
 
-                // If hideOnClick is false or it's triggered by a click don't hide poppers
+                // If hideOnClick is false or triggered by a click don't hide poppers
                 if (!ref.settings.hideOnClick || ref.settings.trigger.indexOf('click') !== -1) return
             }
 
@@ -300,6 +307,11 @@ class Tippy {
     _createPopperElement(title, settings) {
         const popper = document.createElement('div')
         popper.setAttribute('class', this.classNames.popper)
+
+        // Fix for iOS animateFill
+        if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
+            popper.classList.add('tippy-iOS-fix')
+        }
 
         const tooltip = document.createElement('div')
         tooltip.setAttribute('class', `${this.classNames.tooltip} ${settings.theme} leave`)
@@ -385,10 +397,6 @@ class Tippy {
         if (!delay && delay !== 0) delay = this.settings.delay
 
         // 0, '0'
-        let hideDelay = parseInt(el.getAttribute('data-hidedelay'))
-        if (!hideDelay && hideDelay !== 0) hideDelay = this.settings.hideDelay
-
-        // 0, '0'
         let duration = parseInt(el.getAttribute('data-duration'))
         if (!duration && duration !== 0) duration = this.settings.duration
 
@@ -430,7 +438,6 @@ class Tippy {
             animateFill,
             arrow,
             delay,
-            hideDelay,
             trigger,
             duration,
             hideDuration,
@@ -467,17 +474,7 @@ class Tippy {
             }
         }
 
-        const hide = () => {
-            if (settings.hideDelay) {
-                const hideDelay = setTimeout(
-                    () => this.hide(popper, settings.hideDuration),
-                    settings.hideDelay
-                )
-                popper.setAttribute('data-hidedelay', hideDelay)
-            } else {
-                this.hide(popper, settings.hideDuration)
-            }
-        }
+        const hide = () => this.hide(popper, settings.hideDuration)
 
         const handleTrigger = event => {
 
@@ -490,7 +487,7 @@ class Tippy {
             if (
                 event.type === 'click'
                 && popper.style.visibility === 'visible'
-                && settings.hideOnClick
+                && settings.hideOnClick !== 'persistent'
                )
             {
                 return hide()
@@ -679,8 +676,6 @@ class Tippy {
     * @param {Number} - duration (optional)
     */
     show(popper, duration = this.defaultSettings.duration) {
-        // Clear unwanted timeouts due to `hideDelay` setting
-        clearTimeout(popper.getAttribute('data-hidedelay'))
 
         // Already visible
         if (popper.style.visibility === 'visible') return
@@ -703,9 +698,10 @@ class Tippy {
                 ref.tooltippedEl.addEventListener('mousemove', this._followCursor)
             }
         } else {
-            ref.instance.update()
             ref.instance.enableEventListeners()
         }
+
+        ref.instance.update()
 
         // Repaint is required for CSS transition when appending
         getComputedStyle(tooltip).opacity
@@ -749,7 +745,7 @@ class Tippy {
     * @param {DOMElement} - popper
     * @param {Number} - duration (optional)
     */
-    hide(popper, duration = this.settings.hideDuration) {
+    hide(popper, duration = this.settings.duration) {
         // Clear unwanted timeouts due to `delay` setting
         clearTimeout(popper.getAttribute('data-delay'))
 
@@ -766,16 +762,8 @@ class Tippy {
 
         ref.tooltippedEl.classList.remove('active')
 
-        tooltip.classList.add('leave')
-        tooltip.classList.remove('enter')
-
-        if (circle) {
-            circle.classList.add('leave')
-            circle.classList.remove('enter')
-        }
-
         // Use the same duration as the show if it's the default
-        if (duration === this.defaultSettings.hideDuration) {
+        if (duration === this.settings.duration) {
             if (tooltip.style.transitionDuration) {
                 duration = parseInt(tooltip.style.transitionDuration.replace('ms', ''))
             } else if (tooltip.style.WebkitTransitionDuration) {
@@ -788,6 +776,13 @@ class Tippy {
                 circle.style.WebkitTransitionDuration = duration + 'ms'
                 circle.style.transitionDuration = duration + 'ms'
             }
+        }
+
+        tooltip.classList.add('leave')
+        tooltip.classList.remove('enter')
+        if (circle) {
+            circle.classList.add('leave')
+            circle.classList.remove('enter')
         }
 
         // Re-focus tooltipped element if it's a HTML popover

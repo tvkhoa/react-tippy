@@ -1,6 +1,6 @@
 {
   "name": "react-tippy",
-  "version": "0.3.2-2",
+  "version": "0.3.5",
   "description": "React tippy",
   "main": "dist/react-tippy.js",
   "author": "Khoa Thai",
@@ -38,7 +38,7 @@
     "yargs": "^7.0.2"
   },
   "scripts": {
-    "build-lib": "webpack --config webpacklib.config.js --env build",
+    "build": "webpack --config webpacklib.config.js --env build",
     "start": "react-scripts start"
   },
   "dependencies": {
