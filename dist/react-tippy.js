@@ -137,6 +137,10 @@ var Tooltip = function (_Component) {
         followCursor: this.props.followCursor,
         inertia: this.props.inertia,
         popperOptions: this.props.popperOptions,
+        beforeShown: this.props.beforeShown,
+        shown: this.props.shown,
+        beforeHidden: this.props.beforeHidden,
+        hidden: this.props.hidden,
         html: this.props.id ? '#' + this.props.id : this.props.id
       });
     }
@@ -199,7 +203,11 @@ Tooltip.defaultProps = {
   multiple: false,
   followCursor: false,
   inertia: false,
-  popperOptions: {}
+  popperOptions: {},
+  beforeShown: function beforeShown() {},
+  shown: function shown() {},
+  beforeHidden: function beforeHidden() {},
+  hidden: function hidden() {}
 };
 
 exports.default = Tooltip;

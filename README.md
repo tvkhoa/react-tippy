@@ -90,6 +90,11 @@ const HeaderWithTootip = withTooltip(Header, {
 |popperOptions|{}|Object|Allows more control over tooltip positioning and behavior. See right below.|
 |id|null|It is template id|Just only use when you want to add HTML to a tooltip.|
 |content|null|react element|Tooltip content. If you don't define content, the title will be used|
+|beforeShown|noop|function|Callback before show
+|shown|noop|function|Callback after show
+|beforeHidden|noop|function|Callback before hide
+|hidden|noop|function|Callback after hide
+
 
 ## Custom html content
 
@@ -115,6 +120,7 @@ import {
 </Tooltip>
 
 ```
+
 
 # License
 MIT. Also check Popper.js' license.

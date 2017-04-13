@@ -23,6 +23,10 @@ class Tooltip extends Component {
       followCursor: this.props.followCursor,
       inertia: this.props.inertia,
       popperOptions: this.props.popperOptions,
+      beforeShown: this.props.beforeShown,
+      shown: this.props.shown,
+      beforeHidden: this.props.beforeHidden,
+      hidden: this.props.hidden,
       html: this.props.id ? `#${this.props.id}` : this.props.id,
     });
   }
@@ -71,7 +75,11 @@ Tooltip.defaultProps = {
   multiple: false,
   followCursor: false,
   inertia: false,
-  popperOptions: {}
+  popperOptions: {},
+  beforeShown: () => {},
+  shown: () => {},
+  beforeHidden: () => {},
+  hidden: () => {},
 };
 
 export default Tooltip;
