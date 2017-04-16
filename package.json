@@ -1,6 +1,6 @@
 {
   "name": "react-tippy",
-  "version": "0.4.0",
+  "version": "0.4.0-1",
   "description": "React tippy",
   "main": "dist/react-tippy.js",
   "author": "Khoa Thai",
@@ -43,6 +43,6 @@
     "start": "react-scripts start"
   },
   "dependencies": {
-    "popper.js": "^1.0.8"
+    "popper.js": "^1.5.1"
   }
 }
