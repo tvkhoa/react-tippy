@@ -18,9 +18,14 @@ class Tooltip extends Component {
     this.destroyTippy();
   }
 
-  componentDidUpdate() {
-    this.destroyTippy();
-    this.initTippy();
+  componentDidUpdate(prevProps) {
+    if (this.props.html !== prevProps.html && this.props.interactive === true){
+      const popper = this.tippy.getPopperElement(this.tooltipDOM);
+      this.tippy.updateForReact(popper, this.props.html);
+    } else {
+      this.destroyTippy();
+      this.initTippy();
+    }
   }
 
   _initTippy() {
@@ -47,29 +52,23 @@ class Tooltip extends Component {
       shown: this.props.shown,
       beforeHidden: this.props.beforeHidden,
       hidden: this.props.hidden,
-      html: this.props.id ? `#${this.props.id}` : this.props.id,
     });
+    if (this.props.html) {
+      const popper = this.tippy.getPopperElement(this.tooltipDOM);
+      this.tippy.updateForReact(popper, this.props.html);
+    }
   }
 
   _destroyTippy() {
     const popper = this.tippy.getPopperElement(this.tooltipDOM);
+    this.tippy.hide(popper, 0);
     this.tippy.destroy(popper);
   }
 
   render() {
-    const { id, content } = this.props;
     return (
-      <div>
-        <div
-          ref={(tooltip) => { this.tooltipDOM = tooltip; }}
-        >
-          {this.props.children}
-        </div>
-        { id && (
-          <div id={id} style={{display: 'none'}}>
-            { content }
-          </div>
-        )}
+      <div ref={(tooltip) => { this.tooltipDOM = tooltip; }}>
+        {this.props.children}
       </div>
     );
   }
@@ -77,7 +76,7 @@ class Tooltip extends Component {
 
 
 Tooltip.defaultProps = {
-  html: false,
+  html: null,
   position: 'top',
   animation: 'shift',
   animateFill: true,

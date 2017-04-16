@@ -1,5 +1,5 @@
 import Popper from 'popper.js'
-
+import ReactDOM from 'react-dom';
 /**!
     * @file tippy.js | Pure JS Tooltip Library
     * @version 0.3.5
@@ -668,6 +668,21 @@ class Tippy {
         } catch (e) {
             throw new Error('[Tippy error]: Element does not exist in any Tippy instances')
         }
+    }
+
+    /**
+    * Update a popper
+    * @param {DOMElement} - popper
+    */
+    updateForReact(popper, content) {
+      const ref = Tippy.bus.refs[Tippy.bus.poppers.indexOf(popper)]
+      const tooltip = popper.querySelector(`.${this.classNames.tooltip}`)
+      ref.settings.content = content
+      ref.instance.update()
+      ReactDOM.render(
+        content,
+        tooltip,
+      );
     }
 
     /**

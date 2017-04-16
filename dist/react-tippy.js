@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"), require("popper.js"));
+		module.exports = factory(require("react"), require("popper.js"), require("react-dom"));
 	else if(typeof define === 'function' && define.amd)
-		define("reactTippy", ["react", "popper.js"], factory);
+		define("reactTippy", ["react", "popper.js", "react-dom"], factory);
 	else if(typeof exports === 'object')
-		exports["reactTippy"] = factory(require("react"), require("popper.js"));
+		exports["reactTippy"] = factory(require("react"), require("popper.js"), require("react-dom"));
 	else
-		root["reactTippy"] = factory(root["React"], root["Popper"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_5__) {
+		root["reactTippy"] = factory(root["React"], root["Popper"], root["ReactDOM"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_6__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -132,9 +132,14 @@ var Tooltip = function (_Component) {
     }
   }, {
     key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      this.destroyTippy();
-      this.initTippy();
+    value: function componentDidUpdate(prevProps) {
+      if (this.props.html !== prevProps.html && this.props.interactive === true) {
+        var popper = this.tippy.getPopperElement(this.tooltipDOM);
+        this.tippy.updateForReact(popper, this.props.html);
+      } else {
+        this.destroyTippy();
+        this.initTippy();
+      }
     }
   }, {
     key: '_initTippy',
@@ -161,14 +166,18 @@ var Tooltip = function (_Component) {
         beforeShown: this.props.beforeShown,
         shown: this.props.shown,
         beforeHidden: this.props.beforeHidden,
-        hidden: this.props.hidden,
-        html: this.props.id ? '#' + this.props.id : this.props.id
+        hidden: this.props.hidden
       });
+      if (this.props.html) {
+        var popper = this.tippy.getPopperElement(this.tooltipDOM);
+        this.tippy.updateForReact(popper, this.props.html);
+      }
     }
   }, {
     key: '_destroyTippy',
     value: function _destroyTippy() {
       var popper = this.tippy.getPopperElement(this.tooltipDOM);
+      this.tippy.hide(popper, 0);
       this.tippy.destroy(popper);
     }
   }, {
@@ -176,27 +185,12 @@ var Tooltip = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var _props = this.props,
-          id = _props.id,
-          content = _props.content;
-
       return _react2.default.createElement(
         'div',
-        null,
-        _react2.default.createElement(
-          'div',
-          {
-            ref: function ref(tooltip) {
-              _this2.tooltipDOM = tooltip;
-            }
-          },
-          this.props.children
-        ),
-        id && _react2.default.createElement(
-          'div',
-          { id: id, style: { display: 'none' } },
-          content
-        )
+        { ref: function ref(tooltip) {
+            _this2.tooltipDOM = tooltip;
+          } },
+        this.props.children
       );
     }
   }]);
@@ -205,7 +199,7 @@ var Tooltip = function (_Component) {
 }(_react.Component);
 
 Tooltip.defaultProps = {
-  html: false,
+  html: null,
   position: 'top',
   animation: 'shift',
   animateFill: true,
@@ -314,6 +308,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _popper = __webpack_require__(5);
 
 var _popper2 = _interopRequireDefault(_popper);
+
+var _reactDom = __webpack_require__(6);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -675,7 +673,6 @@ var Tippy = function () {
                 popper.classList.add('html-template');
                 popper.setAttribute('tabindex', '0');
                 tooltip.setAttribute('data-template-id', settings.html);
-                console.log(settings.html);
             } else {
                 content.innerHTML = title;
             }
@@ -1013,6 +1010,21 @@ var Tippy = function () {
         }
 
         /**
+        * Update a popper
+        * @param {DOMElement} - popper
+        */
+
+    }, {
+        key: 'updateForReact',
+        value: function updateForReact(popper, content) {
+            var ref = Tippy.bus.refs[Tippy.bus.poppers.indexOf(popper)];
+            var tooltip = popper.querySelector('.' + this.classNames.tooltip);
+            ref.settings.content = content;
+            ref.instance.update();
+            _reactDom2.default.render(content, tooltip);
+        }
+
+        /**
         * Shows a popper
         * @param {DOMElement} - popper
         * @param {Number} - duration (optional)
@@ -1206,6 +1218,12 @@ module.exports = Tippy;
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_6__;
 
 /***/ })
 /******/ ]);

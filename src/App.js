@@ -11,11 +11,11 @@ import {
 } from './Tooltip';
 
 const NormalHeader = () => (
-  <h2>Welcome to React - normal </h2>
+  <h2>Normal component</h2>
 );
 
 const Header = () => (
-  <h2>Welcome to React with tooltip</h2>
+  <h2>Component with tooltip</h2>
 );
 
 const HeaderWithTootip = withTooltip(Header, {
@@ -28,14 +28,15 @@ class App extends Component {
       tooltipContent,
       setTooltipContent,
     } = this.props;
-    const that = this;
     return (
       <div className="App">
         <div className="App-header" onClick={() => {setTooltipContent('Aloha')}}>
           <img src={logo} className="App-logo" alt="logo" />
         </div>
         <NormalHeader />
+        <hr />
         <HeaderWithTootip />
+        <hr />
         <Tooltip
           title={tooltipContent}
           position="bottom"
@@ -43,36 +44,27 @@ class App extends Component {
           followCursor
         >
           <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
+            Tooltip with dynamic content: {tooltipContent}
           </p>
         </Tooltip>
-
-        <input
-          type="text"
-          value={tooltipContent}
-          onChange={(e) => {setTooltipContent(e.target.value)}}
-        />
-
+        <hr />
         <Tooltip
-          id="my-template-id"
           arrow
           trigger="click"
-          hideOnClick={false}
-          content={(
+          interactive
+          html={(
             <div>
+              <p>{tooltipContent}</p>
               <input
                 type="text"
                 value={tooltipContent}
-                onChange={(e) => {console.log(e.target.value);}}
+                onChange={(e) => {setTooltipContent(e.target.value)}}
               />
             </div>
           )}
         >
           <p className="App-intro">
-            Click to show
-          </p>
-          <p className="App-intro">
-            {tooltipContent}
+            Interactive tooltip
           </p>
         </Tooltip>
       </div>

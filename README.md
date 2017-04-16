@@ -88,8 +88,7 @@ const HeaderWithTootip = withTooltip(Header, {
 |followCursor|false|true false|Specifies whether to follow the user's mouse cursor (mouse devices only).|
 |inertia|false|true false|Modifies the transition-timing-function with a cubic bezier to create a "slingshot" intertial effect.|
 |popperOptions|{}|Object|Allows more control over tooltip positioning and behavior. See right below.|
-|id|null|It is template id|Just only use when you want to add HTML to a tooltip.|
-|content|null|react element|Tooltip content. If you don't define content, the title will be used|
+|html|null|react element|Tooltip content. If you don't define html, the title will be used|
 |beforeShown|noop|function|Callback before show
 |shown|noop|function|Callback after show
 |beforeHidden|noop|function|Callback before hide
@@ -107,8 +106,7 @@ import {
 
 
 <Tooltip
-  id="my-template-id"
-  content={(
+  html={(
     <div>
       <strong>
         Troi oi
@@ -119,6 +117,28 @@ import {
   // ...
 </Tooltip>
 
+```
+
+## Interactive html tooltip
+You can use `interactive` prop and `html` for your interactive tooltip
+
+```javascript
+  <Tooltip
+    trigger="click"
+    interactive
+    html={(
+      <div>
+        <p>{tooltipContent}</p>
+        <input
+          type="text"
+          value={tooltipContent}
+          onChange={(e) => {setTooltipContent(e.target.value)}}
+        />
+      </div>
+    )}
+  >
+    ...
+  </Tooltip>
 ```
 
 
