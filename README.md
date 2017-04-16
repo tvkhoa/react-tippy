@@ -71,6 +71,7 @@ const HeaderWithTootip = withTooltip(Header, {
 
 |Settingsettings|Defaultremove|Optionssettings_input_component|Rolebuild|
 |--- |--- |--- |--- |
+|disabled|false|boolean|Show or not show tooltip|
 |position|'top'|'top' 'bottom' 'left' 'right'|Specifies which direction to position the tooltip on the element.|
 |trigger|'mouseenter focus'|'mouseenter' 'focus' 'click' 'manual'|Specifies which type of events will trigger a tooltip to show. Separate each by a space. mouseenter is for hovering and touch on mobile, and focus is for keyboard navigation. Use manual if you want to show/hide the tooltip manually/programmatically (see below).|
 |interactive|false|true false|Makes a tooltip interactive, i.e. will not close when the user hovers over or clicks on the tooltip. This lets you create a popover (similar to Bootstrap) when used in conjunction with a click trigger.|

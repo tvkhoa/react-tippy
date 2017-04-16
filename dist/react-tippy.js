@@ -137,40 +137,46 @@ var Tooltip = function (_Component) {
         var popper = this.tippy.getPopperElement(this.tooltipDOM);
         this.tippy.updateForReact(popper, this.props.html);
       } else {
-        this.destroyTippy();
+        if (this.tippy) {
+          this.destroyTippy();
+        }
         this.initTippy();
       }
     }
   }, {
     key: '_initTippy',
     value: function _initTippy() {
-      this.tooltipDOM.setAttribute('title', this.props.title);
-      this.tippy = new _tippy2.default(this.tooltipDOM, {
-        position: this.props.position,
-        animation: this.props.animation,
-        animateFill: this.props.animateFill,
-        arrow: this.props.arrow,
-        delay: this.props.delay,
-        hideDelay: this.props.hideDelay,
-        trigger: this.props.trigger,
-        duration: this.props.duration,
-        hideDuration: this.props.hideDuration,
-        interactive: this.props.interactive,
-        theme: this.props.theme,
-        offset: this.props.offset,
-        hideOnClick: this.props.hideOnClick,
-        multiple: this.props.multiple,
-        followCursor: this.props.followCursor,
-        inertia: this.props.inertia,
-        popperOptions: this.props.popperOptions,
-        beforeShown: this.props.beforeShown,
-        shown: this.props.shown,
-        beforeHidden: this.props.beforeHidden,
-        hidden: this.props.hidden
-      });
-      if (this.props.html) {
-        var popper = this.tippy.getPopperElement(this.tooltipDOM);
-        this.tippy.updateForReact(popper, this.props.html);
+      if (!this.props.disabled) {
+        this.tooltipDOM.setAttribute('title', this.props.title);
+        this.tippy = new _tippy2.default(this.tooltipDOM, {
+          position: this.props.position,
+          animation: this.props.animation,
+          animateFill: this.props.animateFill,
+          arrow: this.props.arrow,
+          delay: this.props.delay,
+          hideDelay: this.props.hideDelay,
+          trigger: this.props.trigger,
+          duration: this.props.duration,
+          hideDuration: this.props.hideDuration,
+          interactive: this.props.interactive,
+          theme: this.props.theme,
+          offset: this.props.offset,
+          hideOnClick: this.props.hideOnClick,
+          multiple: this.props.multiple,
+          followCursor: this.props.followCursor,
+          inertia: this.props.inertia,
+          popperOptions: this.props.popperOptions,
+          beforeShown: this.props.beforeShown,
+          shown: this.props.shown,
+          beforeHidden: this.props.beforeHidden,
+          hidden: this.props.hidden
+        });
+        if (this.props.html) {
+          var popper = this.tippy.getPopperElement(this.tooltipDOM);
+          this.tippy.updateForReact(popper, this.props.html);
+        }
+      } else {
+        this.tippy = null;
       }
     }
   }, {
@@ -220,7 +226,8 @@ Tooltip.defaultProps = {
   beforeShown: function beforeShown() {},
   shown: function shown() {},
   beforeHidden: function beforeHidden() {},
-  hidden: function hidden() {}
+  hidden: function hidden() {},
+  disabled: false
 };
 
 exports.default = Tooltip;

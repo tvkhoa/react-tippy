@@ -27,10 +27,12 @@ class App extends Component {
     const {
       tooltipContent,
       setTooltipContent,
+      disabled,
+      setDisabled,
     } = this.props;
     return (
       <div className="App">
-        <div className="App-header" onClick={() => {setTooltipContent('Aloha')}}>
+        <div className="App-header" onClick={() => {setDisabled(!disabled)}}>
           <img src={logo} className="App-logo" alt="logo" />
         </div>
         <NormalHeader />
@@ -42,6 +44,7 @@ class App extends Component {
           position="bottom"
           inertia
           followCursor
+          disabled={disabled}
         >
           <p className="App-intro">
             Tooltip with dynamic content: {tooltipContent}
@@ -74,6 +77,7 @@ class App extends Component {
 
 const enhance = compose(
   withState('tooltipContent', 'setTooltipContent', 'tooltipContent'),
+  withState('disabled', 'setDisabled', false),
 );
 
 export default enhance(App);
