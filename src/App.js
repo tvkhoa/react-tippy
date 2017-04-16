@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import {
+  compose,
+  withState,
+} from 'recompose';
 import logo from './logo.svg';
 import './App.css';
 import {
@@ -20,41 +24,55 @@ const HeaderWithTootip = withTooltip(Header, {
 
 class App extends Component {
   render() {
+    const {
+      tooltipContent,
+      setTooltipContent,
+    } = this.props;
+    const that = this;
     return (
       <div className="App">
-        <div className="App-header">
+        <div className="App-header" onClick={() => {setTooltipContent('Aloha')}}>
           <img src={logo} className="App-logo" alt="logo" />
         </div>
         <NormalHeader />
         <HeaderWithTootip />
         <Tooltip
-          title="Welcome to React"
+          title={tooltipContent}
           position="bottom"
-          trigger="click"
+          inertia
+          followCursor
         >
           <p className="App-intro">
             To get started, edit <code>src/App.js</code> and save to reload.
           </p>
         </Tooltip>
 
+        <input
+          type="text"
+          value={tooltipContent}
+          onChange={(e) => {setTooltipContent(e.target.value)}}
+        />
+
         <Tooltip
           id="my-template-id"
-          inertia
-          followCursor
           arrow
+          trigger="click"
+          hideOnClick={false}
           content={(
             <div>
-              <strong>
-                Troi oi
-              </strong>
+              <input
+                type="text"
+                value={tooltipContent}
+                onChange={(e) => {console.log(e.target.value);}}
+              />
             </div>
           )}
         >
           <p className="App-intro">
-            2
+            Click to show
           </p>
           <p className="App-intro">
-            3
+            {tooltipContent}
           </p>
         </Tooltip>
       </div>
@@ -62,4 +80,8 @@ class App extends Component {
   }
 }
 
-export default App;
+const enhance = compose(
+  withState('tooltipContent', 'setTooltipContent', 'tooltipContent'),
+);
+
+export default enhance(App);

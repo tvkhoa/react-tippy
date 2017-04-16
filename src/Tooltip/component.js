@@ -4,7 +4,27 @@ import Tippy from './tippy';
 // title
 
 class Tooltip extends Component {
+  constructor(props) {
+    super(props);
+    this.initTippy = this._initTippy.bind(this);
+    this.destroyTippy = this._destroyTippy.bind(this);
+  }
+
   componentDidMount() {
+    this.initTippy();
+  }
+
+  componentWillUnmount() {
+    this.destroyTippy();
+  }
+
+  componentDidUpdate() {
+    this.destroyTippy();
+    this.initTippy();
+  }
+
+  _initTippy() {
+    this.tooltipDOM.setAttribute('title', this.props.title);
     this.tippy = new Tippy(this.tooltipDOM, {
       position: this.props.position,
       animation: this.props.animation,
@@ -31,17 +51,16 @@ class Tooltip extends Component {
     });
   }
 
-  componentWillUnmount() {
+  _destroyTippy() {
     const popper = this.tippy.getPopperElement(this.tooltipDOM);
     this.tippy.destroy(popper);
   }
 
   render() {
-    const { title, id, content } = this.props;
+    const { id, content } = this.props;
     return (
       <div>
         <div
-          title={title}
           ref={(tooltip) => { this.tooltipDOM = tooltip; }}
         >
           {this.props.children}

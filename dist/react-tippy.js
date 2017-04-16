@@ -110,15 +110,36 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Tooltip = function (_Component) {
   _inherits(Tooltip, _Component);
 
-  function Tooltip() {
+  function Tooltip(props) {
     _classCallCheck(this, Tooltip);
 
-    return _possibleConstructorReturn(this, (Tooltip.__proto__ || Object.getPrototypeOf(Tooltip)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Tooltip.__proto__ || Object.getPrototypeOf(Tooltip)).call(this, props));
+
+    _this.initTippy = _this._initTippy.bind(_this);
+    _this.destroyTippy = _this._destroyTippy.bind(_this);
+    return _this;
   }
 
   _createClass(Tooltip, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      this.initTippy();
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.destroyTippy();
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      this.destroyTippy();
+      this.initTippy();
+    }
+  }, {
+    key: '_initTippy',
+    value: function _initTippy() {
+      this.tooltipDOM.setAttribute('title', this.props.title);
       this.tippy = new _tippy2.default(this.tooltipDOM, {
         position: this.props.position,
         animation: this.props.animation,
@@ -145,8 +166,8 @@ var Tooltip = function (_Component) {
       });
     }
   }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
+    key: '_destroyTippy',
+    value: function _destroyTippy() {
       var popper = this.tippy.getPopperElement(this.tooltipDOM);
       this.tippy.destroy(popper);
     }
@@ -156,7 +177,6 @@ var Tooltip = function (_Component) {
       var _this2 = this;
 
       var _props = this.props,
-          title = _props.title,
           id = _props.id,
           content = _props.content;
 
@@ -166,7 +186,6 @@ var Tooltip = function (_Component) {
         _react2.default.createElement(
           'div',
           {
-            title: title,
             ref: function ref(tooltip) {
               _this2.tooltipDOM = tooltip;
             }
@@ -656,6 +675,7 @@ var Tippy = function () {
                 popper.classList.add('html-template');
                 popper.setAttribute('tabindex', '0');
                 tooltip.setAttribute('data-template-id', settings.html);
+                console.log(settings.html);
             } else {
                 content.innerHTML = title;
             }

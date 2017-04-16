@@ -34,6 +34,7 @@
     "react": "^15.5.3",
     "react-dom": "^15.5.3",
     "react-scripts": "0.9.5",
+    "recompose": "^0.23.1",
     "webpack": "^2.3.0",
     "yargs": "^7.0.2"
   },
