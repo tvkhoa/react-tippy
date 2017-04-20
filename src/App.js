@@ -55,6 +55,7 @@ class App extends Component {
           arrow
           trigger="click"
           interactive
+          position="bottom"
           html={(
             <div>
               <p>{tooltipContent}</p>

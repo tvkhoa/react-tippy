@@ -73,7 +73,11 @@ class Tooltip extends Component {
 
   render() {
     return (
-      <div ref={(tooltip) => { this.tooltipDOM = tooltip; }}>
+      <div
+        ref={(tooltip) => { this.tooltipDOM = tooltip; }}
+        className={this.props.className}
+        styles={this.props.styles}
+      >
         {this.props.children}
       </div>
     );
@@ -105,6 +109,8 @@ Tooltip.defaultProps = {
   beforeHidden: () => {},
   hidden: () => {},
   disabled: false,
+  className: '',
+  styles: {},
 };
 
 export default Tooltip;
