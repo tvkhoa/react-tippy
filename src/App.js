@@ -44,10 +44,13 @@ class App extends Component {
           position="bottom"
           inertia
           followCursor
+          size="big"
+          arrow
+          arrowSize="big"
           disabled={disabled}
         >
           <p className="App-intro">
-            Tooltip with dynamic content: {tooltipContent}
+            Big Tooltip with dynamic content: {tooltipContent}
           </p>
         </Tooltip>
         <hr />
