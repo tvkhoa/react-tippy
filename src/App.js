@@ -55,10 +55,10 @@ class App extends Component {
         </Tooltip>
         <hr />
         <Tooltip
-          arrow
           trigger="click"
           interactive
           position="bottom"
+          animateFill={false}
           html={(
             <div>
               <p>{tooltipContent}</p>

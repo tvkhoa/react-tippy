@@ -200,7 +200,7 @@ var Tooltip = function (_Component) {
             _this2.tooltipDOM = tooltip;
           },
           className: this.props.className,
-          styles: this.props.styles
+          style: this.props.style
         },
         this.props.children
       );
@@ -237,7 +237,7 @@ Tooltip.defaultProps = {
   arrowSize: 'regular',
   size: 'regular',
   className: '',
-  styles: {}
+  style: {}
 };
 
 exports.default = Tooltip;
@@ -1093,12 +1093,13 @@ var Tippy = function () {
 
     }, {
         key: 'updateForReact',
-        value: function updateForReact(popper, content) {
+        value: function updateForReact(popper, updatedContent) {
             var ref = STORE.refs[STORE.poppers.indexOf(popper)];
-            var tooltip = popper.querySelector(SELECTORS.tooltip);
-            ref.settings.content = content;
+            var tooltipContent = popper.querySelector(SELECTORS.content);
+
             ref.instance.update();
-            _reactDom2.default.render(content, tooltip);
+
+            _reactDom2.default.render(updatedContent, tooltipContent);
         }
 
         /**

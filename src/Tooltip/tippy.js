@@ -765,14 +765,15 @@ export default class Tippy {
     * @param {DOMElement} - popper
     * @param {ReactElement} - content
     */
-    updateForReact(popper, content) {
+    updateForReact(popper, updatedContent) {
       const ref = STORE.refs[STORE.poppers.indexOf(popper)]
-      const tooltip = popper.querySelector(SELECTORS.tooltip)
-      ref.settings.content = content
+      const tooltipContent = popper.querySelector(SELECTORS.content)
+
       ref.instance.update()
+
       ReactDOM.render(
-        content,
-        tooltip,
+        updatedContent,
+        tooltipContent,
       );
     }
 

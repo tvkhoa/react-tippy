@@ -78,7 +78,7 @@ class Tooltip extends Component {
       <div
         ref={(tooltip) => { this.tooltipDOM = tooltip; }}
         className={this.props.className}
-        styles={this.props.styles}
+        style={this.props.style}
       >
         {this.props.children}
       </div>
@@ -114,7 +114,7 @@ Tooltip.defaultProps = {
   arrowSize: 'regular',
   size: 'regular',
   className: '',
-  styles: {},
+  style: {},
 };
 
 export default Tooltip;

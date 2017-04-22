@@ -92,10 +92,12 @@ const HeaderWithTootip = withTooltip(Header, {
 |popperOptions|{}|Object|Allows more control over tooltip positioning and behavior. See right below.|
 |html|null|react element|Tooltip content. If you don't define html, the title will be used|
 |size|'regular'|'small' 'regular' 'big'|Specifies how big the tooltip is.|
-|beforeShown|noop|function|Callback before show
-|shown|noop|function|Callback after show
-|beforeHidden|noop|function|Callback before hide
-|hidden|noop|function|Callback after hide
+|beforeShown|noop|function|Callback before show|
+|shown|noop|function|Callback after show|
+|beforeHidden|noop|function|Callback before hide|
+|hidden|noop|function|Callback after hide|
+|className|''|string|className of container|
+|style|{}|React inline style (object)|style of container|
 
 
 ## Custom html content
