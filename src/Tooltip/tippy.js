@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 /**!
 * @file tippy.js | Pure JS Tooltip Library
-* @version 0.6.1
+* @version 0.7.0
 * @license MIT
 */
 
@@ -26,9 +26,10 @@ const DEFAULTS = {
     arrow: false,
     arrowSize: 'regular',
     delay: 0,
+    hideDelay: 0,
     trigger: 'mouseenter focus',
-    duration: 400,
-    hideDuration: 400,
+    duration: 375,
+    hideDuration: 375,
     interactive: false,
     theme: 'dark',
     size: 'regular',
@@ -37,6 +38,7 @@ const DEFAULTS = {
     multiple: false,
     followCursor: false,
     inertia: false,
+    transitionFlip: true,
     popperOptions: {}
 }
 
@@ -88,8 +90,9 @@ function handleDocumentClick(event) {
         ) return
     }
 
-    // Don't trigger a hide for tippy controllers
-    if (!closest(event.target, SELECTORS.controller)) {
+    // Don't trigger a hide for tippy controllers, and don't needlessly run loop
+    if (!closest(event.target, SELECTORS.controller)
+    && document.body.querySelector('.tippy-popper')) {
         hideAllPoppers()
     }
 }
@@ -193,11 +196,6 @@ function createPopperInstance(el, popper, settings) {
 function createPopperElement(title, settings) {
     const popper = document.createElement('div')
     popper.setAttribute('class', 'tippy-popper')
-
-    // Fix for iOS animateFill
-    if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
-        popper.classList.add('tippy-iOS-fix')
-    }
 
     const tooltip = document.createElement('div')
     tooltip.setAttribute('class', `tippy-tooltip tippy-tooltip--${settings.size} ${settings.theme} leave`)
@@ -393,6 +391,23 @@ function applyTransitionDuration(els, duration) {
 }
 
 /**
+* Fixes CSS transition
+* @param {Object} ref - element/popper reference
+* @param {Function} callback - the quick hide/show correction
+*/
+function correctTransition(ref, callback) {
+    setTimeout(() => {
+        if (ref.settings.position !== ref.popper.getAttribute('x-placement')) {
+            ref.flipped = true
+            callback()
+        } else if (ref.flipped && ref.settings.position === ref.popper.getAttribute('x-placement')) {
+            ref.flipped = false
+            callback()
+        }
+    }, 0)
+}
+
+/**
 * Prepares the callback functions for `show` and `hide` methods
 * @param {Object} ref -  the element/popper reference
 * @param {Boolean} immediatelyFire - whether to instantly fire the callback or wait
@@ -433,23 +448,6 @@ function awakenPopper(ref) {
     } else {
         ref.instance.enableEventListeners()
     }
-}
-
-/**
-* Fixes CSS transition when showing a flipped tooltip
-* @param {Object} ref - the popper/element reference
-* @param {Number} duration
-*/
-function correctTransition(ref, callback) {
-    setTimeout(() => {
-        const position = ref.popper.getAttribute('x-placement')
-        const a = (!ref.adjusted && ref.settings.position !== position)
-        const b = (ref.adjusted && ref.settings.position === position)
-        if (a || b) {
-            ref.adjusted = a ? true : false
-            callback()
-        }
-    }, 0)
 }
 
 /**
@@ -552,6 +550,10 @@ export default class Tippy {
         if (!delay && delay !== 0) delay = this.settings.delay
 
         // 0, '0'
+        let hideDelay = parseInt(el.getAttribute('data-hidedelay'))
+        if (!hideDelay && hideDelay !== 0) hideDelay = this.settings.hideDelay
+
+        // 0, '0'
         let duration = parseInt(el.getAttribute('data-duration'))
         if (!duration && duration !== 0) duration = this.settings.duration
 
@@ -583,6 +585,10 @@ export default class Tippy {
         let inertia = el.getAttribute('data-inertia') || this.settings.inertia
         if (inertia === 'false') inertia = false
 
+        // 'true', true, 'false', false
+        let transitionFlip = el.getAttribute('data-transitionflip') || this.settings.transitionFlip
+        if (transitionFlip === 'false') transitionFlip = false
+
         // just take the provided value
         const popperOptions = this.settings.popperOptions
 
@@ -594,6 +600,7 @@ export default class Tippy {
             arrow,
             arrowSize,
             delay,
+            hideDelay,
             trigger,
             duration,
             hideDuration,
@@ -605,6 +612,7 @@ export default class Tippy {
             multiple,
             followCursor,
             inertia,
+            transitionFlip,
             popperOptions
         }
     }
@@ -620,7 +628,11 @@ export default class Tippy {
 
         // Avoid creating unnecessary timeouts
         const _show = () => {
+            clearTimeout(popper.getAttribute('data-delay'))
+            clearTimeout(popper.getAttribute('data-hidedelay'))
+
             if (settings.delay) {
+
                 const delay = setTimeout(
                     () => this.show(popper, settings.duration),
                     settings.delay
@@ -632,7 +644,21 @@ export default class Tippy {
         }
 
         const show = () => this.callbacks.wait ? this.callbacks.wait(_show) : _show()
-        const hide = () => this.hide(popper, settings.hideDuration)
+
+        const hide = () => {
+            clearTimeout(popper.getAttribute('data-hidedelay'))
+            clearTimeout(popper.getAttribute('data-delay'))
+
+            if (settings.hideDelay) {
+                const delay = setTimeout(
+                    () => this.hide(popper, settings.hideDuration),
+                    settings.hideDelay
+                )
+                popper.setAttribute('data-hidedelay', delay)
+            } else {
+                this.hide(popper, settings.hideDuration)
+            }
+        }
 
         const handleTrigger = event => {
 
@@ -784,7 +810,6 @@ export default class Tippy {
     * @param {Boolean} enableCallback (optional)
     */
     show(popper, duration = this.settings.duration, enableCallback = true) {
-
         // Already visible
         if (popper.style.visibility === 'visible') return
 
@@ -792,15 +817,16 @@ export default class Tippy {
         const tooltip = popper.querySelector(SELECTORS.tooltip)
         const circle = popper.querySelector(SELECTORS.circle)
 
-        if (enableCallback) this.callbacks.beforeShown()
+        if (enableCallback) {
+            this.callbacks.beforeShown()
+            // Flipping causes CSS transition to go haywire
+            correctTransition(ref, () => {
+                this.hide(popper, 0, false)
+                setTimeout(() => this.show(popper, duration, false), 0)
+            })
+        }
 
         awakenPopper(ref)
-
-        // Flipping causes CSS transition to go haywire
-        correctTransition(ref, () => {
-            this.hide(ref.popper, 0, false)
-            setTimeout(() => this.show(ref.popper, duration, false), 0)
-        })
 
         // Repaint/reflow is required for CSS transition when appending
         triggerReflow(tooltip, circle)
@@ -815,14 +841,17 @@ export default class Tippy {
         onTransitionEnd(ref, duration < 20, () => {
             if (popper.style.visibility === 'hidden' || ref.onShownFired) return
 
+            if (!ref.settings.transitionFlip) tooltip.classList.add('tippy-notransition')
+
             // Focus click triggered interactive tooltips (popovers) only
             if (ref.settings.interactive && ref.settings.trigger.indexOf('click') !== -1) {
                 popper.focus()
             }
 
+            // Prevents shown() from firing more than once from early transition cancellations
             ref.onShownFired = true
 
-            this.callbacks.shown()
+            if (enableCallback) this.callbacks.shown()
         })
     }
 
@@ -833,9 +862,6 @@ export default class Tippy {
     * @param {Boolean} enableCallback (optional)
     */
     hide(popper, duration = this.settings.duration, enableCallback = true) {
-        // Clear unwanted timeouts due to `delay` setting
-        clearTimeout(popper.getAttribute('data-delay'))
-
         // Hidden anyway
         if (!document.body.contains(popper)) return
 
@@ -845,8 +871,15 @@ export default class Tippy {
 
         if (enableCallback) {
             this.callbacks.beforeHidden()
+
             ref.el.classList.remove('active')
+
             ref.onShownFired = false
+
+            if (!ref.settings.transitionFlip) tooltip.classList.remove('tippy-notransition')
+
+            ref.flipped = (ref.settings.position !== popper.getAttribute('x-placement'))
+                          ? true : false
         }
 
         popper.style.visibility = 'hidden'
@@ -888,7 +921,7 @@ export default class Tippy {
 
             document.body.removeChild(popper)
 
-            this.callbacks.hidden()
+            if (enableCallback) this.callbacks.hidden()
         })
     }
 
@@ -929,8 +962,7 @@ export default class Tippy {
                                 ? template.innerHTML
                                 : document.getElementById(template.replace('#', '')).innerHTML
         } else {
-            content.innerHTML = ref.el.getAttribute('title') ||
-            ref.el.getAttribute('data-original-title')
+            content.innerHTML = ref.el.getAttribute('title') || ref.el.getAttribute('data-original-title')
             removeTitle(ref.el)
         }
     }

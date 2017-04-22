@@ -78,7 +78,10 @@ class Tooltip extends Component {
       <div
         ref={(tooltip) => { this.tooltipDOM = tooltip; }}
         className={this.props.className}
-        style={this.props.style}
+        style={{
+          display: 'inline',
+          ...this.props.style
+        }}
       >
         {this.props.children}
       </div>
@@ -96,8 +99,8 @@ Tooltip.defaultProps = {
   delay: 0,
   hideDelay: 0,
   trigger: 'mouseenter focus',
-  duration: 400,
-  hideDuration: 400,
+  duration: 375,
+  hideDuration: 375,
   interactive: false,
   theme: 'dark',
   offset: 0,

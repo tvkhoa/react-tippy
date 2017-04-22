@@ -41,24 +41,23 @@ class App extends Component {
         <hr />
         <Tooltip
           title={tooltipContent}
-          position="bottom"
-          inertia
-          followCursor
-          size="big"
+          position="left"
           arrow
           arrowSize="big"
           disabled={disabled}
+          animateFill={false}
         >
-          <p className="App-intro">
+          <span className="App-intro">
             Big Tooltip with dynamic content: {tooltipContent}
-          </p>
+          </span>
         </Tooltip>
         <hr />
         <Tooltip
           trigger="click"
           interactive
-          position="bottom"
+          position="right"
           animateFill={false}
+          transitionFlip={false}
           html={(
             <div>
               <p>{tooltipContent}</p>
@@ -70,9 +69,9 @@ class App extends Component {
             </div>
           )}
         >
-          <p className="App-intro">
+          <span className="App-intro">
             Interactive tooltip
-          </p>
+          </span>
         </Tooltip>
       </div>
     );
