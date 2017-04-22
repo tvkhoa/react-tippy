@@ -1,6 +1,6 @@
 ## React Tippy
 
-A lightweight tooltip for React. Demo: [link to Demo!](https://tvkhoa.github.io)
+A lightweight tooltip for React. Demo at [Demo page here...](https://tvkhoa.github.io)
 
 Based on `tippy.js` and powered by `Popper.js`
 
@@ -82,23 +82,23 @@ const HeaderWithTootip = withTooltip(Header, {
 
 |Setting|Default|Options|Role|
 |--- |--- |--- |--- |
-|disabled|false|boolean|Show or not show tooltip|
+|disabled|`false`|`true` `false`|Show or not show tooltip|
 |position|`top`|`top` `bottom` `left` `right`|Specifies which direction to position the tooltip on the element.|
 |trigger|`mouseenter focus`|`mouseenter` `focus` `click` `manual`|Specifies which type of events will trigger a tooltip to show. Separate each by a space. mouseenter is for hovering and touch on mobile, and focus is for keyboard navigation. Use manual if you want to show/hide the tooltip manually/programmatically (see below).|
 |interactive|`false`|`true` `false`|Makes a tooltip interactive, i.e. will not close when the user hovers over or clicks on the tooltip. This lets you create a popover (similar to Bootstrap) when used in conjunction with a click trigger.|
 |delay|0|Any integer >= 0 (milliseconds)|Specifies how long it takes after a trigger event is fired for a tooltip to show.|
 |hideDelay|0|Any integer >= 0 (milliseconds)|Specifies how long it takes after a leave event is fired for a tooltip to hide. Not applicable when clicking on the document to hide tooltips.|
 |animation|`shift`|`shift` `perspective` `fade` `scale` `none`|Specifies the type of transition animation a tooltip has.|
-|arrow|false|true false|Adds an arrow pointing to the tooltipped element. Setting this to true disables animateFill.|
+|arrow|`false`|`true` `false`|Adds an arrow pointing to the tooltipped element. Setting this to true disables animateFill.|
 |arrowSize|`regular`|`small` `regular` `big`|Specifies how big the tooltip's arrow is.|
-|animateFill|true|true false|Adds a material design-esque filling animation. This is disabled if you have arrow set to true.|
+|animateFill|`true`|`true` `false`|Adds a material design-esque filling animation. This is disabled if you have arrow set to true.|
 |duration|375|Any integer >= 0 (milliseconds)|Specifies how long the transition animation takes to complete when showing a tooltip.|
 |hideDuration|375|Any integer >= 0 (milliseconds)|Specifies how long the transition animation takes to complete when hiding a tooltip.|
 |offset|0|Any number (pixels)|Offsets the tooltip on its opposite axis. For position top and bottom, it acts as offsetX. For position left and right, it acts as offsetY.|
 |hideOnClick|`true`|`true` `false` `'persistent'`|Specifies whether to hide a tooltip upon clicking its element after hovering over.|
 |multiple|`false`|`true` `false`|Specifies whether to allow multiple tooltips open on the page (click trigger only).|
-|followCursor|false|true false|Specifies whether to follow the user's mouse cursor (mouse devices only).|
-|inertia|false|true false|Modifies the transition-timing-function with a cubic bezier to create a "slingshot" intertial effect.|
+|followCursor|`false`|`true` `false`|Specifies whether to follow the user's mouse cursor (mouse devices only).|
+|inertia|`false`|`true` `false`|Modifies the transition-timing-function with a cubic bezier to create a "slingshot" intertial effect.|
 |transitionFlip|`true`|`true` `false`|Specifies whether to transition between flips or not. Uses the same transition timing as duration|
 |popperOptions|{}|Object|Allows more control over tooltip positioning and behavior. See right below.|
 |html|null|react element|Tooltip content. If you don't define html, the title will be used|
