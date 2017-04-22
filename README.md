@@ -1,6 +1,6 @@
 ## React Tippy
 
-A lightweight tooltip for React. Demo: [link to Demo!](http://tvkhoa.github.io)
+A lightweight tooltip for React. Demo: [link to Demo!](https://tvkhoa.github.io)
 
 Based on `tippy.js` and powered by `Popper.js`
 
