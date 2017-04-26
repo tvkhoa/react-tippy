@@ -1,6 +1,6 @@
 ## React Tippy
 
-A lightweight tooltip for React. Demo at [Demo page here...](https://tvkhoa.github.io)
+A lightweight tooltip for React. Demo at [Demo page here...](https://tvkhoa.github.io/react-tippy)
 
 Based on `tippy.js` and powered by `Popper.js`
 
@@ -82,7 +82,10 @@ const HeaderWithTootip = withTooltip(Header, {
 
 |Setting|Default|Options|Role|
 |--- |--- |--- |--- |
+
 |disabled|`false`|`true` `false`|Show or not show tooltip|
+|open|`undefined`|`true` `false`|Just only use it if you want to `show/hide it manually`. Usually, you don't need it|
+|onRequestClose|`noop function`|Function|Just only use it if you want to `show/hide it manually`. This event is fired when you click outside of your tooltip, should be used with the prop `interaction` to keep your tooltip showing|
 |position|`top`|`top` `bottom` `left` `right`|Specifies which direction to position the tooltip on the element.|
 |trigger|`mouseenter focus`|`mouseenter` `focus` `click` `manual`|Specifies which type of events will trigger a tooltip to show. Separate each by a space. mouseenter is for hovering and touch on mobile, and focus is for keyboard navigation. Use manual if you want to show/hide the tooltip manually/programmatically (see below).|
 |interactive|`false`|`true` `false`|Makes a tooltip interactive, i.e. will not close when the user hovers over or clicks on the tooltip. This lets you create a popover (similar to Bootstrap) when used in conjunction with a click trigger.|
@@ -94,6 +97,7 @@ const HeaderWithTootip = withTooltip(Header, {
 |animateFill|`true`|`true` `false`|Adds a material design-esque filling animation. This is disabled if you have arrow set to true.|
 |duration|375|Any integer >= 0 (milliseconds)|Specifies how long the transition animation takes to complete when showing a tooltip.|
 |hideDuration|375|Any integer >= 0 (milliseconds)|Specifies how long the transition animation takes to complete when hiding a tooltip.|
+|distance|10|Any number (pixels)|Specifies how far away the tooltip is from its element.|
 |offset|0|Any number (pixels)|Offsets the tooltip on its opposite axis. For position top and bottom, it acts as offsetX. For position left and right, it acts as offsetY.|
 |hideOnClick|`true`|`true` `false` `'persistent'`|Specifies whether to hide a tooltip upon clicking its element after hovering over.|
 |multiple|`false`|`true` `false`|Specifies whether to allow multiple tooltips open on the page (click trigger only).|
@@ -158,6 +162,19 @@ You can use `interactive` prop and `html` for your interactive tooltip
   </Tooltip>
 ```
 
+## Show/hide your tooltip manually
+
+```javascript
+<Tooltip
+  title={tooltipContent}
+  open={open}
+  onRequestClose={() => {console.log('call'); setIsOpen(false)}}
+>
+  <span className="App-intro" onClick={() => { setIsOpen(true) }}>
+    This will show {tooltipContent}
+  </span>
+</Tooltip>
+```
 
 # License
 MIT. Also check Popper.js' license.

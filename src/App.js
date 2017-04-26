@@ -29,6 +29,8 @@ class App extends Component {
       setTooltipContent,
       disabled,
       setDisabled,
+      open,
+      setIsOpen,
     } = this.props;
     return (
       <div className="App">
@@ -41,14 +43,11 @@ class App extends Component {
         <hr />
         <Tooltip
           title={tooltipContent}
-          position="left"
-          arrow
-          arrowSize="big"
-          disabled={disabled}
-          animateFill={false}
+          open={open}
+          onRequestClose={() => {console.log('call'); setIsOpen(false)}}
         >
-          <span className="App-intro">
-            Big Tooltip with dynamic content: {tooltipContent}
+          <span className="App-intro" onClick={() => { setIsOpen(true) }}>
+            Big Tooltip with dynamic content: {tooltipContent} {disabled.toString()}
           </span>
         </Tooltip>
         <hr />
@@ -80,6 +79,7 @@ class App extends Component {
 
 const enhance = compose(
   withState('tooltipContent', 'setTooltipContent', 'tooltipContent'),
+  withState('open', 'setIsOpen', false),
   withState('disabled', 'setDisabled', false),
 );
 
