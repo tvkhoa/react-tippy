@@ -1,6 +1,6 @@
 ## React Tippy
 
-A lightweight tooltip for React. Demo at [Demo page here...](https://tvkhoa.github.io/react-tippy)
+A lightweight tooltip for React. Demo at [Demo page here...](https://tvkhoa.github.io/testlib)
 
 Based on `tippy.js` and powered by `Popper.js`
 
@@ -82,7 +82,6 @@ const HeaderWithTootip = withTooltip(Header, {
 
 |Setting|Default|Options|Role|
 |--- |--- |--- |--- |
-
 |disabled|`false`|`true` `false`|Show or not show tooltip|
 |open|`undefined`|`true` `false`|Just only use it if you want to `show/hide it manually`. Usually, you don't need it|
 |onRequestClose|`noop function`|Function|Just only use it if you want to `show/hide it manually`. This event is fired when you click outside of your tooltip, should be used with the prop `interaction` to keep your tooltip showing|
