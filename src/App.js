@@ -42,6 +42,7 @@ class App extends Component {
         <HeaderWithTootip />
         <hr />
         <Tooltip
+          disabled={disabled}
           title={tooltipContent}
           open={open}
           onRequestClose={() => {console.log('call'); setIsOpen(false)}}

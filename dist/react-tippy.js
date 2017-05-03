@@ -448,7 +448,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**!
 * @file tippy.js | Pure JS Tooltip Library
-* @version 0.10.0
+* @version 0.11.1
 * @license MIT
 */
 
@@ -568,6 +568,15 @@ function prefix(property) {
 }
 
 /**
+* Returns the non-shifted placement (e.g., 'bottom-start' => 'bottom')
+* @param {String} str - placement
+* @return {String}
+*/
+function getCorePlacement(str) {
+    return str.replace(/-.+/, '');
+}
+
+/**
 * Polyfill to get the closest parent element
 * @param {Element} element - child of parent to be returned
 * @param {String} parentSelector - selector to match the parent if found
@@ -609,7 +618,7 @@ function createPopperInstance(ref) {
     }, settings.popperOptions || {}, {
         modifiers: _extends({}, settings.popperOptions ? settings.popperOptions.modifiers : {}, {
             flip: _extends({
-                padding: 15
+                padding: parseInt(settings.distance) + 3 /* 3px from viewport boundary */
             }, settings.popperOptions && settings.popperOptions.modifiers ? settings.popperOptions.modifiers.flip : {}),
             offset: _extends({
                 offset: parseInt(settings.offset)
@@ -620,7 +629,7 @@ function createPopperInstance(ref) {
             tooltip.style.bottom = '';
             tooltip.style.left = '';
             tooltip.style.right = '';
-            tooltip.style[ref.popper.getAttribute('x-placement')] = -(settings.distance - 10) + 'px';
+            tooltip.style[getCorePlacement(ref.popper.getAttribute('x-placement'))] = -(settings.distance - 10) + 'px';
         }
     });
 
@@ -690,7 +699,7 @@ function createPopperElement(id, title, settings) {
     }
 
     // Init distance. Further updates are made in the popper instance's `onUpdate()` method
-    tooltip.style[settings.position] = -(settings.distance - 10) + 'px';
+    tooltip.style[getCorePlacement(settings.position)] = -(settings.distance - 10) + 'px';
 
     tooltip.appendChild(content);
     popper.appendChild(tooltip);
@@ -774,7 +783,7 @@ function elementIsInViewport(el) {
 */
 function followCursor(e) {
     var ref = STORE.refs[STORE.els.indexOf(this)];
-    var position = ref.popper.getAttribute('x-placement');
+    var position = getCorePlacement(ref.popper.getAttribute('x-placement'));
     var halfPopperWidth = Math.round(ref.popper.offsetWidth / 2);
     var halfPopperHeight = Math.round(ref.popper.offsetHeight / 2);
 
@@ -849,24 +858,16 @@ function correctTransition(ref, callback) {
 /**
 * Prepares the callback functions for `show` and `hide` methods
 * @param {Object} ref -  the element/popper reference
-* @param {Boolean} immediatelyFire - whether to instantly fire the callback or wait
 * @param {Function} callback - callback function to fire once transitions complete
 */
-function onTransitionEnd(ref, immediatelyFire, callback) {
+function onTransitionEnd(ref, callback) {
     var tooltip = ref.popper.querySelector(SELECTORS.tooltip);
 
     var listenerCallback = function listenerCallback() {
-        if (!immediatelyFire) {
-            tooltip.removeEventListener('webkitTransitionEnd', listenerCallback);
-            tooltip.removeEventListener('transitionend', listenerCallback);
-        }
+        tooltip.removeEventListener('webkitTransitionEnd', listenerCallback);
+        tooltip.removeEventListener('transitionend', listenerCallback);
         callback();
     };
-
-    ref.transititionendListener = listenerCallback;
-
-    // transitionend may not fire for 0 duration, keep it safe and use ~1 frame of time
-    if (immediatelyFire) return listenerCallback();
 
     // Wait for transitions to complete
     tooltip.addEventListener('webkitTransitionEnd', listenerCallback);
@@ -886,16 +887,16 @@ function awakenPopper(ref) {
         ref.el.addEventListener('mousemove', followCursor);
     }
 
-    if (!ref.instance) {
+    if (!ref.popperInstance) {
         // Create instance if it hasn't been created yet
-        ref.instance = createPopperInstance(ref);
+        ref.popperInstance = createPopperInstance(ref);
         if (ref.settings.followCursor && !GLOBALS.touchUser) {
-            ref.instance.disableEventListeners();
+            ref.popperInstance.disableEventListeners();
         }
     } else {
-        ref.instance.update();
+        ref.popperInstance.update();
         if (!ref.settings.followCursor) {
-            ref.instance.enableEventListeners();
+            ref.popperInstance.enableEventListeners();
         }
     }
 }
@@ -912,7 +913,7 @@ function hideAllPoppers(currentRef) {
         // hideOnClick can have the truthy value of 'persistent', so strict check is needed
         if (ref.settings.hideOnClick === true && (!currentRef || ref.popper !== currentRef.popper)) {
             ref.settings.onRequestClose();
-            privateInstance.hide(ref.popper, ref.settings.hideDuration);
+            ref.tippyInstance.hide(ref.popper, ref.settings.hideDuration);
         }
     });
 }
@@ -1111,7 +1112,8 @@ var Tippy = function () {
                     el: el,
                     popper: popper,
                     settings: settings,
-                    listeners: listeners
+                    listeners: listeners,
+                    tippyInstance: _this3
                 });
 
                 GLOBALS.idCounter++;
@@ -1205,11 +1207,9 @@ var Tippy = function () {
                 return;
             }
 
-            tooltip.removeEventListener('webkitTransitionEnd', ref.transitionendListener);
-            tooltip.removeEventListener('transitionend', ref.transitionendListener);
-
             if (enableCallback) {
                 this.callbacks.beforeShown();
+
                 // Flipping causes CSS transition to go haywire
                 if (duration >= 20) {
                     correctTransition(ref, function () {
@@ -1229,6 +1229,11 @@ var Tippy = function () {
 
             if (!document.body.contains(popper)) {
                 awakenPopper(ref);
+            }
+
+            // Interactive tooltips receive a class of 'active'
+            if (ref.settings.interactive) {
+                ref.el.classList.add('active');
             }
 
             ref.hidden = false;
@@ -1269,7 +1274,7 @@ var Tippy = function () {
                 if (enableCallback) _this4.callbacks.shown();
             };
 
-            onTransitionEnd(ref, duration < 20, transitionendCallback);
+            onTransitionEnd(ref, transitionendCallback);
 
             // transitionend listener sometimes may not fire
             clearTimeout(ref.transitionendTimeout);
@@ -1300,15 +1305,10 @@ var Tippy = function () {
             var tooltip = popper.querySelector(SELECTORS.tooltip);
             var circle = popper.querySelector(SELECTORS.circle);
             var content = popper.querySelector(SELECTORS.content);
-
             // Prevent hide if open
             if (ref.settings.disabled === false && ref.settings.open) {
                 return;
             }
-
-            tooltip.removeEventListener('webkitTransitionEnd', ref.transitionendListener);
-            tooltip.removeEventListener('transitionend', ref.transitionendListener);
-
             if (enableCallback) {
                 this.callbacks.beforeHidden();
 
@@ -1358,14 +1358,14 @@ var Tippy = function () {
 
                 if (popper.style.visibility === 'visible' || !document.body.contains(popper)) return;
 
-                ref.instance.disableEventListeners();
+                ref.popperInstance.disableEventListeners();
 
                 document.body.removeChild(popper);
 
                 if (enableCallback) _this5.callbacks.hidden();
             };
 
-            onTransitionEnd(ref, duration < 20, transitionendCallback);
+            onTransitionEnd(ref, transitionendCallback);
 
             // transitionend listener sometimes may not fire
             clearTimeout(ref.transitionendTimeout);
@@ -1395,8 +1395,8 @@ var Tippy = function () {
             ref.el.removeAttribute('data-tooltipped');
             ref.el.removeAttribute('aria-describedby');
 
-            if (ref.instance) {
-                ref.instance.destroy();
+            if (ref.popperInstance) {
+                ref.popperInstance.destroy();
             }
 
             // Remove from storage
@@ -1430,9 +1430,6 @@ var Tippy = function () {
 }();
 
 exports.default = Tippy;
-
-
-var privateInstance = new Tippy();
 
 /***/ }),
 /* 5 */
