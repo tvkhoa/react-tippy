@@ -121,7 +121,7 @@ You need to pass element to option `html`
 
 ```javascript
 import {
-  withTooltip,
+  Tooltip,
 } from 'react-tippy';
 
 

@@ -190,6 +190,7 @@ class Tooltip extends Component {
   _destroyTippy() {
     if (this.tippy) {
       const popper = this.tippy.getPopperElement(this.tooltipDOM);
+      this.updateSettings('open', false);
       this.tippy.hide(popper, 0);
       this.tippy.destroy(popper);
       this.tippy = null;

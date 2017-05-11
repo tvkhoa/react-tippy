@@ -314,6 +314,7 @@ var Tooltip = function (_Component) {
     value: function _destroyTippy() {
       if (this.tippy) {
         var popper = this.tippy.getPopperElement(this.tooltipDOM);
+        this.updateSettings('open', false);
         this.tippy.hide(popper, 0);
         this.tippy.destroy(popper);
         this.tippy = null;
