@@ -162,7 +162,7 @@ var Tooltip = function (_Component) {
     _this.initTippy = _this._initTippy.bind(_this);
     _this.destroyTippy = _this._destroyTippy.bind(_this);
     _this.updateTippy = _this._updateTippy.bind(_this);
-    _this.updateForReact = _this._updateForReact.bind(_this);
+    _this.updateReactDom = _this._updateReactDom.bind(_this);
     _this.showTooltip = _this._showTooltip.bind(_this);
     _this.hideTooltip = _this._hideTooltip.bind(_this);
     _this.updateSettings = _this._updateSettings.bind(_this);
@@ -219,11 +219,13 @@ var Tooltip = function (_Component) {
         return;
       }
 
-      // Update content
-      if (this.props.html !== prevProps.html && this.props.interactive === true) {
-        this.updateForReact();
+      if (this.props.html !== prevProps.html) {
+        this.updateReactDom();
         return;
-      } else if (this.props.title !== prevProps.title) {
+      }
+
+      // Update content
+      if (this.props.title !== prevProps.title) {
         this.updateTippy();
         return;
       }
@@ -268,14 +270,18 @@ var Tooltip = function (_Component) {
       }
     }
   }, {
-    key: '_updateForReact',
-    value: function _updateForReact() {
+    key: '_updateReactDom',
+    value: function _updateReactDom() {
       if (typeof window === 'undefined' || typeof document === 'undefined') {
         return;
       }
       if (this.tippy) {
+        this.updateSettings('ReactDOM', this.props.html);
         var popper = this.tippy.getPopperElement(this.tooltipDOM);
-        this.tippy.updateForReact(popper, this.props.html);
+        var isVisible = popper.style.visibility === 'visible' || this.props.open;
+        if (isVisible) {
+          this.tippy.updateForReact(popper, this.props.html);
+        }
       }
     }
   }, {
@@ -323,12 +329,10 @@ var Tooltip = function (_Component) {
           beforeHidden: this.props.beforeHidden,
           hidden: this.props.hidden,
           distance: this.props.distance,
+          reactDOM: this.props.html,
           open: this.props.open,
           onRequestClose: this.props.onRequestClose
         });
-        if (this.props.html) {
-          this.updateForReact();
-        }
         if (this.props.open) {
           this.showTooltip();
         }
@@ -1337,6 +1341,10 @@ var Tippy = function () {
                 return;
             }
 
+            if (ref.settings.reactDOM) {
+                this.updateForReact(popper, ref.settings.reactDOM);
+            }
+
             if (enableCallback) {
                 this.callbacks.beforeShown();
 
@@ -1489,6 +1497,12 @@ var Tippy = function () {
 
             ref.el.removeAttribute('data-tooltipped');
             ref.el.removeAttribute('aria-describedby');
+
+            //RemoveDOM
+            if (ref.settings.reactDOM) {
+                var tooltipContent = popper.querySelector(SELECTORS.content);
+                _reactDom2.default.unmountComponentAtNode(tooltipContent);
+            }
 
             if (ref.popperInstance) ref.popperInstance.destroy();
 

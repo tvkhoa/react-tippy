@@ -51,7 +51,7 @@ class Tooltip extends Component {
     this.initTippy = this._initTippy.bind(this);
     this.destroyTippy = this._destroyTippy.bind(this);
     this.updateTippy = this._updateTippy.bind(this);
-    this.updateForReact = this._updateForReact.bind(this);
+    this.updateReactDom = this._updateReactDom.bind(this);
     this.showTooltip = this._showTooltip.bind(this);
     this.hideTooltip = this._hideTooltip.bind(this);
     this.updateSettings = this._updateSettings.bind(this);
@@ -101,12 +101,13 @@ class Tooltip extends Component {
       return;
     }
 
+    if (this.props.html !== prevProps.html) {
+      this.updateReactDom();
+      return;
+    }
 
     // Update content
-    if (this.props.html !== prevProps.html && this.props.interactive === true){
-      this.updateForReact();
-      return;
-    } else if (this.props.title !== prevProps.title) {
+    if (this.props.title !== prevProps.title) {
       this.updateTippy();
       return;
     }
@@ -148,13 +149,17 @@ class Tooltip extends Component {
     }
   }
 
-  _updateForReact() {
+  _updateReactDom() {
     if (typeof window === 'undefined' || typeof document === 'undefined' ) {
       return;
     }
     if (this.tippy) {
+      this.updateSettings('ReactDOM', this.props.html);
       const popper = this.tippy.getPopperElement(this.tooltipDOM);
-      this.tippy.updateForReact(popper, this.props.html);
+      const isVisible = popper.style.visibility === 'visible' || this.props.open;
+      if (isVisible) {
+        this.tippy.updateForReact(popper, this.props.html);
+      }
     }
   }
 
@@ -200,12 +205,10 @@ class Tooltip extends Component {
         beforeHidden: this.props.beforeHidden,
         hidden: this.props.hidden,
         distance: this.props.distance,
+        reactDOM: this.props.html,
         open: this.props.open,
         onRequestClose: this.props.onRequestClose,
       });
-      if (this.props.html) {
-        this.updateForReact();
-      }
       if (this.props.open) {
         this.showTooltip();
       }

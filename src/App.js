@@ -22,6 +22,23 @@ const HeaderWithTootip = withTooltip(Header, {
   title: 'Welcome to React with tooltip',
 });
 
+class TooltipContent extends Component {
+  componentWillMount() {
+    console.log('mount now');
+  }
+  componentWillUnmount() {
+    console.log('unmount now');
+  }
+
+  render() {
+    return (
+      <div>
+        TooltipContent here
+      </div>
+    );
+  }
+};
+
 class App extends Component {
   render() {
     const {
@@ -51,6 +68,19 @@ class App extends Component {
             Big Tooltip with dynamic content: {tooltipContent} {disabled.toString()}
           </span>
         </Tooltip>
+        <hr />
+
+        {!disabled && (
+          <Tooltip
+            trigger="click"
+            html={(
+              <TooltipContent />
+            )}
+          >
+            Click here
+          </Tooltip>
+        )}
+
         <hr />
         <Tooltip
           trigger="click"

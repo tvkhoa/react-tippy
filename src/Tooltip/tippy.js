@@ -844,6 +844,9 @@ export default class Tippy {
           return;
         }
 
+        if (ref.settings.reactDOM) {
+          this.updateForReact(popper, ref.settings.reactDOM)
+        }
 
         if (enableCallback) {
             this.callbacks.beforeShown()
@@ -985,7 +988,14 @@ export default class Tippy {
         ref.el.removeAttribute('data-tooltipped')
         ref.el.removeAttribute('aria-describedby')
 
+        //RemoveDOM
+        if (ref.settings.reactDOM){
+          const tooltipContent = popper.querySelector(SELECTORS.content)
+          ReactDOM.unmountComponentAtNode(tooltipContent)
+        }
+
         if (ref.popperInstance) ref.popperInstance.destroy()
+
 
         // Remove from storage
         STORE.refs.splice(STORE.refs.map(ref => ref.popper).indexOf(popper), 1)
