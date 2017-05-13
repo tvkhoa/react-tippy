@@ -73,6 +73,7 @@ class App extends Component {
         {!disabled && (
           <Tooltip
             trigger="click"
+            unmountHTMLWhenHide
             html={(
               <TooltipContent />
             )}

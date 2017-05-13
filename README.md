@@ -105,6 +105,7 @@ const HeaderWithTootip = withTooltip(Header, {
 |transitionFlip|`true`|`true` `false`|Specifies whether to transition between flips or not. Uses the same transition timing as duration|
 |popperOptions|{}|Object|Allows more control over tooltip positioning and behavior. See right below.|
 |html|null|react element|Tooltip content. If you don't define html, the title will be used|
+|unmountHTMLWhenHide|`false`|`true` `false`|By default, html component will be mounted at first show and unmount only when your tooltip component is unmounted. When you set unmountHTMLWhenHide is `true`, it will be unmounted whenever tooltip is hidden.|
 |size|`regular`|`small` `regular` `big`|Specifies how big the tooltip is.|
 |beforeShown|noop|function|Callback before show|
 |shown|noop|function|Callback after show|

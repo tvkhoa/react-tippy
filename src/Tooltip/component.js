@@ -31,6 +31,7 @@ const defaultProps = {
   style: {},
   distance: 10,
   onRequestClose: () => {},
+  unmountHTMLWhenHide: false,
 };
 
 const propKeys = Object.keys(defaultProps)
@@ -206,6 +207,7 @@ class Tooltip extends Component {
         hidden: this.props.hidden,
         distance: this.props.distance,
         reactDOM: this.props.html,
+        unmountHTMLWhenHide: this.props.unmountHTMLWhenHide,
         open: this.props.open,
         onRequestClose: this.props.onRequestClose,
       });

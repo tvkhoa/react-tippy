@@ -136,7 +136,8 @@ var defaultProps = {
   className: '',
   style: {},
   distance: 10,
-  onRequestClose: function onRequestClose() {}
+  onRequestClose: function onRequestClose() {},
+  unmountHTMLWhenHide: false
 };
 
 var propKeys = Object.keys(defaultProps);
@@ -330,6 +331,7 @@ var Tooltip = function (_Component) {
           hidden: this.props.hidden,
           distance: this.props.distance,
           reactDOM: this.props.html,
+          unmountHTMLWhenHide: this.props.unmountHTMLWhenHide,
           open: this.props.open,
           onRequestClose: this.props.onRequestClose
         });
@@ -1426,6 +1428,11 @@ var Tippy = function () {
             if (ref.settings.disabled === false && ref.settings.open) {
                 return;
             }
+
+            if (ref.settings.unmountHTMLWhenHide && ref.settings.reactDOM) {
+                _reactDom2.default.unmountComponentAtNode(content);
+            }
+
             if (enableCallback) {
                 this.callbacks.beforeHidden();
 

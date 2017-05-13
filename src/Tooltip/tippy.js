@@ -919,6 +919,11 @@ export default class Tippy {
         if (ref.settings.disabled === false && ref.settings.open) {
           return;
         }
+
+        if (ref.settings.unmountHTMLWhenHide && ref.settings.reactDOM) {
+          ReactDOM.unmountComponentAtNode(content)
+        }
+
         if (enableCallback) {
             this.callbacks.beforeHidden()
 
