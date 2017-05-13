@@ -172,11 +172,17 @@ var Tooltip = function (_Component) {
   _createClass(Tooltip, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return;
+      }
       this.initTippy();
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
+      if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return;
+      }
       this.destroyTippy();
     }
   }, {
@@ -185,6 +191,9 @@ var Tooltip = function (_Component) {
       var _this2 = this;
 
       // enable and disabled
+      if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return;
+      }
       if (this.props.disabled === false && prevProps.disabled === true) {
         this.updateSettings('disabled', false);
         this.destroyTippy();
@@ -228,6 +237,9 @@ var Tooltip = function (_Component) {
   }, {
     key: '_showTooltip',
     value: function _showTooltip() {
+      if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return;
+      }
       if (this.tippy) {
         var popper = this.tippy.getPopperElement(this.tooltipDOM);
         this.tippy.show(popper, this.props.duration);
@@ -236,6 +248,9 @@ var Tooltip = function (_Component) {
   }, {
     key: '_hideTooltip',
     value: function _hideTooltip() {
+      if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return;
+      }
       if (this.tippy) {
         var popper = this.tippy.getPopperElement(this.tooltipDOM);
         this.tippy.hide(popper, this.props.hideDuration);
@@ -244,6 +259,9 @@ var Tooltip = function (_Component) {
   }, {
     key: '_updateSettings',
     value: function _updateSettings(name, value) {
+      if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return;
+      }
       if (this.tippy) {
         var popper = this.tippy.getPopperElement(this.tooltipDOM);
         this.tippy.updateSettings(popper, name, value);
@@ -252,6 +270,9 @@ var Tooltip = function (_Component) {
   }, {
     key: '_updateForReact',
     value: function _updateForReact() {
+      if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return;
+      }
       if (this.tippy) {
         var popper = this.tippy.getPopperElement(this.tooltipDOM);
         this.tippy.updateForReact(popper, this.props.html);
@@ -260,6 +281,9 @@ var Tooltip = function (_Component) {
   }, {
     key: '_updateTippy',
     value: function _updateTippy() {
+      if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return;
+      }
       if (this.tippy) {
         var popper = this.tippy.getPopperElement(this.tooltipDOM);
         this.tippy.update(popper);
@@ -268,6 +292,9 @@ var Tooltip = function (_Component) {
   }, {
     key: '_initTippy',
     value: function _initTippy() {
+      if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return;
+      }
       if (!this.props.disabled) {
         this.tooltipDOM.setAttribute('title', this.props.title);
         this.tippy = new _tippy2.default(this.tooltipDOM, {
@@ -312,6 +339,9 @@ var Tooltip = function (_Component) {
   }, {
     key: '_destroyTippy',
     value: function _destroyTippy() {
+      if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return;
+      }
       if (this.tippy) {
         var popper = this.tippy.getPopperElement(this.tooltipDOM);
         this.updateSettings('open', false);

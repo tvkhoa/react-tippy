@@ -58,15 +58,24 @@ class Tooltip extends Component {
   }
 
   componentDidMount() {
+    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+      return;
+    }
     this.initTippy();
   }
 
   componentWillUnmount() {
+    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+      return;
+    }
     this.destroyTippy();
   }
 
   componentDidUpdate(prevProps) {
     // enable and disabled
+    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+      return;
+    }
     if (this.props.disabled === false && prevProps.disabled === true) {
       this.updateSettings('disabled', false);
       this.destroyTippy();
@@ -110,6 +119,9 @@ class Tooltip extends Component {
   }
 
   _showTooltip() {
+    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+      return;
+    }
     if (this.tippy) {
       const popper = this.tippy.getPopperElement(this.tooltipDOM);
       this.tippy.show(popper, this.props.duration);
@@ -117,6 +129,9 @@ class Tooltip extends Component {
   }
 
   _hideTooltip() {
+    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+      return;
+    }
     if (this.tippy) {
       const popper = this.tippy.getPopperElement(this.tooltipDOM);
       this.tippy.hide(popper, this.props.hideDuration);
@@ -124,6 +139,9 @@ class Tooltip extends Component {
   }
 
   _updateSettings(name, value) {
+    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+      return;
+    }
     if (this.tippy) {
       const popper = this.tippy.getPopperElement(this.tooltipDOM);
       this.tippy.updateSettings(popper, name, value);
@@ -131,6 +149,9 @@ class Tooltip extends Component {
   }
 
   _updateForReact() {
+    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+      return;
+    }
     if (this.tippy) {
       const popper = this.tippy.getPopperElement(this.tooltipDOM);
       this.tippy.updateForReact(popper, this.props.html);
@@ -138,6 +159,9 @@ class Tooltip extends Component {
   }
 
   _updateTippy() {
+    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+      return;
+    }
     if (this.tippy) {
       const popper = this.tippy.getPopperElement(this.tooltipDOM);
       this.tippy.update(popper);
@@ -145,6 +169,9 @@ class Tooltip extends Component {
   }
 
   _initTippy() {
+    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+      return;
+    }
     if (!this.props.disabled) {
       this.tooltipDOM.setAttribute('title', this.props.title);
       this.tippy = new Tippy(this.tooltipDOM, {
@@ -188,6 +215,9 @@ class Tooltip extends Component {
   }
 
   _destroyTippy() {
+    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+      return;
+    }
     if (this.tippy) {
       const popper = this.tippy.getPopperElement(this.tooltipDOM);
       this.updateSettings('open', false);
