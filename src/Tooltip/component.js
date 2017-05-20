@@ -13,6 +13,7 @@ const defaultProps = {
   duration: 375,
   hideDuration: 375,
   interactive: false,
+  interactiveBorder: 2,
   theme: 'dark',
   offset: 0,
   hideOnClick: true,
@@ -31,6 +32,8 @@ const defaultProps = {
   style: {},
   distance: 10,
   onRequestClose: () => {},
+  sticky: false,
+  stickyDuration: 200,
   unmountHTMLWhenHide: false,
 };
 
@@ -193,6 +196,7 @@ class Tooltip extends Component {
         duration: this.props.duration,
         hideDuration: this.props.hideDuration,
         interactive: this.props.interactive,
+        interactiveBorder: this.props.interactiveBorder,
         theme: this.props.theme,
         offset: this.props.offset,
         hideOnClick: this.props.hideOnClick,
@@ -209,6 +213,8 @@ class Tooltip extends Component {
         reactDOM: this.props.html,
         unmountHTMLWhenHide: this.props.unmountHTMLWhenHide,
         open: this.props.open,
+        sticky: this.props.sticky,
+        stickyDuration: this.props.stickyDuration,
         onRequestClose: this.props.onRequestClose,
       });
       if (this.props.open) {

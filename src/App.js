@@ -59,6 +59,34 @@ class App extends Component {
         <HeaderWithTootip />
         <hr />
         <Tooltip
+          // options
+          title="Welcome to React"
+          position="bottom"
+          trigger="click"
+        >
+          <p>
+            Click here to show popup
+          </p>
+        </Tooltip>
+
+        <Tooltip
+          // options
+          title="Sticky"
+          trigger="mouseenter"
+          sticky
+          interactiveBorder={10}
+        >
+          <p
+            style={{
+              animation: 'hover 2s ease-in-out infinite',
+            }}
+          >
+            Sticky
+          </p>
+        </Tooltip>
+
+        <hr />
+        <Tooltip
           disabled={disabled}
           title={tooltipContent}
           open={open}
