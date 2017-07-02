@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Tippy from './tippy';
+import tippy from './js/tippy';
 
 const defaultProps = {
   html: null,
@@ -96,7 +96,9 @@ class Tooltip extends Component {
     // open
     if (this.props.open === true && !prevProps.open) {
       this.updateSettings('open', true);
-      this.showTooltip();
+      setTimeout(() => {
+        this.showTooltip();
+      }, 0)
       return;
     }
     if (this.props.open === false && prevProps.open === true) {
@@ -183,7 +185,7 @@ class Tooltip extends Component {
     }
     if (!this.props.disabled) {
       this.tooltipDOM.setAttribute('title', this.props.title);
-      this.tippy = new Tippy(this.tooltipDOM, {
+      this.tippy = tippy(this.tooltipDOM, {
         disabled: this.props.disabled,
         position: this.props.position,
         animation: this.props.animation,
@@ -216,6 +218,8 @@ class Tooltip extends Component {
         sticky: this.props.sticky,
         stickyDuration: this.props.stickyDuration,
         onRequestClose: this.props.onRequestClose,
+        useContext: this.props.useContext,
+        reactInstance: this.props.useContext ? this : undefined,
       });
       if (this.props.open) {
         this.showTooltip();

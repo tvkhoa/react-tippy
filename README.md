@@ -179,5 +179,55 @@ You can use `interactive` prop and `html` for your interactive tooltip
 </Tooltip>
 ```
 
+## Browser support
+
+Tippy gracefully degrades on older browsers (and with JavaScript disabled) by using the browser's default title tooltip.
+
+If you want to support older browsers, please add `polyfill` by yourself
+
+### Supported browsers
+
+Browsers which support requestAnimationFrame. See [caniuse](https://caniuse.com/#search=requestAnimationFrame). If your audience has low Opera Mini usage (common in western countries), then support should be >96%.
+
+### Touch devices
+
+Tippy works on touch devices almost the same as on desktop/mouse devices. However on iOS devices, in order for tooltips to close when tapping anywhere on the body and to trigger hover events on non-clickable elements, a .tippy-touch { cursor: pointer !important; } class is added to the body.
+
+## Accessibility
+
+Tooltips have ARIA labelling to ensure accessibility.
+
+
+# Troubleshoot
+
+## I cannot connect html props with redux connect. Or can I use context in tooltip content?
+
+react-tippy provides `useContext` for Tooltip component. It can allow you to use context in tooltip content. Therefore, you can totally connect it to redux.
+
+```javascript
+<Tooltip
+  trigger="click"
+  useContext
+  html={(
+    <TooltipContent />
+  )}
+>
+  Click here
+</Tooltip>
+```
+
+## Could I change tooltip style (width, height, ...)?
+
+You can change css to have your tooltip width. If you use `html` props, you can do like this
+
+```javascript
+html={(
+  <div style={{ width: 400 }}>
+    // content here
+  </div>
+)}
+```
+
+
 # License
 MIT. Also check Popper.js' license.

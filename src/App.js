@@ -3,12 +3,18 @@ import {
   compose,
   withState,
 } from 'recompose';
+import {
+  connect,
+} from 'react-redux';
 import logo from './logo.svg';
 import './App.css';
 import {
   Tooltip,
   withTooltip,
 } from './Tooltip';
+import {
+  contentSelector
+} from './state';
 
 const NormalHeader = () => (
   <h2>Normal component</h2>
@@ -22,7 +28,11 @@ const HeaderWithTootip = withTooltip(Header, {
   title: 'Welcome to React with tooltip',
 });
 
-class TooltipContent extends Component {
+const mapStateToProps = (state) => ({
+  content: contentSelector(state),
+});
+
+class TooltipContentComponent extends Component {
   componentWillMount() {
     console.log('mount now');
   }
@@ -33,11 +43,13 @@ class TooltipContent extends Component {
   render() {
     return (
       <div>
-        TooltipContent here
+        TooltipContent here {this.props.content}
       </div>
     );
   }
 };
+
+const TooltipContent = connect(mapStateToProps)(TooltipContentComponent);
 
 class App extends Component {
   render() {
@@ -84,7 +96,9 @@ class App extends Component {
             Sticky
           </p>
         </Tooltip>
-
+        <button onClick={() => { console.log('call open'); setIsOpen(true) }}>
+          Do something
+        </button>
         <hr />
         <Tooltip
           disabled={disabled}
@@ -92,8 +106,8 @@ class App extends Component {
           open={open}
           onRequestClose={() => {console.log('call'); setIsOpen(false)}}
         >
-          <span className="App-intro" onClick={() => { setIsOpen(true) }}>
-            Big Tooltip with dynamic content: {tooltipContent} {disabled.toString()}
+          <span className="App-intro" onClick={() => { console.log('call open'); setIsOpen(true) }}>
+            Big Tooltip with dynamic content: {tooltipContent} {open.toString()} {disabled.toString()}
           </span>
         </Tooltip>
         <hr />
@@ -102,6 +116,7 @@ class App extends Component {
           <Tooltip
             trigger="click"
             unmountHTMLWhenHide
+            useContext
             html={(
               <TooltipContent />
             )}
@@ -118,7 +133,7 @@ class App extends Component {
           animateFill={false}
           transitionFlip={false}
           html={(
-            <div>
+            <div style={{ width: 400 }}>
               <p>{tooltipContent}</p>
               <input
                 type="text"
@@ -128,7 +143,7 @@ class App extends Component {
             </div>
           )}
         >
-          <span className="App-intro">
+          <span className="App-intro" >
             Interactive tooltip
           </span>
         </Tooltip>
