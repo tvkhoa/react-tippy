@@ -84,6 +84,7 @@ const HeaderWithTootip = withTooltip(Header, {
 |--- |--- |--- |--- |
 |disabled|`false`|`true` `false`|Show or not show tooltip|
 |open|`undefined`|`true` `false`|Just only use it if you want to `show/hide it manually`. Usually, you don't need it|
+|useContext|`undefined`|`true` `false`|Define that you're using context in your tooltip content (or `html` props). It's useful when you want your tooltip content can connect to redux store|
 |onRequestClose|`noop function`|Function|Just only use it if you want to `show/hide it manually`. This event is fired when you click outside of your tooltip, should be used with the prop `interaction` to keep your tooltip showing|
 |position|`top`|`top` `bottom` `left` `right`|Specifies which direction to position the tooltip on the element. Add the suffix `-start` or `-end` to shift the position. `top-end` is an example.|
 |trigger|`mouseenter focus`|`mouseenter` `focus` `click` `manual`|Specifies which type of events will trigger a tooltip to show. Separate each by a space. mouseenter is for hovering and touch on mobile, and focus is for keyboard navigation. Use manual if you want to show/hide the tooltip manually/programmatically (see below).|
