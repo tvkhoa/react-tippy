@@ -16,6 +16,78 @@ import {
   contentSelector
 } from './state';
 
+const ManualPopover = ({ children, open, onRequestClose, content }) => {
+  return (
+    <Tooltip
+      useContext
+      html={content}
+      position={"bottom"}
+      open={open}
+      onRequestClose={onRequestClose}
+      trigger="manual"
+      interactive
+      animateFill={false}
+    >
+      {children}
+    </Tooltip>
+  );
+};
+
+class Menu extends React.Component {
+  state = { visible: false };
+  render() {
+    const { selected, children } = this.props;
+
+    const PopoverContent = (
+      <div onClick={() => this.setState({ visible: false })}>
+        {children}
+      </div>
+    );
+
+    return (
+      <div>
+        <ManualPopover
+          open={this.state.visible}
+          content={PopoverContent}
+          onRequestClose={() => {
+            console.log('triggered');
+            this.setState({ visible: false });
+          }}
+        >
+          <button onClick={e => this.setState({ visible: !this.state.visible })}>
+            {selected}
+          </button>
+        </ManualPopover>
+        {children}
+      </div>
+    );
+  }
+}
+
+class Example extends React.Component {
+  state = { value: 1 };
+
+  render() {
+    const { value } = this.state;
+    const options = [1, 2];
+
+    return (
+      <Menu selected={value}>
+        {options.map(option => {
+          const isActive = option === value;
+          console.log(`Rendering ${option}, isActive: ${isActive}`);
+          return (
+            <div key={option} onClick={() => this.setState({ value: option })}>
+              {option} – {isActive ? "Active" : "Not Active"}
+            </div>
+          );
+        })}
+      </Menu>
+    );
+  }
+}
+
+
 const NormalHeader = () => (
   <h2>Normal component</h2>
 );
@@ -147,6 +219,8 @@ class App extends Component {
             Interactive tooltip
           </span>
         </Tooltip>
+
+        <Example />
       </div>
     );
   }

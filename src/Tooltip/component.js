@@ -99,23 +99,19 @@ class Tooltip extends Component {
       setTimeout(() => {
         this.showTooltip();
       }, 0)
-      return;
     }
     if (this.props.open === false && prevProps.open === true) {
       this.updateSettings('open', false);
       this.hideTooltip();
-      return;
     }
 
     if (this.props.html !== prevProps.html) {
       this.updateReactDom();
-      return;
     }
 
     // Update content
     if (this.props.title !== prevProps.title) {
       this.updateTippy();
-      return;
     }
 
     // update otherProps
@@ -160,7 +156,7 @@ class Tooltip extends Component {
       return;
     }
     if (this.tippy) {
-      this.updateSettings('ReactDOM', this.props.html);
+      this.updateSettings('reactDOM', this.props.html);
       const popper = this.tippy.getPopperElement(this.tooltipDOM);
       const isVisible = popper.style.visibility === 'visible' || this.props.open;
       if (isVisible) {
