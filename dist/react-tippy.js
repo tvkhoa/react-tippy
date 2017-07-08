@@ -402,23 +402,19 @@ var Tooltip = function (_Component) {
         setTimeout(function () {
           _this2.showTooltip();
         }, 0);
-        return;
       }
       if (this.props.open === false && prevProps.open === true) {
         this.updateSettings('open', false);
         this.hideTooltip();
-        return;
       }
 
       if (this.props.html !== prevProps.html) {
         this.updateReactDom();
-        return;
       }
 
       // Update content
       if (this.props.title !== prevProps.title) {
         this.updateTippy();
-        return;
       }
 
       // update otherProps
@@ -467,7 +463,7 @@ var Tooltip = function (_Component) {
         return;
       }
       if (this.tippy) {
-        this.updateSettings('ReactDOM', this.props.html);
+        this.updateSettings('reactDOM', this.props.html);
         var popper = this.tippy.getPopperElement(this.tooltipDOM);
         var isVisible = popper.style.visibility === 'visible' || this.props.open;
         if (isVisible) {
