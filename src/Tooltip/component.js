@@ -216,6 +216,7 @@ class Tooltip extends Component {
         onRequestClose: this.props.onRequestClose,
         useContext: this.props.useContext,
         reactInstance: this.props.useContext ? this : undefined,
+        performance: true,
       });
       if (this.props.open) {
         this.showTooltip();
