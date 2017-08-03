@@ -88,6 +88,7 @@ const HeaderWithTootip = withTooltip(Header, {
 |onRequestClose|`noop function`|Function|Just only use it if you want to `show/hide it manually`. This event is fired when you click outside of your tooltip, should be used with the prop `interaction` to keep your tooltip showing|
 |position|`top`|`top` `bottom` `left` `right`|Specifies which direction to position the tooltip on the element. Add the suffix `-start` or `-end` to shift the position. `top-end` is an example.|
 |trigger|`mouseenter focus`|`mouseenter` `focus` `click` `manual`|Specifies which type of events will trigger a tooltip to show. Separate each by a space. mouseenter is for hovering and touch on mobile, and focus is for keyboard navigation. Use manual if you want to show/hide the tooltip manually/programmatically (see below).|
+|tabIndex|`undefined`|number|set tabIndex so element can receive focus|
 |interactive|`false`|`true` `false`|Makes a tooltip interactive, i.e. will not close when the user hovers over or clicks on the tooltip. This lets you create a popover (similar to Bootstrap) when used in conjunction with a click trigger.|
 |interactiveBorder|2|Any number (pixels)|Specifies the size of the invisible border around an interactive tooltip that will prevent it from closing. Only applies to `mouseenter` triggered tooltips.|
 |delay|0|Any integer >= 0 (milliseconds)|Specifies how long it takes after a trigger event is fired for a tooltip to show.|

@@ -186,7 +186,8 @@ class App extends Component {
 
         {!disabled && (
           <Tooltip
-            trigger="click"
+            trigger="focus"
+            tabIndex={0}
             unmountHTMLWhenHide
             useContext
             html={(
