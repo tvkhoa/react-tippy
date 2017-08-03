@@ -47,6 +47,6 @@
     "start": "react-scripts start"
   },
   "dependencies": {
-    "popper.js": "^1.5.1"
+    "popper.js": "^1.11.1"
   }
 }
