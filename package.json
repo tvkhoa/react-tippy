@@ -46,7 +46,10 @@
     "build": "webpack --config webpacklib.config.js --env build",
     "start": "react-scripts start"
   },
-  "dependencies": {
-    "popper.js": "^1.11.1"
-  }
+},
+"dependencies": {
+"popper.js": "^1.11.1",
+"@types/react": "*"
+},
+"typings": "./index.d.ts"
 }

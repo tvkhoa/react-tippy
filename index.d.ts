@@ -1,0 +1,49 @@
+import * as React from 'react';
+
+export type Position = 'top' | 'bottom' | 'left' | 'right';
+export type Trigger = 'mouseenter' | 'focus click' | 'manual';
+export type Animation = 'shift' | 'perspective' | 'fade scale' | 'none';
+export type Size = 'small' | 'regular' | 'big';
+export type Theme = 'dark' | 'light' | 'transparent';
+
+export interface TooltipProps {
+    disabled?: boolean;
+    open?: boolean;
+    useContext?: boolean;
+    onRequestClose?: () => void;
+    position?: Position;
+    trigger?: Trigger;
+    tabIndex?: number;
+    interactive?: boolean;
+    interactiveBorder?: number;
+    delay?: number;
+    hideDelay?: number;
+    animation?: Animation;
+    arrow?: boolean;
+    arrowSize?: Size;
+    animateFill?: boolean;
+    duration?: number;
+    hideDuration?: number;
+    distance?: number;
+    offset?: number;
+    hideOnClick?: boolean | 'persistent';
+    multiple?: boolean;
+    followCursor?: boolean;
+    inertia?: boolean;
+    transitionFlip?: boolean;
+    popperOptions?: any;
+    html?: React.ReactElement<any>;
+    unmountHTMLWhenHide?: boolean;
+    size?: Size;
+    sticky?: boolean;
+    stickyDuration?: boolean;
+    beforeShown?: () => void;
+    shown?: () => void;
+    beforeHidden?: () => void;
+    hidden?: () => void;
+    theme?: Theme;
+    className?: string;
+    style?: React.CSSProperties;
+}
+
+export class Tooltip extends React.Component<TooltipProps> { }
