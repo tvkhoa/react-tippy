@@ -7,7 +7,7 @@
 		exports["reactTippy"] = factory(require("react"), require("popper.js"), require("react-dom"));
 	else
 		root["reactTippy"] = factory(root["React"], root["Popper"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_13__, __WEBPACK_EXTERNAL_MODULE_36__, __WEBPACK_EXTERNAL_MODULE_37__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_13__, __WEBPACK_EXTERNAL_MODULE_38__, __WEBPACK_EXTERNAL_MODULE_39__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -86,9 +86,6 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 var Browser = exports.Browser = {};
 
 if (typeof window !== 'undefined') {
@@ -127,7 +124,7 @@ var Selectors = exports.Selectors = {
 /**
 * The default settings applied to each instance
 */
-var Defaults = exports.Defaults = _defineProperty({
+var Defaults = exports.Defaults = {
   html: false,
   position: 'top',
   animation: 'shift',
@@ -150,7 +147,9 @@ var Defaults = exports.Defaults = _defineProperty({
   flipDuration: 350,
   sticky: false,
   stickyDuration: 200,
-  appendTo: null,
+  appendTo: function appendTo() {
+    return document.body;
+  },
   zIndex: 9999,
   touchHold: false,
   performance: false,
@@ -160,7 +159,7 @@ var Defaults = exports.Defaults = _defineProperty({
   popperOptions: {},
   open: undefined,
   onRequestClose: function onRequestClose() {}
-}, 'popperOptions', {});
+};
 
 /**
 * The keys of the defaults object for reducing down into a new object
@@ -257,7 +256,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = closest;
 
-var _matches = __webpack_require__(6);
+var _matches = __webpack_require__(8);
 
 /**
 * Ponyfill to get the closest parent element
@@ -289,6 +288,54 @@ function closest(element, parentSelector) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = defer;
+/**
+* Waits until next repaint to execute a fn
+* @param {Function} fn
+*/
+function defer(fn) {
+  window.requestAnimationFrame(function () {
+    setTimeout(fn, 0);
+  });
+}
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getInnerElements;
+
+var _globals = __webpack_require__(0);
+
+/**
+* Returns inner elements of the popper element
+* @param {Element} popper
+* @return {Object}
+*/
+function getInnerElements(popper) {
+  return {
+    tooltip: popper.querySelector(_globals.Selectors.TOOLTIP),
+    circle: popper.querySelector(_globals.Selectors.CIRCLE),
+    content: popper.querySelector(_globals.Selectors.CONTENT)
+  };
+}
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.default = isVisible;
 /**
 * Determines if a popper is currently visible
@@ -300,7 +347,7 @@ function isVisible(popper) {
 }
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -319,28 +366,7 @@ function defaultMatchSelector(s) {
 var matches = exports.matches = typeof window === 'undefined' ? defaultMatchSelector : Element.prototype.matches || Element.prototype.matchesSelector || Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || defaultMatchSelector;
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = queueExecution;
-/**
-* Waits until next repaint to execute a fn
-* @return {Function}
-*/
-function queueExecution(fn) {
-  window.requestAnimationFrame(function () {
-    setTimeout(fn, 0);
-  });
-}
-
-/***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -358,7 +384,7 @@ var _react = __webpack_require__(13);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _tippy = __webpack_require__(28);
+var _tippy = __webpack_require__(30);
 
 var _tippy2 = _interopRequireDefault(_tippy);
 
@@ -390,10 +416,10 @@ var defaultProps = {
   followCursor: false,
   inertia: false,
   popperOptions: {},
-  beforeShown: function beforeShown() {},
-  shown: function shown() {},
-  beforeHidden: function beforeHidden() {},
-  hidden: function hidden() {},
+  onShow: function onShow() {},
+  onShown: function onShown() {},
+  onHide: function onHide() {},
+  onHidden: function onHidden() {},
   disabled: false,
   arrowSize: 'regular',
   size: 'regular',
@@ -403,6 +429,7 @@ var defaultProps = {
   onRequestClose: function onRequestClose() {},
   sticky: false,
   stickyDuration: 200,
+  touchHold: false,
   unmountHTMLWhenHide: false
 };
 
@@ -590,20 +617,22 @@ var Tooltip = function (_Component) {
           followCursor: this.props.followCursor,
           inertia: this.props.inertia,
           popperOptions: this.props.popperOptions,
-          beforeShown: this.props.beforeShown,
-          shown: this.props.shown,
-          beforeHidden: this.props.beforeHidden,
-          hidden: this.props.hidden,
+          onShow: this.props.onShow,
+          onShown: this.props.onShown,
+          onHide: this.props.onHide,
+          onHidden: this.props.onHidden,
           distance: this.props.distance,
           reactDOM: this.props.html,
           unmountHTMLWhenHide: this.props.unmountHTMLWhenHide,
           open: this.props.open,
           sticky: this.props.sticky,
           stickyDuration: this.props.stickyDuration,
+          touchHold: this.props.touchHold,
           onRequestClose: this.props.onRequestClose,
           useContext: this.props.useContext,
           reactInstance: this.props.useContext ? this : undefined,
-          performance: true
+          performance: true,
+          html: this.props.rawTemplate ? this.props.rawTemplate : undefined
         });
         if (this.props.open) {
           this.showTooltip();
@@ -657,7 +686,7 @@ Tooltip.defaultProps = defaultProps;
 exports.default = Tooltip;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -753,48 +782,6 @@ function followCursorHandler(e) {
 }
 
 /***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = hideAllPoppers;
-
-var _globals = __webpack_require__(0);
-
-/**
-* Hides all poppers
-* @param {Object} exclude - refData to exclude if needed
-*/
-function hideAllPoppers(exclude) {
-  _globals.Store.forEach(function (refData) {
-    var popper = refData.popper,
-        tippyInstance = refData.tippyInstance,
-        _refData$settings = refData.settings,
-        appendTo = _refData$settings.appendTo,
-        hideOnClick = _refData$settings.hideOnClick,
-        trigger = _refData$settings.trigger;
-
-    // Don't hide already hidden ones
-
-    if (!appendTo.contains(popper)) return;
-
-    // hideOnClick can have the truthy value of 'persistent', so strict check is needed
-    var isHideOnClick = hideOnClick === true || trigger.indexOf('focus') !== -1;
-    var isNotCurrentRef = !exclude || popper !== exclude.popper;
-
-    if (isHideOnClick && isNotCurrentRef) {
-      refData.settings.onRequestClose();
-      tippyInstance.hide(popper);
-    }
-  });
-}
-
-/***/ }),
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -830,12 +817,18 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = removeTitle;
 /**
-* Removes the title from the tooltipped element
+* Removes the title from the tooltipped element, setting `data-original-title`
+* appropriately
 * @param {Element} el
 */
 function removeTitle(el) {
   var title = el.getAttribute('title');
-  el.setAttribute('data-original-title', title || 'html');
+
+  // Only set `data-original-title` attr if there is a title
+  if (title) {
+    el.setAttribute('data-original-title', title);
+  }
+
   el.removeAttribute('title');
 }
 
@@ -860,7 +853,7 @@ var _react = __webpack_require__(13);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _component = __webpack_require__(8);
+var _component = __webpack_require__(9);
 
 var _component2 = _interopRequireDefault(_component);
 
@@ -895,7 +888,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.withTooltip = exports.Tooltip = undefined;
 
-var _component = __webpack_require__(8);
+var _component = __webpack_require__(9);
 
 var _component2 = _interopRequireDefault(_component);
 
@@ -922,7 +915,7 @@ exports.default = bindEventListeners;
 
 var _globals = __webpack_require__(0);
 
-var _hideAllPoppers = __webpack_require__(10);
+var _hideAllPoppers = __webpack_require__(25);
 
 var _hideAllPoppers2 = _interopRequireDefault(_hideAllPoppers);
 
@@ -934,7 +927,7 @@ var _find = __webpack_require__(2);
 
 var _find2 = _interopRequireDefault(_find);
 
-var _matches = __webpack_require__(6);
+var _matches = __webpack_require__(8);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1168,43 +1161,49 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.default = createPopperInstance;
 
-var _popper = __webpack_require__(36);
+var _popper = __webpack_require__(38);
 
 var _popper2 = _interopRequireDefault(_popper);
 
-var _globals = __webpack_require__(0);
+var _defer = __webpack_require__(5);
 
-var _getCorePlacement = __webpack_require__(3);
-
-var _getCorePlacement2 = _interopRequireDefault(_getCorePlacement);
-
-var _getOffsetDistanceInPx = __webpack_require__(11);
-
-var _getOffsetDistanceInPx2 = _interopRequireDefault(_getOffsetDistanceInPx);
+var _defer2 = _interopRequireDefault(_defer);
 
 var _prefix = __webpack_require__(1);
 
 var _prefix2 = _interopRequireDefault(_prefix);
 
+var _getCorePlacement = __webpack_require__(3);
+
+var _getCorePlacement2 = _interopRequireDefault(_getCorePlacement);
+
+var _getInnerElements2 = __webpack_require__(6);
+
+var _getInnerElements3 = _interopRequireDefault(_getInnerElements2);
+
+var _getOffsetDistanceInPx = __webpack_require__(11);
+
+var _getOffsetDistanceInPx2 = _interopRequireDefault(_getOffsetDistanceInPx);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
 * Creates a new popper instance
-* @param {Object} refData
+* @param {Object} data
 * @return {Object} - the popper instance
 */
-function createPopperInstance(refData) {
-  var el = refData.el,
-      popper = refData.popper,
-      _refData$settings = refData.settings,
-      position = _refData$settings.position,
-      popperOptions = _refData$settings.popperOptions,
-      offset = _refData$settings.offset,
-      distance = _refData$settings.distance,
-      flipDuration = _refData$settings.flipDuration;
+function createPopperInstance(data) {
+  var el = data.el,
+      popper = data.popper,
+      _data$settings = data.settings,
+      position = _data$settings.position,
+      popperOptions = _data$settings.popperOptions,
+      offset = _data$settings.offset,
+      distance = _data$settings.distance,
+      flipDuration = _data$settings.flipDuration;
 
-
-  var tooltip = popper.querySelector(_globals.Selectors.TOOLTIP);
+  var _getInnerElements = (0, _getInnerElements3.default)(popper),
+      tooltip = _getInnerElements.tooltip;
 
   var config = _extends({
     placement: position
@@ -1227,6 +1226,28 @@ function createPopperInstance(refData) {
     }
   });
 
+  // Update the popper's position whenever its content changes
+  // Not supported in IE10 unless polyfilled
+  if (window.MutationObserver) {
+    var styles = popper.style;
+
+    var observer = new MutationObserver(function () {
+      styles[(0, _prefix2.default)('transitionDuration')] = '0ms';
+      data.popperInstance.update();
+      (0, _defer2.default)(function () {
+        styles[(0, _prefix2.default)('transitionDuration')] = flipDuration + 'ms';
+      });
+    });
+
+    observer.observe(popper, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+
+    data._mutationObserver = observer;
+  }
+
   return new _popper2.default(el, popper, config);
 }
 
@@ -1242,7 +1263,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = createTooltips;
 
-var _getIndividualSettings = __webpack_require__(23);
+var _getIndividualSettings = __webpack_require__(24);
 
 var _getIndividualSettings2 = _interopRequireDefault(_getIndividualSettings);
 
@@ -1254,9 +1275,13 @@ var _createTrigger = __webpack_require__(20);
 
 var _createTrigger2 = _interopRequireDefault(_createTrigger);
 
-var _getEventListenerHandlers = __webpack_require__(22);
+var _getEventListenerHandlers = __webpack_require__(23);
 
 var _getEventListenerHandlers2 = _interopRequireDefault(_getEventListenerHandlers);
+
+var _evaluateSettings = __webpack_require__(21);
+
+var _evaluateSettings2 = _interopRequireDefault(_evaluateSettings);
 
 var _removeTitle = __webpack_require__(12);
 
@@ -1279,9 +1304,7 @@ function createTooltips(els) {
   return els.reduce(function (a, el) {
     var id = idCounter;
 
-    var settings = _this.settings.performance ? _this.settings : (0, _getIndividualSettings2.default)(el, _this.settings);
-    // animateFill is disabled if an arrow is true
-    if (settings.arrow) settings.animateFill = false;
+    var settings = (0, _evaluateSettings2.default)(_this.settings.performance ? _this.settings : (0, _getIndividualSettings2.default)(el, _this.settings));
 
     var html = settings.html,
         trigger = settings.trigger,
@@ -1396,6 +1419,37 @@ function createTrigger(event, el, handlers, touchHold) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = evaluateSettings;
+/**
+* Evaluates/modifies the settings object for appropriate behavior
+* @param {Object} settings
+* @return {Object} modified/evaluated settings
+*/
+function evaluateSettings(settings) {
+  // animateFill is disabled if an arrow is true
+  if (settings.arrow) {
+    settings.animateFill = false;
+  }
+
+  // reassign appendTo into the result of evaluating appendTo
+  // if it's set as a function instead of Element
+  if (settings.appendTo && typeof settings.appendTo === 'function') {
+    settings.appendTo = settings.appendTo();
+  }
+
+  return settings;
+}
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.default = getArrayOfElements;
 /**
 * Returns an array of elements based on the selector input
@@ -1415,7 +1469,7 @@ function getArrayOfElements(selector) {
 }
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1428,7 +1482,7 @@ exports.default = getEventListenerHandlers;
 
 var _globals = __webpack_require__(0);
 
-var _isVisible = __webpack_require__(5);
+var _isVisible = __webpack_require__(7);
 
 var _isVisible2 = _interopRequireDefault(_isVisible);
 
@@ -1436,7 +1490,7 @@ var _closest = __webpack_require__(4);
 
 var _closest2 = _interopRequireDefault(_closest);
 
-var _cursorIsOutsideInteractiveBorder = __webpack_require__(30);
+var _cursorIsOutsideInteractiveBorder = __webpack_require__(32);
 
 var _cursorIsOutsideInteractiveBorder2 = _interopRequireDefault(_cursorIsOutsideInteractiveBorder);
 
@@ -1586,7 +1640,7 @@ function getEventListenerHandlers(el, popper, settings) {
 }
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1632,7 +1686,49 @@ function getIndividualSettings(el, instanceSettings) {
 }
 
 /***/ }),
-/* 24 */
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = hideAllPoppers;
+
+var _globals = __webpack_require__(0);
+
+/**
+* Hides all poppers
+* @param {Object} exclude - refData to exclude if needed
+*/
+function hideAllPoppers(exclude) {
+  _globals.Store.forEach(function (refData) {
+    var popper = refData.popper,
+        tippyInstance = refData.tippyInstance,
+        _refData$settings = refData.settings,
+        appendTo = _refData$settings.appendTo,
+        hideOnClick = _refData$settings.hideOnClick,
+        trigger = _refData$settings.trigger;
+
+    // Don't hide already hidden ones
+
+    if (!appendTo.contains(popper)) return;
+
+    // hideOnClick can have the truthy value of 'persistent', so strict check is needed
+    var isHideOnClick = hideOnClick === true || trigger.indexOf('focus') !== -1;
+    var isNotCurrentRef = !exclude || popper !== exclude.popper;
+
+    if (isHideOnClick && isNotCurrentRef) {
+      refData.settings.onRequestClose();
+      tippyInstance.hide(popper);
+    }
+  });
+}
+
+/***/ }),
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1642,12 +1738,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = init;
-
-var _globals = __webpack_require__(0);
-
-var _hideAllPoppers = __webpack_require__(10);
-
-var _hideAllPoppers2 = _interopRequireDefault(_hideAllPoppers);
 
 var _bindEventListeners = __webpack_require__(16);
 
@@ -1663,17 +1753,13 @@ function init() {
   if (init.done) return false;
   init.done = true;
 
-  // If the script is in <head>, document.body is null, so it's set in the
-  // init function
-  _globals.Defaults.appendTo = document.body;
-
   (0, _bindEventListeners2.default)();
 
   return true;
 }
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1684,15 +1770,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = makeSticky;
 
-var _queueExecution = __webpack_require__(7);
+var _defer = __webpack_require__(5);
 
-var _queueExecution2 = _interopRequireDefault(_queueExecution);
+var _defer2 = _interopRequireDefault(_defer);
 
 var _prefix = __webpack_require__(1);
 
 var _prefix2 = _interopRequireDefault(_prefix);
 
-var _isVisible = __webpack_require__(5);
+var _isVisible = __webpack_require__(7);
 
 var _isVisible2 = _interopRequireDefault(_isVisible);
 
@@ -1725,11 +1811,11 @@ function makeSticky(refData) {
   };
 
   // Wait until Popper's position has been updated initially
-  (0, _queueExecution2.default)(updatePosition);
+  (0, _defer2.default)(updatePosition);
 }
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1742,17 +1828,13 @@ exports.default = mountPopper;
 
 var _globals = __webpack_require__(0);
 
-var _followCursorHandler = __webpack_require__(9);
+var _followCursorHandler = __webpack_require__(10);
 
 var _followCursorHandler2 = _interopRequireDefault(_followCursorHandler);
 
 var _createPopperInstance = __webpack_require__(18);
 
 var _createPopperInstance2 = _interopRequireDefault(_createPopperInstance);
-
-var _queueExecution = __webpack_require__(7);
-
-var _queueExecution2 = _interopRequireDefault(_queueExecution);
 
 var _prefix = __webpack_require__(1);
 
@@ -1763,15 +1845,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
 * Appends the popper and creates a popper instance if one does not exist
 * Also updates its position if need be and enables event listeners
-* @param {Object} refData -  the element/popper reference data
+* @param {Object} data -  the element/popper reference data
 */
-function mountPopper(refData) {
-  var el = refData.el,
-      popper = refData.popper,
-      _refData$settings = refData.settings,
-      appendTo = _refData$settings.appendTo,
-      followCursor = _refData$settings.followCursor,
-      flipDuration = _refData$settings.flipDuration;
+function mountPopper(data) {
+  var el = data.el,
+      popper = data.popper,
+      _data$settings = data.settings,
+      appendTo = _data$settings.appendTo,
+      followCursor = _data$settings.followCursor;
 
   // Already on the DOM
 
@@ -1779,46 +1860,24 @@ function mountPopper(refData) {
 
   appendTo.appendChild(popper);
 
-  if (!refData.popperInstance) {
-    // Create instance if it hasn't been created yet
-    refData.popperInstance = (0, _createPopperInstance2.default)(refData);
-
-    // Update the popper's position whenever its content changes
-    // Not supported in IE10 unless polyfilled
-    if (window.MutationObserver) {
-      var styles = popper.style;
-      var observer = new MutationObserver(function () {
-        styles[(0, _prefix2.default)('transitionDuration')] = '0ms';
-        refData.popperInstance.update();
-        (0, _queueExecution2.default)(function () {
-          styles[(0, _prefix2.default)('transitionDuration')] = flipDuration + 'ms';
-        });
-      });
-      observer.observe(popper, {
-        childList: true,
-        subtree: true,
-        characterData: true
-      });
-      refData._mutationObserver = observer;
-    }
+  if (!data.popperInstance) {
+    data.popperInstance = (0, _createPopperInstance2.default)(data);
   } else {
-    refData.popperInstance.update();
-
+    data.popperInstance.update();
     if (!followCursor || _globals.Browser.touch) {
-      refData.popperInstance.enableEventListeners();
+      data.popperInstance.enableEventListeners();
     }
   }
 
-  // Since touch is determined dynamically, followCursor setting
-  // is set on mount
+  // Since touch is determined dynamically, followCursor is set on mount
   if (followCursor && !_globals.Browser.touch) {
     el.addEventListener('mousemove', _followCursorHandler2.default);
-    refData.popperInstance.disableEventListeners();
+    data.popperInstance.disableEventListeners();
   }
 }
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1831,45 +1890,51 @@ exports.default = onTransitionEnd;
 
 var _globals = __webpack_require__(0);
 
+var _getInnerElements2 = __webpack_require__(6);
+
+var _getInnerElements3 = _interopRequireDefault(_getInnerElements2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
 * Prepares the callback functions for `show` and `hide` methods
-* @param {Object} refData -  the element/popper reference data
+* @param {Object} data
 * @param {Number} duration
 * @param {Function} callback - callback function to fire once transitions complete
 */
-function onTransitionEnd(refData, duration, callback) {
+function onTransitionEnd(data, duration, callback) {
   // Make callback synchronous if duration is 0
   if (!duration) {
     return callback();
   }
 
-  var tooltip = refData.popper.querySelector(_globals.Selectors.TOOLTIP);
+  var _getInnerElements = (0, _getInnerElements3.default)(data.popper),
+      tooltip = _getInnerElements.tooltip;
+
   var transitionendFired = false;
 
   var listenerCallback = function listenerCallback(e) {
-    if (e.target !== tooltip) return;
-
-    transitionendFired = true;
-
-    tooltip.removeEventListener('webkitTransitionEnd', listenerCallback);
-    tooltip.removeEventListener('transitionend', listenerCallback);
-
-    callback();
+    if (e.target === tooltip && !transitionendFired) {
+      transitionendFired = true;
+      callback();
+    }
   };
 
-  // Wait for transitions to complete
+  // Fire callback upon transition completion
   tooltip.addEventListener('webkitTransitionEnd', listenerCallback);
   tooltip.addEventListener('transitionend', listenerCallback);
 
-  // transitionend listener sometimes may not fire
-  clearTimeout(refData._transitionendTimeout);
-  refData._transitionendTimeout = setTimeout(function () {
-    !transitionendFired && callback();
+  // Fallback: transitionend listener sometimes may not fire
+  clearTimeout(data._transitionendTimeout);
+  data._transitionendTimeout = setTimeout(function () {
+    if (!transitionendFired) {
+      callback();
+    }
   }, duration);
 }
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1891,17 +1956,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _globals = __webpack_require__(0);
 
-var _reactDom = __webpack_require__(37);
+var _reactDom = __webpack_require__(39);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _init = __webpack_require__(24);
+var _init = __webpack_require__(26);
 
 var _init2 = _interopRequireDefault(_init);
 
-var _queueExecution = __webpack_require__(7);
+var _defer = __webpack_require__(5);
 
-var _queueExecution2 = _interopRequireDefault(_queueExecution);
+var _defer2 = _interopRequireDefault(_defer);
 
 var _prefix = __webpack_require__(1);
 
@@ -1911,7 +1976,7 @@ var _find = __webpack_require__(2);
 
 var _find2 = _interopRequireDefault(_find);
 
-var _findIndex = __webpack_require__(32);
+var _findIndex = __webpack_require__(34);
 
 var _findIndex2 = _interopRequireDefault(_findIndex);
 
@@ -1919,47 +1984,51 @@ var _removeTitle = __webpack_require__(12);
 
 var _removeTitle2 = _interopRequireDefault(_removeTitle);
 
-var _elementIsInViewport = __webpack_require__(31);
+var _elementIsInViewport = __webpack_require__(33);
 
 var _elementIsInViewport2 = _interopRequireDefault(_elementIsInViewport);
 
-var _triggerReflow = __webpack_require__(35);
+var _triggerReflow = __webpack_require__(37);
 
 var _triggerReflow2 = _interopRequireDefault(_triggerReflow);
 
-var _modifyClassList = __webpack_require__(33);
+var _modifyClassList = __webpack_require__(35);
 
 var _modifyClassList2 = _interopRequireDefault(_modifyClassList);
 
-var _applyTransitionDuration = __webpack_require__(29);
+var _getInnerElements4 = __webpack_require__(6);
+
+var _getInnerElements5 = _interopRequireDefault(_getInnerElements4);
+
+var _applyTransitionDuration = __webpack_require__(31);
 
 var _applyTransitionDuration2 = _interopRequireDefault(_applyTransitionDuration);
 
-var _isVisible = __webpack_require__(5);
+var _isVisible = __webpack_require__(7);
 
 var _isVisible2 = _interopRequireDefault(_isVisible);
 
-var _noop = __webpack_require__(34);
+var _noop = __webpack_require__(36);
 
 var _noop2 = _interopRequireDefault(_noop);
 
-var _followCursorHandler = __webpack_require__(9);
+var _followCursorHandler = __webpack_require__(10);
 
 var _followCursorHandler2 = _interopRequireDefault(_followCursorHandler);
 
-var _getArrayOfElements = __webpack_require__(21);
+var _getArrayOfElements = __webpack_require__(22);
 
 var _getArrayOfElements2 = _interopRequireDefault(_getArrayOfElements);
 
-var _onTransitionEnd = __webpack_require__(27);
+var _onTransitionEnd = __webpack_require__(29);
 
 var _onTransitionEnd2 = _interopRequireDefault(_onTransitionEnd);
 
-var _mountPopper = __webpack_require__(26);
+var _mountPopper = __webpack_require__(28);
 
 var _mountPopper2 = _interopRequireDefault(_mountPopper);
 
-var _makeSticky = __webpack_require__(25);
+var _makeSticky = __webpack_require__(27);
 
 var _makeSticky2 = _interopRequireDefault(_makeSticky);
 
@@ -1986,7 +2055,6 @@ var Tippy = function () {
     // Use default browser tooltip on unsupported browsers
     if (!_globals.Browser.SUPPORTED) return;
 
-    // DOM is presumably mostly ready (for document.body) by instantiation time
     (0, _init2.default)();
 
     this.state = {
@@ -1995,10 +2063,12 @@ var Tippy = function () {
 
     this.selector = selector;
 
-    this.settings = Object.assign({}, _globals.Defaults, settings);
+    this.settings = _extends({}, _globals.Defaults, settings);
 
-    // DEPRECATION: `on` prefixed callbacks are now preferred over non-
-    // as it better indicates it's a callback function
+    if (settings.show || settings.shown || settings.hide || settings.hidden) {
+      console.warn('Callbacks without the `on` prefix are deprecated (with the exception of `wait`).' + ' Use onShow, onShown, onHide, and onHidden instead.');
+    }
+
     this.callbacks = {
       wait: settings.wait,
       show: settings.onShow || settings.show || _noop2.default,
@@ -2022,8 +2092,8 @@ var Tippy = function () {
     key: 'getPopperElement',
     value: function getPopperElement(el) {
       try {
-        return (0, _find2.default)(this.store, function (refData) {
-          return refData.el === el;
+        return (0, _find2.default)(this.store, function (data) {
+          return data.el === el;
         }).popper;
       } catch (e) {
         console.error('[getPopperElement]: Element passed as the argument does not exist in the instance');
@@ -2040,8 +2110,8 @@ var Tippy = function () {
     key: 'getReferenceElement',
     value: function getReferenceElement(popper) {
       try {
-        return (0, _find2.default)(this.store, function (refData) {
-          return refData.popper === popper;
+        return (0, _find2.default)(this.store, function (data) {
+          return data.popper === popper;
         }).el;
       } catch (e) {
         console.error('[getReferenceElement]: Popper passed as the argument does not exist in the instance');
@@ -2057,8 +2127,8 @@ var Tippy = function () {
   }, {
     key: 'getReferenceData',
     value: function getReferenceData(x) {
-      return (0, _find2.default)(this.store, function (refData) {
-        return refData.el === x || refData.popper === x;
+      return (0, _find2.default)(this.store, function (data) {
+        return data.el === x || data.popper === x;
       });
     }
 
@@ -2072,11 +2142,11 @@ var Tippy = function () {
   }, {
     key: 'updateSettings',
     value: function updateSettings(popper, name, value) {
-      var refData = (0, _find2.default)(this.store, function (refData) {
-        return refData.popper === popper;
+      var data = (0, _find2.default)(this.store, function (data) {
+        return data.popper === popper;
       });
-      var newSettings = _extends({}, refData.settings, _defineProperty({}, name, value));
-      refData.settings = newSettings;
+      var newSettings = _extends({}, data.settings, _defineProperty({}, name, value));
+      data.settings = newSettings;
     }
   }, {
     key: 'updateForReact',
@@ -2089,16 +2159,16 @@ var Tippy = function () {
     */
     value: function updateForReact(popper, updatedContent) {
       var tooltipContent = popper.querySelector(_globals.Selectors.CONTENT);
-      var refData = (0, _find2.default)(this.store, function (refData) {
-        return refData.popper === popper;
+      var data = (0, _find2.default)(this.store, function (data) {
+        return data.popper === popper;
       });
 
-      var _refData$settings = refData.settings,
-          useContext = _refData$settings.useContext,
-          reactInstance = _refData$settings.reactInstance;
+      var _data$settings = data.settings,
+          useContext = _data$settings.useContext,
+          reactInstance = _data$settings.reactInstance;
 
       if (useContext) {
-        _reactDom2.default.unstable_renderSubtreeIntoContainer(refData.settings.reactInstance, updatedContent, tooltipContent);
+        _reactDom2.default.unstable_renderSubtreeIntoContainer(data.settings.reactInstance, updatedContent, tooltipContent);
       } else {
         _reactDom2.default.render(updatedContent, tooltipContent);
       }
@@ -2116,32 +2186,41 @@ var Tippy = function () {
 
       if (this.state.destroyed) return;
 
-      this.callbacks.show.call(popper);
-
-      var refData = (0, _find2.default)(this.store, function (refData) {
-        return refData.popper === popper;
+      var data = (0, _find2.default)(this.store, function (data) {
+        return data.popper === popper;
       });
-      var tooltip = popper.querySelector(_globals.Selectors.TOOLTIP);
-      var circle = popper.querySelector(_globals.Selectors.CIRCLE);
-      var content = popper.querySelector(_globals.Selectors.CONTENT);
 
-      if (refData.settings.open === false) {
+      var _getInnerElements = (0, _getInnerElements5.default)(popper),
+          tooltip = _getInnerElements.tooltip,
+          circle = _getInnerElements.circle,
+          content = _getInnerElements.content;
+
+      if (!document.body.contains(data.el)) {
+        this.destroy(popper);
         return;
       }
 
-      if (refData.settings.reactDOM) {
-        this.updateForReact(popper, refData.settings.reactDOM);
+      this.callbacks.show.call(popper);
+
+      // Custom react
+      if (data && data.settings && data.settings.open === false) {
+        return;
       }
 
-      var el = refData.el,
-          _refData$settings2 = refData.settings,
-          appendTo = _refData$settings2.appendTo,
-          sticky = _refData$settings2.sticky,
-          interactive = _refData$settings2.interactive,
-          followCursor = _refData$settings2.followCursor,
-          flipDuration = _refData$settings2.flipDuration,
-          duration = _refData$settings2.duration,
-          dynamicTitle = _refData$settings2.dynamicTitle;
+      if (data.settings.reactDOM) {
+        this.updateForReact(popper, data.settings.reactDOM);
+      }
+      // end: Custom react
+
+      var el = data.el,
+          _data$settings2 = data.settings,
+          appendTo = _data$settings2.appendTo,
+          sticky = _data$settings2.sticky,
+          interactive = _data$settings2.interactive,
+          followCursor = _data$settings2.followCursor,
+          flipDuration = _data$settings2.flipDuration,
+          duration = _data$settings2.duration,
+          dynamicTitle = _data$settings2.dynamicTitle;
 
 
       if (dynamicTitle) {
@@ -2154,29 +2233,24 @@ var Tippy = function () {
 
       var _duration = customDuration !== undefined ? customDuration : Array.isArray(duration) ? duration[0] : duration;
 
-      // Remove transition duration (prevent a transition when popper changes position)
+      // Prevent a transition when popper changes position
       (0, _applyTransitionDuration2.default)([popper, tooltip, circle], 0);
 
-      (0, _mountPopper2.default)(refData);
+      (0, _mountPopper2.default)(data);
 
       popper.style.visibility = 'visible';
       popper.setAttribute('aria-hidden', 'false');
 
-      // Wait for popper to update position and alter x-placement
-      (0, _queueExecution2.default)(function () {
-        if (!(0, _isVisible2.default)(popper)) return;
-
-        // Sometimes the arrow will not be in the correct position,
-        // force another update
+      // Wait for popper's position to update
+      (0, _defer2.default)(function () {
+        // Sometimes the arrow will not be in the correct position, force another update
         if (!followCursor || _globals.Browser.touch) {
-          refData.popperInstance.update();
+          data.popperInstance.update();
+          (0, _applyTransitionDuration2.default)([popper], flipDuration);
         }
 
         // Re-apply transition durations
         (0, _applyTransitionDuration2.default)([tooltip, circle], _duration);
-        if (!followCursor || _globals.Browser.touch) {
-          (0, _applyTransitionDuration2.default)([popper], flipDuration);
-        }
 
         // Make content fade out a bit faster than the tooltip if `animateFill`
         if (circle) content.style.opacity = 1;
@@ -2185,7 +2259,7 @@ var Tippy = function () {
         interactive && el.classList.add('active');
 
         // Update popper's position on every animation frame
-        sticky && (0, _makeSticky2.default)(refData);
+        sticky && (0, _makeSticky2.default)(data);
 
         // Repaint/reflow is required for CSS transition when appending
         (0, _triggerReflow2.default)(tooltip, circle);
@@ -2197,17 +2271,15 @@ var Tippy = function () {
         });
 
         // Wait for transitions to complete
-        (0, _onTransitionEnd2.default)(refData, _duration, function () {
-          if (!(0, _isVisible2.default)(popper) || refData._onShownFired) return;
+        (0, _onTransitionEnd2.default)(data, _duration, function () {
+          if (!(0, _isVisible2.default)(popper) || data._onShownFired) return;
 
           // Focus interactive tooltips only
           interactive && popper.focus();
-
           // Remove transitions from tooltip
           tooltip.classList.add('tippy-notransition');
-
           // Prevents shown() from firing more than once from early transition cancellations
-          refData._onShownFired = true;
+          data._onShownFired = true;
 
           _this.callbacks.shown.call(popper);
         });
@@ -2229,35 +2301,40 @@ var Tippy = function () {
 
       this.callbacks.hide.call(popper);
 
-      var refData = (0, _find2.default)(this.store, function (refData) {
-        return refData.popper === popper;
+      var data = (0, _find2.default)(this.store, function (data) {
+        return data.popper === popper;
       });
-      var tooltip = popper.querySelector(_globals.Selectors.TOOLTIP);
-      var circle = popper.querySelector(_globals.Selectors.CIRCLE);
-      var content = popper.querySelector(_globals.Selectors.CONTENT);
 
+      var _getInnerElements2 = (0, _getInnerElements5.default)(popper),
+          tooltip = _getInnerElements2.tooltip,
+          circle = _getInnerElements2.circle,
+          content = _getInnerElements2.content;
+
+      // custom react
       // Prevent hide if open
-      if (refData.settings.disabled === false && refData.settings.open) {
+
+
+      if (data.settings.disabled === false && data.settings.open) {
         return;
       }
 
-      if (refData.settings.unmountHTMLWhenHide && refData.settings.reactDOM) {
-        _reactDom2.default.unmountComponentAtNode(content);
-      }
-      var el = refData.el,
-          _refData$settings3 = refData.settings,
-          appendTo = _refData$settings3.appendTo,
-          sticky = _refData$settings3.sticky,
-          interactive = _refData$settings3.interactive,
-          followCursor = _refData$settings3.followCursor,
-          html = _refData$settings3.html,
-          trigger = _refData$settings3.trigger,
-          duration = _refData$settings3.duration;
+      var isUnmount = data && data.settings && data.settings.unmountHTMLWhenHide && data.settings.reactDOM;
+      // end: custom react
+
+      var el = data.el,
+          _data$settings3 = data.settings,
+          appendTo = _data$settings3.appendTo,
+          sticky = _data$settings3.sticky,
+          interactive = _data$settings3.interactive,
+          followCursor = _data$settings3.followCursor,
+          html = _data$settings3.html,
+          trigger = _data$settings3.trigger,
+          duration = _data$settings3.duration;
 
 
       var _duration = customDuration !== undefined ? customDuration : Array.isArray(duration) ? duration[1] : duration;
 
-      refData._onShownFired = false;
+      data._onShownFired = false;
       interactive && el.classList.remove('active');
 
       popper.style.visibility = 'hidden';
@@ -2281,16 +2358,23 @@ var Tippy = function () {
       }
 
       // Wait for transitions to complete
-      (0, _onTransitionEnd2.default)(refData, _duration, function () {
-        if ((0, _isVisible2.default)(popper) || !appendTo.contains(popper)) return;
+      (0, _onTransitionEnd2.default)(data, _duration, function () {
+        // `isVisible` is not completely reliable to determine if we shouldn't
+        // run the hidden callback, we need to check the computed opacity style.
+        // This prevents glitchy behavior of the transition when quickly showing
+        // and hiding a tooltip.
+        if ((0, _isVisible2.default)(popper) || !appendTo.contains(popper) || getComputedStyle(tooltip).opacity === '1') return;
 
         el.removeEventListener('mousemove', _followCursorHandler2.default);
-
-        refData.popperInstance.disableEventListeners();
-
+        data.popperInstance.disableEventListeners();
         appendTo.removeChild(popper);
 
         _this2.callbacks.hidden.call(popper);
+
+        // custom react
+        if (isUnmount) {
+          _reactDom2.default.unmountComponentAtNode(content);
+        }
       });
     }
 
@@ -2304,12 +2388,15 @@ var Tippy = function () {
     value: function update(popper) {
       if (this.state.destroyed) return;
 
-      var refData = (0, _find2.default)(this.store, function (refData) {
-        return refData.popper === popper;
+      var data = (0, _find2.default)(this.store, function (data) {
+        return data.popper === popper;
       });
-      var content = popper.querySelector(_globals.Selectors.CONTENT);
-      var el = refData.el,
-          html = refData.settings.html;
+
+      var _getInnerElements3 = (0, _getInnerElements5.default)(popper),
+          content = _getInnerElements3.content;
+
+      var el = data.el,
+          html = data.settings.html;
 
 
       if (html instanceof Element) {
@@ -2335,14 +2422,14 @@ var Tippy = function () {
 
       if (this.state.destroyed) return;
 
-      var refData = (0, _find2.default)(this.store, function (refData) {
-        return refData.popper === popper;
+      var data = (0, _find2.default)(this.store, function (data) {
+        return data.popper === popper;
       });
 
-      var el = refData.el,
-          popperInstance = refData.popperInstance,
-          listeners = refData.listeners,
-          _mutationObserver = refData._mutationObserver;
+      var el = data.el,
+          popperInstance = data.popperInstance,
+          listeners = data.listeners,
+          _mutationObserver = data._mutationObserver;
 
       // Ensure the popper is hidden
 
@@ -2366,14 +2453,14 @@ var Tippy = function () {
       _mutationObserver && _mutationObserver.disconnect();
 
       // Remove from store
-      _globals.Store.splice((0, _findIndex2.default)(_globals.Store, function (refData) {
-        return refData.popper === popper;
+      _globals.Store.splice((0, _findIndex2.default)(_globals.Store, function (data) {
+        return data.popper === popper;
       }), 1);
 
       // Ensure filter is called only once
       if (_isLast === undefined || _isLast) {
-        this.store = _globals.Store.filter(function (refData) {
-          return refData.tippyInstance === _this3;
+        this.store = _globals.Store.filter(function (data) {
+          return data.tippyInstance === _this3;
         });
       }
     }
@@ -2421,7 +2508,7 @@ tippy.enableDynamicInputDetection = function () {
 exports.default = tippy;
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2438,7 +2525,7 @@ var _prefix = __webpack_require__(1);
 
 var _prefix2 = _interopRequireDefault(_prefix);
 
-var _matches = __webpack_require__(6);
+var _matches = __webpack_require__(8);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2460,7 +2547,7 @@ function applyTransitionDuration(els, duration) {
 }
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2523,7 +2610,7 @@ function cursorIsOutsideInteractiveBorder(event, popper, settings) {
 }
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2545,7 +2632,7 @@ function elementIsInViewport(el) {
 }
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2578,7 +2665,7 @@ function findIndex(arr, checkFn) {
 }
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2601,7 +2688,7 @@ function modifyClassList(els, callback) {
 }
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2614,7 +2701,7 @@ exports.default = noop;
 function noop() {}
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2642,16 +2729,16 @@ function triggerReflow(tooltip, circle) {
 }
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_36__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_38__;
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_37__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_39__;
 
 /***/ })
 /******/ ]);
