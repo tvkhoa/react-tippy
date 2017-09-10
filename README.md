@@ -112,10 +112,11 @@ const HeaderWithTootip = withTooltip(Header, {
 |size|`regular`|`small` `regular` `big`|Specifies how big the tooltip is.|
 |sticky|`false`|`true` `false`|Specifies whether the tooltip should stick to its element reference when it's showing (for example, if the element is animated/moves).|
 |stickyDuration|200|Any number (milliseconds)|Specifies the 'smoothing' transition when the popper's position updates as its element moves.|
-|beforeShown|noop|function|Callback before show|
-|shown|noop|function|Callback after show|
-|beforeHidden|noop|function|Callback before hide|
-|hidden|noop|function|Callback after hide|
+|touchHold|false|`true` `false`|Changes the trigger behavior on touch devices. It will change it from a tap to show and tap off to hide, to a tap and hold to show, and a release to hide.|
+|onShow|noop|function|Callback when the tooltip has been triggered and has started to transition in|
+|onShown|noop|function|Callback when the tooltip has fully transitioned in and is showing|
+|onHide|noop|function|Callback when the tooltip has begun to transition out|
+|onHidden|noop|function|Callback when the tooltip has fully transitioned out and is hidden|
 |theme|`dark`|`dark` `light` `transparent`|The CSS styling theme.|
 |className|''|string|className of container|
 |style|{}|React inline style (object)|style of container|

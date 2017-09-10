@@ -56,7 +56,7 @@ export const Defaults = {
   flipDuration: 350,
   sticky: false,
   stickyDuration: 200,
-  appendTo: null,
+  appendTo: () => document.body,
   zIndex: 9999,
   touchHold: false,
   performance: false,
@@ -66,7 +66,6 @@ export const Defaults = {
   popperOptions: {},
   open: undefined,
   onRequestClose: () => {},
-  popperOptions: {}
 }
 
 /**

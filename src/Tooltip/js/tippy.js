@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom'
 import init from './core/init'
 
 /* Utility functions */
-import queueExecution          from './utils/queueExecution'
+import defer                   from './utils/defer'
 import prefix                  from './utils/prefix'
 import find                    from './utils/find'
 import findIndex               from './utils/findIndex'
@@ -17,6 +17,7 @@ import removeTitle             from './utils/removeTitle'
 import elementIsInViewport     from './utils/elementIsInViewport'
 import triggerReflow           from './utils/triggerReflow'
 import modifyClassList         from './utils/modifyClassList'
+import getInnerElements        from './utils/getInnerElements'
 import applyTransitionDuration from './utils/applyTransitionDuration'
 import isVisible               from './utils/isVisible'
 import noop                    from './utils/noop'
@@ -38,7 +39,6 @@ class Tippy {
     // Use default browser tooltip on unsupported browsers
     if (!Browser.SUPPORTED) return
 
-    // DOM is presumably mostly ready (for document.body) by instantiation time
     init()
 
     this.state = {
@@ -47,10 +47,15 @@ class Tippy {
 
     this.selector = selector
 
-    this.settings = Object.assign({}, Defaults, settings)
+    this.settings = { ...Defaults, ...settings }
 
-    // DEPRECATION: `on` prefixed callbacks are now preferred over non-
-    // as it better indicates it's a callback function
+    if (settings.show || settings.shown || settings.hide || settings.hidden) {
+      console.warn(
+        'Callbacks without the `on` prefix are deprecated (with the exception of `wait`).' +
+        ' Use onShow, onShown, onHide, and onHidden instead.'
+      )
+    }
+
     this.callbacks = {
       wait: settings.wait,
       show: settings.onShow || settings.show || noop,
@@ -70,7 +75,7 @@ class Tippy {
   */
   getPopperElement(el) {
     try {
-      return find(this.store, refData => refData.el === el).popper
+      return find(this.store, data => data.el === el).popper
     } catch (e) {
       console.error('[getPopperElement]: Element passed as the argument does not exist in the instance')
     }
@@ -83,7 +88,7 @@ class Tippy {
   */
   getReferenceElement(popper) {
     try {
-      return find(this.store, refData => refData.popper === popper).el
+      return find(this.store, data => data.popper === popper).el
     } catch (e) {
       console.error('[getReferenceElement]: Popper passed as the argument does not exist in the instance')
     }
@@ -95,74 +100,79 @@ class Tippy {
   * @return {Object}
   */
   getReferenceData(x) {
-    return find(this.store, refData => refData.el === x || refData.popper === x)
+    return find(this.store, data => data.el === x || data.popper === x)
   }
 
-    /**
-    * Update settings
-    * @param {DOMElement} - popper
-    * @param {string} - name
-    * @param {string} - value
-    */
+  /**
+  * Update settings
+  * @param {DOMElement} - popper
+  * @param {string} - name
+  * @param {string} - value
+  */
 
-    updateSettings(popper, name, value) {
-      const refData = find(this.store, refData => refData.popper === popper)
-      const newSettings = {
-        ...refData.settings,
-        [name]: value,
-      }
-      refData.settings = newSettings;
-    };
-
-    /**
-    * Update for React
-    * @param {DOMElement} - popper
-    * @param {ReactElement} - content
-    */
-    updateForReact(popper, updatedContent) {
-      const tooltipContent = popper.querySelector(Selectors.CONTENT)
-      const refData = find(this.store, refData => refData.popper === popper)
-
-      const {
-        useContext,
-        reactInstance,
-      } = refData.settings;
-      if (useContext) {
-        ReactDOM.unstable_renderSubtreeIntoContainer(
-          refData.settings.reactInstance,
-          updatedContent,
-          tooltipContent,
-        );
-      } else {
-        ReactDOM.render(
-          updatedContent,
-          tooltipContent,
-        );
-      }
-
+  updateSettings(popper, name, value) {
+    const data = find(this.store, data => data.popper === popper)
+    const newSettings = {
+      ...data.settings,
+      [name]: value,
     }
-    /**
-    * Shows a popper
-    * @param {Element} popper
-    * @param {Number} customDuration (optional)
-    */
-    show(popper, customDuration) {
-        if (this.state.destroyed) return
+    data.settings = newSettings;
+  };
+
+  /**
+  * Update for React
+  * @param {DOMElement} - popper
+  * @param {ReactElement} - content
+  */
+  updateForReact(popper, updatedContent) {
+    const tooltipContent = popper.querySelector(Selectors.CONTENT)
+    const data = find(this.store, data => data.popper === popper)
+
+    const {
+      useContext,
+      reactInstance,
+    } = data.settings;
+    if (useContext) {
+      ReactDOM.unstable_renderSubtreeIntoContainer(
+        data.settings.reactInstance,
+        updatedContent,
+        tooltipContent,
+      );
+    } else {
+      ReactDOM.render(
+        updatedContent,
+        tooltipContent,
+      );
+    }
+
+  }
+  /**
+  * Shows a popper
+  * @param {Element} popper
+  * @param {Number} customDuration (optional)
+  */
+  show(popper, customDuration) {
+    if (this.state.destroyed) return
+
+    const data = find(this.store, data => data.popper === popper)
+    const { tooltip, circle, content } = getInnerElements(popper)
+
+    if (!document.body.contains(data.el)) {
+      this.destroy(popper)
+      return
+    }
 
     this.callbacks.show.call(popper)
 
-    const refData = find(this.store, refData => refData.popper === popper)
-    const tooltip = popper.querySelector(Selectors.TOOLTIP)
-    const circle = popper.querySelector(Selectors.CIRCLE)
-    const content = popper.querySelector(Selectors.CONTENT)
-
-    if (refData.settings.open === false) {
+    // Custom react
+    if (data && data.settings && data.settings.open === false) {
       return;
     }
 
-    if (refData.settings.reactDOM) {
-      this.updateForReact(popper, refData.settings.reactDOM)
+    if (data.settings.reactDOM) {
+      this.updateForReact(popper, data.settings.reactDOM)
     }
+    // end: Custom react
 
     const {
       el,
@@ -175,7 +185,7 @@ class Tippy {
         duration,
         dynamicTitle
       }
-    } = refData
+    } = data
 
     if (dynamicTitle) {
       const title = el.getAttribute('title')
@@ -189,29 +199,24 @@ class Tippy {
       ? customDuration
       : Array.isArray(duration) ? duration[0] : duration
 
-    // Remove transition duration (prevent a transition when popper changes position)
+    // Prevent a transition when popper changes position
     applyTransitionDuration([popper, tooltip, circle], 0)
 
-    mountPopper(refData)
+    mountPopper(data)
 
     popper.style.visibility = 'visible'
     popper.setAttribute('aria-hidden', 'false')
 
-    // Wait for popper to update position and alter x-placement
-    queueExecution(() => {
-      if (!isVisible(popper)) return
-
-      // Sometimes the arrow will not be in the correct position,
-      // force another update
+    // Wait for popper's position to update
+    defer(() => {
+      // Sometimes the arrow will not be in the correct position, force another update
       if (!followCursor || Browser.touch) {
-        refData.popperInstance.update()
+        data.popperInstance.update()
+        applyTransitionDuration([popper], flipDuration)
       }
 
       // Re-apply transition durations
       applyTransitionDuration([tooltip, circle], _duration)
-      if (!followCursor || Browser.touch) {
-        applyTransitionDuration([popper], flipDuration)
-      }
 
       // Make content fade out a bit faster than the tooltip if `animateFill`
       if (circle) content.style.opacity = 1
@@ -220,7 +225,7 @@ class Tippy {
       interactive && el.classList.add('active')
 
       // Update popper's position on every animation frame
-      sticky && makeSticky(refData)
+      sticky && makeSticky(data)
 
       // Repaint/reflow is required for CSS transition when appending
       triggerReflow(tooltip, circle)
@@ -232,17 +237,15 @@ class Tippy {
       })
 
       // Wait for transitions to complete
-      onTransitionEnd(refData, _duration, () => {
-        if (!isVisible(popper) || refData._onShownFired) return
+      onTransitionEnd(data, _duration, () => {
+        if (!isVisible(popper) || data._onShownFired) return
 
         // Focus interactive tooltips only
         interactive && popper.focus()
-
         // Remove transitions from tooltip
         tooltip.classList.add('tippy-notransition')
-
         // Prevents shown() from firing more than once from early transition cancellations
-        refData._onShownFired = true
+        data._onShownFired = true
 
         this.callbacks.shown.call(popper)
       })
@@ -259,19 +262,18 @@ class Tippy {
 
     this.callbacks.hide.call(popper)
 
-    const refData = find(this.store, refData => refData.popper === popper)
-    const tooltip = popper.querySelector(Selectors.TOOLTIP)
-    const circle = popper.querySelector(Selectors.CIRCLE)
-    const content = popper.querySelector(Selectors.CONTENT)
+    const data = find(this.store, data => data.popper === popper)
+    const { tooltip, circle, content } = getInnerElements(popper)
 
+    // custom react
     // Prevent hide if open
-    if (refData.settings.disabled === false && refData.settings.open) {
+    if (data.settings.disabled === false && data.settings.open) {
       return;
     }
 
-    if (refData.settings.unmountHTMLWhenHide && refData.settings.reactDOM) {
-      ReactDOM.unmountComponentAtNode(content)
-    }
+    const isUnmount = data && data.settings && data.settings.unmountHTMLWhenHide && data.settings.reactDOM;
+    // end: custom react
+
     const {
       el,
       settings: {
@@ -283,13 +285,13 @@ class Tippy {
         trigger,
         duration
       }
-    } = refData
+    } = data
 
     const _duration = customDuration !== undefined
       ? customDuration
       : Array.isArray(duration) ? duration[1] : duration
 
-    refData._onShownFired = false
+    data._onShownFired = false
     interactive && el.classList.remove('active')
 
     popper.style.visibility = 'hidden'
@@ -313,16 +315,27 @@ class Tippy {
     }
 
     // Wait for transitions to complete
-    onTransitionEnd(refData, _duration, () => {
-      if (isVisible(popper) || ! appendTo.contains(popper)) return
+    onTransitionEnd(data, _duration, () => {
+      // `isVisible` is not completely reliable to determine if we shouldn't
+      // run the hidden callback, we need to check the computed opacity style.
+      // This prevents glitchy behavior of the transition when quickly showing
+      // and hiding a tooltip.
+      if (
+        isVisible(popper) ||
+        !appendTo.contains(popper) ||
+        getComputedStyle(tooltip).opacity === '1'
+      ) return
 
       el.removeEventListener('mousemove', followCursorHandler)
-
-      refData.popperInstance.disableEventListeners()
-
+      data.popperInstance.disableEventListeners()
       appendTo.removeChild(popper)
 
       this.callbacks.hidden.call(popper)
+
+      // custom react
+      if (isUnmount) {
+        ReactDOM.unmountComponentAtNode(content);
+      }
     })
   }
 
@@ -333,9 +346,9 @@ class Tippy {
   update(popper) {
     if (this.state.destroyed) return
 
-    const refData = find(this.store, refData => refData.popper === popper)
-    const content = popper.querySelector(Selectors.CONTENT)
-    const { el, settings: { html } } = refData
+    const data = find(this.store, data => data.popper === popper)
+    const { content } = getInnerElements(popper)
+    const { el, settings: { html } } = data
 
     if (html instanceof Element) {
       console.warn('Aborted: update() should not be used if `html` is a DOM element')
@@ -357,14 +370,14 @@ class Tippy {
   destroy(popper, _isLast) {
     if (this.state.destroyed) return
 
-    const refData = find(this.store, refData => refData.popper === popper)
+    const data = find(this.store, data => data.popper === popper)
 
     const {
       el,
       popperInstance,
       listeners,
       _mutationObserver
-    } = refData
+    } = data
 
     // Ensure the popper is hidden
     if (isVisible(popper)) {
@@ -385,11 +398,11 @@ class Tippy {
     _mutationObserver && _mutationObserver.disconnect()
 
     // Remove from store
-    Store.splice(findIndex(Store, refData => refData.popper === popper), 1)
+    Store.splice(findIndex(Store, data => data.popper === popper), 1)
 
     // Ensure filter is called only once
     if (_isLast === undefined || _isLast) {
-      this.store = Store.filter(refData => refData.tippyInstance === this)
+      this.store = Store.filter(data => data.tippyInstance === this)
     }
   }
 
