@@ -146,13 +146,25 @@ class App extends Component {
           // options
           title="Welcome to React"
           position="bottom"
-          trigger="click"
+          trigger="mouseenter"
+          duration={3000}
+          unmountHTMLWhenHide
         >
           <p>
-            Click here to show popup
+            Hover here to show popup
           </p>
         </Tooltip>
-
+        <hr />
+        <Tooltip
+          trigger="click"
+          tabIndex={0}
+          unmountHTMLWhenHide
+          useContext
+          rawTemplate={document.querySelector('#rawHTML')}
+        >
+          Raw html
+        </Tooltip>
+        <hr />
         <Tooltip
           // options
           title="Sticky"
@@ -186,7 +198,7 @@ class App extends Component {
 
         {!disabled && (
           <Tooltip
-            trigger="focus"
+            trigger="click"
             tabIndex={0}
             unmountHTMLWhenHide
             useContext

@@ -219,6 +219,7 @@ class Tooltip extends Component {
         useContext: this.props.useContext,
         reactInstance: this.props.useContext ? this : undefined,
         performance: true,
+        html: this.props.rawTemplate ? this.props.rawTemplate : undefined,
       });
       if (this.props.open) {
         this.showTooltip();
