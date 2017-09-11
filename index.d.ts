@@ -7,6 +7,7 @@ export type Size = 'small' | 'regular' | 'big';
 export type Theme = 'dark' | 'light' | 'transparent';
 
 export interface TooltipProps {
+    title?: string;
     disabled?: boolean;
     open?: boolean;
     useContext?: boolean;
@@ -47,3 +48,5 @@ export interface TooltipProps {
 }
 
 export class Tooltip extends React.Component<TooltipProps> { }
+
+export declare function withTooltip<P>(component: React.ComponentType<P>, options: TooltipProps);
