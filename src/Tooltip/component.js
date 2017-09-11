@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import tippy from './js/tippy';
+import {Browser} from './js/core/globals';
 
 const defaultProps = {
   html: null,
@@ -176,7 +177,7 @@ class Tooltip extends Component {
   }
 
   _initTippy() {
-    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+      if (typeof window === 'undefined' || typeof document === 'undefined' || !Browser.SUPPORTED) {
       return;
     }
     if (!this.props.disabled) {
