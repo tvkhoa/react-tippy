@@ -267,7 +267,7 @@ class Tippy {
 
     // custom react
     // Prevent hide if open
-    if (data.settings.disabled === false && data.settings.open) {
+    if (data.settings.disabled === false && data && data.settings.open) {
       return;
     }
 
