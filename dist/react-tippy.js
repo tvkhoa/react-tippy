@@ -979,6 +979,9 @@ function bindEventListeners() {
       var ref = (0, _find2.default)(_globals.Store, function (ref) {
         return ref.popper === popper;
       });
+
+      if(!ref) return;
+
       var interactive = ref.settings.interactive;
 
       if (interactive) return;
