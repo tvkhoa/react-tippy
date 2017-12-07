@@ -43,10 +43,10 @@ export default function createTrigger(event, el, handlers, touchHold) {
   }
 
   if (event === 'focus') {
-    el.addEventListener('blur', handlers.handleBlur)
+    el.addEventListener('focusout', handlers.handleFocusOut)
     listeners.push({
-      event: 'blur',
-      handler: handlers.handleBlur
+      event: 'focusout',
+      handler: handlers.handleFocusOut
     })
   }
 
