@@ -1,8 +1,3 @@
-# This is a fork!
-
-Forked from: https://github.com/tvkhoa/react-tippy The only (intended) change is
-a bugfix for IE11 & blur event.relatedTarget.
-
 ## React Tippy
 
 A lightweight tooltip for React. Demo at [Demo page here...](https://tvkhoa.github.io/testlib)
