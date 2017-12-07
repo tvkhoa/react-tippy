@@ -119,12 +119,11 @@ var Selectors = exports.Selectors = {
   ARROW: '[x-arrow]',
   TOOLTIPPED_EL: '[data-tooltipped]',
   CONTROLLER: '[data-tippy-controller]'
-};
 
-/**
-* The default settings applied to each instance
-*/
-var Defaults = exports.Defaults = {
+  /**
+  * The default settings applied to each instance
+  */
+};var Defaults = exports.Defaults = {
   html: false,
   position: 'top',
   animation: 'shift',
@@ -159,13 +158,12 @@ var Defaults = exports.Defaults = {
   popperOptions: {},
   open: undefined,
   onRequestClose: function onRequestClose() {}
-};
 
-/**
-* The keys of the defaults object for reducing down into a new object
-* Used in `getIndividualSettings()`
-*/
-var DefaultsKeys = exports.DefaultsKeys = Browser.SUPPORTED && Object.keys(Defaults);
+  /**
+  * The keys of the defaults object for reducing down into a new object
+  * Used in `getIndividualSettings()`
+  */
+};var DefaultsKeys = exports.DefaultsKeys = Browser.SUPPORTED && Object.keys(Defaults);
 
 /***/ }),
 /* 1 */
@@ -1399,10 +1397,10 @@ function createTrigger(event, el, handlers, touchHold) {
   }
 
   if (event === 'focus') {
-    el.addEventListener('blur', handlers.handleBlur);
+    el.addEventListener('focusout', handlers.handleFocusOut);
     listeners.push({
-      event: 'blur',
-      handler: handlers.handleBlur
+      event: 'focusout',
+      handler: handlers.handleFocusOut
     });
   }
 
@@ -1623,8 +1621,8 @@ function getEventListenerHandlers(el, popper, settings) {
     hide();
   };
 
-  var handleBlur = function handleBlur(event) {
-    // Ignore blur on touch devices, if there is no `relatedTarget`, hide
+  var handleFocusOut = function handleFocusOut(event) {
+    // Ignore focusout on touch devices, if there is no `relatedTarget`, hide
     // If the related target is a popper, ignore
     if (!event.relatedTarget || _globals.Browser.touch) return;
     if ((0, _closest2.default)(event.relatedTarget, _globals.Selectors.POPPER)) return;
@@ -1635,7 +1633,7 @@ function getEventListenerHandlers(el, popper, settings) {
   return {
     handleTrigger: handleTrigger,
     handleMouseleave: handleMouseleave,
-    handleBlur: handleBlur
+    handleFocusOut: handleFocusOut
   };
 }
 

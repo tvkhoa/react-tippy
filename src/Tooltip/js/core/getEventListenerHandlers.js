@@ -125,8 +125,8 @@ export default function getEventListenerHandlers(el, popper, settings) {
     hide()
   }
 
-  const handleBlur = event => {
-    // Ignore blur on touch devices, if there is no `relatedTarget`, hide
+  const handleFocusOut = event => {
+    // Ignore focusout on touch devices, if there is no `relatedTarget`, hide
     // If the related target is a popper, ignore
     if (!event.relatedTarget || Browser.touch) return
     if (closest(event.relatedTarget, Selectors.POPPER)) return
@@ -137,6 +137,6 @@ export default function getEventListenerHandlers(el, popper, settings) {
   return {
     handleTrigger,
     handleMouseleave,
-    handleBlur
+    handleFocusOut
   }
 }
