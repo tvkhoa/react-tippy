@@ -93,7 +93,7 @@ const HeaderWithTootip = withTooltip(Header, {
 |interactiveBorder|2|Any number (pixels)|Specifies the size of the invisible border around an interactive tooltip that will prevent it from closing. Only applies to `mouseenter` triggered tooltips.|
 |delay|0|Any integer >= 0 (milliseconds)|Specifies how long it takes after a trigger event is fired for a tooltip to show.|
 |hideDelay|0|Any integer >= 0 (milliseconds)|Specifies how long it takes after a leave event is fired for a tooltip to hide. Not applicable when clicking on the document to hide tooltips.|
-|animation|`shift`|`shift` `perspective` `fade` `scale` `none`|Specifies the type of transition animation a tooltip has.|
+|animation|`shift`|`shift` `perspective` `fade` `scale`|Specifies the type of transition animation a tooltip has.|
 |arrow|`false`|`true` `false`|Adds an arrow pointing to the tooltipped element. Setting this to true disables animateFill.|
 |arrowSize|`regular`|`small` `regular` `big`|Specifies how big the tooltip's arrow is.|
 |animateFill|`true`|`true` `false`|Adds a material design-esque filling animation. This is disabled if you have arrow set to true.|
