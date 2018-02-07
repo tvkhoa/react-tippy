@@ -120,6 +120,7 @@ const HeaderWithTootip = withTooltip(Header, {
 |theme|`dark`|`dark` `light` `transparent`|The CSS styling theme.|
 |className|''|string|className of container|
 |style|{}|React inline style (object)|style of container|
+|zIndex|9999|number|Specifies the z-index of the tooltip popper|
 
 
 ## Custom tooltip content

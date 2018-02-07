@@ -180,10 +180,24 @@ class App extends Component {
             Sticky
           </p>
         </Tooltip>
+        
+        <hr />
+        
+        <Tooltip
+          // options
+          title="z-index set to 2"
+          trigger="mouseenter"
+          zIndex={2}
+        >
+          Custom z-index
+        </Tooltip>
+        
+        <hr />
+        
         <button onClick={() => { console.log('call open'); setIsOpen(true) }}>
           Do something
         </button>
-        <hr />
+        
         <Tooltip
           disabled={disabled}
           title={tooltipContent}

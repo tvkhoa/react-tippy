@@ -36,6 +36,7 @@ const defaultProps = {
   stickyDuration: 200,
   touchHold: false,
   unmountHTMLWhenHide: false,
+  zIndex: 9999
 };
 
 const propKeys = Object.keys(defaultProps)
@@ -220,6 +221,7 @@ class Tooltip extends Component {
         reactInstance: this.props.useContext ? this : undefined,
         performance: true,
         html: this.props.rawTemplate ? this.props.rawTemplate : undefined,
+        zIndex: this.props.zIndex
       });
       if (this.props.open) {
         this.showTooltip();
