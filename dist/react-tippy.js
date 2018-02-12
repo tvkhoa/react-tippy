@@ -2314,7 +2314,7 @@ var Tippy = function () {
       // Prevent hide if open
 
 
-      if (data.settings.disabled === false && data.settings.open) {
+      if (!data || (data.settings.disabled === false &&  data.settings.open)) {
         return;
       }
 
