@@ -71,7 +71,7 @@ const Header = () => (
   <h2>Header here</h2>
 );
 
-const HeaderWithTootip = withTooltip(Header, {
+const HeaderWithTooltip = withTooltip(Header, {
   title: 'Welcome to React with tooltip',
 });
 
