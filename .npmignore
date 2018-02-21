@@ -12,6 +12,8 @@
 /src
 /public
 
+/.idea
+
 
 # misc
 .DS_Store
