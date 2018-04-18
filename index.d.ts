@@ -13,7 +13,7 @@ export type Position =
   | "right"
   | "right-start"
   | "right-end";
-export type Trigger = "mouseenter" | "focus click" | "manual";
+export type Trigger = "mouseenter" | "focus" | "click" | "manual";
 export type Animation = "shift" | "perspective" | "fade scale" | "none";
 export type Size = "small" | "regular" | "big";
 export type Theme = "dark" | "light" | "transparent";
@@ -64,4 +64,4 @@ export class Tooltip extends React.Component<TooltipProps> {}
 export declare function withTooltip<P>(
   component: React.ComponentType<P>,
   options: TooltipProps
-);
+): JSX.Element;
