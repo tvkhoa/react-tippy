@@ -390,6 +390,8 @@ var _tippy2 = _interopRequireDefault(_tippy);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -429,6 +431,7 @@ var defaultProps = {
   onRequestClose: function onRequestClose() {},
   sticky: false,
   stickyDuration: 200,
+  tag: 'div',
   touchHold: false,
   unmountHTMLWhenHide: false
 };
@@ -627,6 +630,7 @@ var Tooltip = function (_Component) {
           open: this.props.open,
           sticky: this.props.sticky,
           stickyDuration: this.props.stickyDuration,
+          tag: this.props.tag,
           touchHold: this.props.touchHold,
           onRequestClose: this.props.onRequestClose,
           useContext: this.props.useContext,
@@ -660,8 +664,12 @@ var Tooltip = function (_Component) {
     value: function render() {
       var _this3 = this;
 
+      var _props = this.props,
+          Tag = _props.tag,
+          attributes = _objectWithoutProperties(_props, ['tag']);
+
       return _react2.default.createElement(
-        'span',
+        Tag,
         {
           ref: function ref(tooltip) {
             _this3.tooltipDOM = tooltip;

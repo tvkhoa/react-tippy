@@ -34,6 +34,7 @@ const defaultProps = {
   onRequestClose: () => {},
   sticky: false,
   stickyDuration: 200,
+  tag: 'div',
   touchHold: false,
   unmountHTMLWhenHide: false,
 };
@@ -214,6 +215,7 @@ class Tooltip extends Component {
         open: this.props.open,
         sticky: this.props.sticky,
         stickyDuration: this.props.stickyDuration,
+        tag: this.props.tag,
         touchHold: this.props.touchHold,
         onRequestClose: this.props.onRequestClose,
         useContext: this.props.useContext,
@@ -243,8 +245,13 @@ class Tooltip extends Component {
   }
 
   render() {
+    let {
+      tag: Tag,
+      ...attributes
+    } = this.props;
+
     return (
-      <span
+      <Tag
         ref={(tooltip) =>
           { this.tooltipDOM = tooltip; }}
           title={this.props.title}
@@ -257,7 +264,7 @@ class Tooltip extends Component {
         >
           {this.props.children}
 
-      </span>
+      </Tag>
     );
   }
 }
