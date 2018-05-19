@@ -661,7 +661,7 @@ var Tooltip = function (_Component) {
       var _this3 = this;
 
       return _react2.default.createElement(
-        'div',
+        'span',
         {
           ref: function ref(tooltip) {
             _this3.tooltipDOM = tooltip;
