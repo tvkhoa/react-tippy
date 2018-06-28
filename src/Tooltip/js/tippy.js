@@ -323,7 +323,7 @@ class Tippy {
       if (
         isVisible(popper) ||
         !appendTo.contains(popper) ||
-        getComputedStyle(tooltip).opacity === '1'
+        getComputedStyle(tooltip).opacity !== '1'
       ) return
 
       el.removeEventListener('mousemove', followCursorHandler)
