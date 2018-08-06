@@ -155,6 +155,9 @@ class Tippy {
     if (this.state.destroyed) return
 
     const data = find(this.store, data => data.popper === popper)
+
+    if (!data) return
+
     const { tooltip, circle, content } = getInnerElements(popper)
 
     if (!document.body.contains(data.el)) {
@@ -165,7 +168,7 @@ class Tippy {
     this.callbacks.show.call(popper)
 
     // Custom react
-    if (data && data.settings && data.settings.open === false) {
+    if (data.settings && data.settings.open === false) {
       return;
     }
 
@@ -263,11 +266,14 @@ class Tippy {
     this.callbacks.hide.call(popper)
 
     const data = find(this.store, data => data.popper === popper)
+
+    if (!data) return
+
     const { tooltip, circle, content } = getInnerElements(popper)
 
     // custom react
     // Prevent hide if open
-    if (data.settings.disabled === false && data.settings.open) {
+    if (data && data.settings.disabled === false && data.settings.open) {
       return;
     }
 
