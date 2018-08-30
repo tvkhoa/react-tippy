@@ -128,7 +128,7 @@ class Tooltip extends Component {
     }
     if (this.tippy) {
       const popper = this.tippy.getPopperElement(this.tooltipDOM);
-      this.tippy.show(popper, this.props.duration);
+      setTimeout(() => { this.tippy.show(popper, this.props.duration); });
     }
   }
 
@@ -138,7 +138,7 @@ class Tooltip extends Component {
     }
     if (this.tippy) {
       const popper = this.tippy.getPopperElement(this.tooltipDOM);
-      this.tippy.hide(popper, this.props.hideDuration);
+      setTimeout(() => { this.tippy.hide(popper, this.props.hideDuration); });
     }
   }
 
