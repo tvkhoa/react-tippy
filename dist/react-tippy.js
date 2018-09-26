@@ -727,6 +727,7 @@ function followCursorHandler(e) {
   var refData = (0, _find2.default)(_globals.Store, function (refData) {
     return refData.el === _this;
   });
+  if (!refData) return;
 
   var popper = refData.popper,
       offset = refData.settings.offset;
@@ -979,6 +980,8 @@ function bindEventListeners() {
       var ref = (0, _find2.default)(_globals.Store, function (ref) {
         return ref.popper === popper;
       });
+      if (!ref) return;
+
       var interactive = ref.settings.interactive;
 
       if (interactive) return;
@@ -988,6 +991,8 @@ function bindEventListeners() {
       var _ref = (0, _find2.default)(_globals.Store, function (ref) {
         return ref.el === el;
       });
+      if (!_ref) return;
+
       var _ref$settings = _ref.settings,
           hideOnClick = _ref$settings.hideOnClick,
           multiple = _ref$settings.multiple,
@@ -2145,6 +2150,8 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
+
       var newSettings = _extends({}, data.settings, _defineProperty({}, name, value));
       data.settings = newSettings;
     }
@@ -2162,6 +2169,7 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
 
       var _data$settings = data.settings,
           useContext = _data$settings.useContext,
@@ -2189,6 +2197,7 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
 
       var _getInnerElements = (0, _getInnerElements5.default)(popper),
           tooltip = _getInnerElements.tooltip,
@@ -2203,7 +2212,7 @@ var Tippy = function () {
       this.callbacks.show.call(popper);
 
       // Custom react
-      if (data && data.settings && data.settings.open === false) {
+      if (data.settings && data.settings.open === false) {
         return;
       }
 
@@ -2304,6 +2313,7 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
 
       var _getInnerElements2 = (0, _getInnerElements5.default)(popper),
           tooltip = _getInnerElements2.tooltip,
@@ -2391,6 +2401,7 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
 
       var _getInnerElements3 = (0, _getInnerElements5.default)(popper),
           content = _getInnerElements3.content;
@@ -2425,6 +2436,7 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
 
       var el = data.el,
           popperInstance = data.popperInstance,
