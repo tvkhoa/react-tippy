@@ -31,7 +31,6 @@ export default function createTooltips(els) {
     if (!title && !html) return a
 
     el.setAttribute('data-tooltipped', '')
-    el.setAttribute('aria-describedby', `tippy-tooltip-${id}`)
     removeTitle(el)
 
     const popper = createPopperElement(id, title, settings)
