@@ -117,8 +117,8 @@ const HeaderWithTootip = withTooltip(Header, {
 |onShown|noop|function|Callback when the tooltip has fully transitioned in and is showing|
 |onHide|noop|function|Callback when the tooltip has begun to transition out|
 |onHidden|noop|function|Callback when the tooltip has fully transitioned out and is hidden|
-|theme|`dark`|`dark` `light` `transparent`|The CSS styling theme.|
-|className|''|string|className of container|
+|theme|`dark`|`dark` `light` `transparent` `any_custom_theme`|The CSS styling theme for tooltip|
+|className|''|string|className of tooltip trigger element|
 |style|{}|React inline style (object)|style of container|
 
 
@@ -219,9 +219,9 @@ react-tippy provides `useContext` for Tooltip component. It can allow you to use
 </Tooltip>
 ```
 
-## Could I change tooltip style (width, height, ...)?
+## Could I change tooltip style (width, height, ...) or add theme or className to tooltip?
 
-You can change css to have your tooltip width. If you use `html` props, you can do like this
+className and style are used for customizing the wrapped element ( the one will trigger the tooltip ), so in case you want to customize your tooltip in just few components, your can use html instead of title.
 
 ```javascript
 html={(
@@ -231,6 +231,21 @@ html={(
 )}
 ```
 
+If you want to customize all tooltips, or even use your own theme, you can create your css theme as here
+https://atomiks.github.io/tippyjs/#creating-themes
+
+create a custom theme like this
+```css
+.my-custom-theme { /* must be end with -theme */
+  border: 5px solid red;
+}
+```
+
+then pass it as theme (they can have multiple themes)
+```js
+<Tooltip
+  theme="my-custom light" // <- react-tippy will auto add postfix -theme so remove it here
+```
 
 # License
 MIT. Also check Popper.js' license.
