@@ -3,6 +3,9 @@
   "version": "1.2.3",
   "description": "React tippy",
   "main": "dist/react-tippy.js",
+  "files": [
+    "dist"
+  ],
   "author": "Khoa Thai",
   "license": "MIT",
   "repository": {
