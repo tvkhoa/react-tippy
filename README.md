@@ -171,14 +171,26 @@ You can use `interactive` prop and `html` for your interactive tooltip
 ## Show/hide your tooltip manually
 
 ```javascript
+
+state = {
+  open: false,
+}
+
+// ...
+
 <Tooltip
-  title={tooltipContent}
-  open={open}
-  onRequestClose={() => {console.log('call'); setIsOpen(false)}}
+  open={this.state.open}
 >
-  <span className="App-intro" onClick={() => { setIsOpen(true) }}>
-    This will show {tooltipContent}
-  </span>
+  <p
+    onClick={() => {
+      this.setState(state => ({
+        open: !state.open,
+      }));
+      setTimeout(() => alert('can do things after delay'), 2000);
+    }}
+  >
+  Clicking me will initiate manual open/close tooltip logic
+  </p>
 </Tooltip>
 ```
 
