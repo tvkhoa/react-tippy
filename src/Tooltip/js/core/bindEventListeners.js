@@ -46,6 +46,11 @@ export default function bindEventListeners() {
     if (!(event.target instanceof Element)) {
       return hideAllPoppers()
     }
+    
+    // Ignore clicks on elements unmounted from the DOM
+    if (!document.body.contains(event.target)) {
+      return;
+    }
 
     const el = closest(event.target, Selectors.TOOLTIPPED_EL)
     const popper = closest(event.target, Selectors.POPPER)
