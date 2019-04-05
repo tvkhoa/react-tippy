@@ -232,7 +232,7 @@ html={(
 ```
 
 If you want to customize all tooltips, or even use your own theme, you can create your css theme as here
-https://atomiks.github.io/tippyjs/#creating-themes
+https://atomiks.github.io/tippyjs/themes/#creating-a-theme
 
 create a custom theme like this
 ```css
