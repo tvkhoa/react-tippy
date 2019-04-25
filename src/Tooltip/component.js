@@ -36,6 +36,7 @@ const defaultProps = {
   stickyDuration: 200,
   touchHold: false,
   unmountHTMLWhenHide: false,
+  htmlElement: 'div'
 };
 
 const propKeys = Object.keys(defaultProps)
@@ -243,8 +244,9 @@ class Tooltip extends Component {
   }
 
   render() {
+    const HTMLElement = this.props.htmlElement;
     return (
-      <div
+      <HTMLElement
         ref={(tooltip) => { this.tooltipDOM = tooltip; }}
         title={this.props.title}
         className={this.props.className}
@@ -255,7 +257,7 @@ class Tooltip extends Component {
         }}
       >
         {this.props.children}
-      </div>
+      </HTMLElement>
     );
   }
 }
