@@ -120,7 +120,7 @@ const HeaderWithTooltip = withTooltip(Header, {
 |theme|`dark`|`dark` `light` `transparent`|The CSS styling theme.|
 |className|''|string|className of container|
 |style|{}|React inline style (object)|style of container|
-
+|htmlElement|div|String|name of html element|
 
 ## Custom tooltip content
 

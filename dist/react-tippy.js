@@ -430,7 +430,8 @@ var defaultProps = {
   sticky: false,
   stickyDuration: 200,
   touchHold: false,
-  unmountHTMLWhenHide: false
+  unmountHTMLWhenHide: false,
+  htmlElement: 'div'
 };
 
 var propKeys = Object.keys(defaultProps);
@@ -660,8 +661,9 @@ var Tooltip = function (_Component) {
     value: function render() {
       var _this3 = this;
 
+      var HTMLElement = this.props.htmlElement;
       return _react2.default.createElement(
-        'div',
+        HTMLElement,
         {
           ref: function ref(tooltip) {
             _this3.tooltipDOM = tooltip;
