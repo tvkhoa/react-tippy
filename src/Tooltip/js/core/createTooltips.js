@@ -25,10 +25,10 @@ export default function createTooltips(els) {
         : getIndividualSettings(el, this.settings)
     )
 
-    const { html, trigger, touchHold } = settings
+    const { reactDOM, trigger, touchHold } = settings
 
     const title = el.getAttribute('title')
-    if (!title && !html) return a
+    if (!title && !reactDOM) return a
 
     el.setAttribute('data-tooltipped', '')
     el.setAttribute('aria-describedby', `tippy-tooltip-${id}`)
