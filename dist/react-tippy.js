@@ -594,7 +594,9 @@ var Tooltip = function (_Component) {
         return;
       }
       if (!this.props.disabled) {
-        this.tooltipDOM.setAttribute('title', this.props.title);
+        if (this.props.title) {
+          this.tooltipDOM.setAttribute('title', this.props.title);
+        }
         this.tippy = (0, _tippy2.default)(this.tooltipDOM, {
           disabled: this.props.disabled,
           position: this.props.position,
@@ -1311,13 +1313,13 @@ function createTooltips(els) {
 
     var settings = (0, _evaluateSettings2.default)(_this.settings.performance ? _this.settings : (0, _getIndividualSettings2.default)(el, _this.settings));
 
-    var html = settings.html,
+    var reactDOM = settings.reactDOM,
         trigger = settings.trigger,
         touchHold = settings.touchHold;
 
 
     var title = el.getAttribute('title');
-    if (!title && !html) return a;
+    if (!title && !reactDOM) return a;
 
     el.setAttribute('data-tooltipped', '');
     el.setAttribute('aria-describedby', 'tippy-tooltip-' + id);

@@ -1,6 +1,6 @@
 {
   "name": "react-tippy",
-  "version": "1.2.3",
+  "version": "1.2.3a",
   "description": "React tippy",
   "main": "dist/react-tippy.js",
   "files": [
@@ -16,6 +16,7 @@
     "url": "https://github.com/tvkhoa/react-tippy/issues"
   },
   "homepage": "https://github.com/tvkhoa/react-tippy",
+  "publishConfig":{"registry":"https://upstart.jfrog.io/upstart/api/npm/local-npm/"},
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-core": "^6.24.0",
