@@ -42,12 +42,12 @@
     "redux": "^3.7.1",
     "redux-state-action": "^1.0.8",
     "redux-thunk": "^2.2.0",
-    "@types/react": "*",
     "webpack": "^2.3.0",
     "yargs": "^7.0.2"
   },
   "dependencies": {
-    "popper.js": "^1.11.1"
+    "popper.js": "^1.11.1",
+    "@types/react": "*"
   },
   "scripts": {
     "build": "webpack --config webpacklib.config.js --env build",
