@@ -34,6 +34,7 @@
     "flow-bin": "^0.42.0",
     "lodash-webpack-plugin": "^0.11.2",
     "mocha": "^3.2.0",
+    "popper.js": "^1.11.1",
     "react": "^15.5.3",
     "react-dom": "^15.5.3",
     "react-redux": "^5.0.5",
@@ -42,6 +43,7 @@
     "redux": "^3.7.1",
     "redux-state-action": "^1.0.8",
     "redux-thunk": "^2.2.0",
+    "@types/react": "*",
     "webpack": "^2.3.0",
     "yargs": "^7.0.2"
   },
@@ -49,7 +51,5 @@
     "build": "webpack --config webpacklib.config.js --env build",
     "start": "react-scripts start"
   },
-  "dependencies": {
-    "popper.js": "^1.11.1"
-  }
+  "typings": "./index.d.ts"
 }
