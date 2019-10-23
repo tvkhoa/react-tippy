@@ -978,7 +978,9 @@ function bindEventListeners() {
       var ref = (0, _find2.default)(_globals.Store, function (ref) {
         return ref.popper === popper;
       });
-      var interactive = ref && ref.settings.interactive;
+      if (!ref) return;
+
+      var interactive = ref.settings.interactive;
 
       if (interactive) return;
     }
@@ -2320,7 +2322,7 @@ var Tippy = function () {
       // Prevent hide if open
 
 
-      if (data.settings.disabled === false && data.settings.open) {
+      if (data.settings.disabled === false && data && data.settings.open) {
         return;
       }
 
