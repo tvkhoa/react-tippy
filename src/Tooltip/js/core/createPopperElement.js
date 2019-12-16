@@ -76,7 +76,9 @@ export default function createPopperElement(id, title, settings) {
       content.appendChild(html)
       templateId = '#' + html.id || 'tippy-html-template'
     } else {
-      content.innerHTML = document.getElementById(html.replace('#', '')).innerHTML
+      if (html && html.replace) {
+        content.innerHTML = document.getElementById(html.replace('#', '')).innerHTML
+      }
       templateId = html
     }
 

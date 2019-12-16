@@ -1131,7 +1131,9 @@ function createPopperElement(id, title, settings) {
       content.appendChild(html);
       templateId = '#' + html.id || 'tippy-html-template';
     } else {
-      content.innerHTML = document.getElementById(html.replace('#', '')).innerHTML;
+      if (html && html.replace) {
+        content.innerHTML = document.getElementById(html.replace('#', '')).innerHTML;
+      }
       templateId = html;
     }
 
@@ -2415,7 +2417,7 @@ var Tippy = function () {
         return;
       }
 
-      content.innerHTML = html ? document.getElementById(html.replace('#', '')).innerHTML : el.getAttribute('title') || el.getAttribute('data-original-title');
+      content.innerHTML = html && document.getElementById(html.replace('#', '')) ? document.getElementById(html.replace('#', '')).innerHTML : el.getAttribute('title') || el.getAttribute('data-original-title');
 
       if (!html) (0, _removeTitle2.default)(el);
     }

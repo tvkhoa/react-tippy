@@ -364,7 +364,7 @@ class Tippy {
       return
     }
 
-    content.innerHTML = html
+    content.innerHTML = html && document.getElementById(html.replace('#', ''))
       ? document.getElementById(html.replace('#', '')).innerHTML
       : el.getAttribute('title') || el.getAttribute('data-original-title')
 
