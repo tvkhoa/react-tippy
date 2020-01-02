@@ -9,9 +9,9 @@ Based on `tippy.js` and powered by `Popper.js`
 
 ## Why you should use it?
 
-It is designed to work friendly with React, it provides `<Tooltip>` element or a higher-order component
+It is designed to work friendly with React, it provides `<Tooltip>` element or a higher-order component.
 
-It uses `React DOM` to render tooltip content. Therefore, you can fully use it in your React project without doubt
+It uses `React DOM` to render tooltip content. Therefore, you can fully use it in your React project without doubt.
 
 It is an enhancement of Tippy.js for using in React.
 
@@ -71,7 +71,7 @@ const Header = () => (
   <h2>Header here</h2>
 );
 
-const HeaderWithTootip = withTooltip(Header, {
+const HeaderWithTooltip = withTooltip(Header, {
   title: 'Welcome to React with tooltip',
 });
 
@@ -186,7 +186,7 @@ You can use `interactive` prop and `html` for your interactive tooltip
 
 Tippy gracefully degrades on older browsers (and with JavaScript disabled) by using the browser's default title tooltip.
 
-If you want to support older browsers, please add `polyfill` by yourself
+If you want to support older browsers, please add `polyfill` by yourself.
 
 ### Supported browsers
 
@@ -221,7 +221,7 @@ react-tippy provides `useContext` for Tooltip component. It can allow you to use
 
 ## Could I change tooltip style (width, height, ...) or add theme or className to tooltip?
 
-className and style are used for customizing the wrapped element ( the one will trigger the tooltip ), so in case you want to customize your tooltip in just few components, your can use html instead of title.
+className and style are used for customizing the wrapped element ( the one will trigger the tooltip ), so in case you want to customize your tooltip in just few components, your can use `html` instead of `title`, like this:
 
 ```javascript
 html={(
