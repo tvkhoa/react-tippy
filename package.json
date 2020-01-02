@@ -29,7 +29,7 @@
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-react": "^6.24.1",
     "chai": "^3.5.0",
-    "eslint": "^3.18.0",
+    "eslint": "^4.18.2",
     "eslint-loader": "^1.6.3",
     "eslint-plugin-import": "^2.2.0",
     "flow-bin": "^0.42.0",
