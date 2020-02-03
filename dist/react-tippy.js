@@ -119,11 +119,12 @@ var Selectors = exports.Selectors = {
   ARROW: '[x-arrow]',
   TOOLTIPPED_EL: '[data-tooltipped]',
   CONTROLLER: '[data-tippy-controller]'
+};
 
-  /**
-  * The default settings applied to each instance
-  */
-};var Defaults = exports.Defaults = {
+/**
+* The default settings applied to each instance
+*/
+var Defaults = exports.Defaults = {
   html: false,
   position: 'top',
   animation: 'shift',
@@ -158,12 +159,13 @@ var Selectors = exports.Selectors = {
   popperOptions: {},
   open: undefined,
   onRequestClose: function onRequestClose() {}
+};
 
-  /**
-  * The keys of the defaults object for reducing down into a new object
-  * Used in `getIndividualSettings()`
-  */
-};var DefaultsKeys = exports.DefaultsKeys = Browser.SUPPORTED && Object.keys(Defaults);
+/**
+* The keys of the defaults object for reducing down into a new object
+* Used in `getIndividualSettings()`
+*/
+var DefaultsKeys = exports.DefaultsKeys = Browser.SUPPORTED && Object.keys(Defaults);
 
 /***/ }),
 /* 1 */
@@ -386,6 +388,8 @@ var _tippy = __webpack_require__(30);
 
 var _tippy2 = _interopRequireDefault(_tippy);
 
+var _globals = __webpack_require__(0);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -428,7 +432,8 @@ var defaultProps = {
   sticky: false,
   stickyDuration: 200,
   touchHold: false,
-  unmountHTMLWhenHide: false
+  unmountHTMLWhenHide: false,
+  zIndex: 9999
 };
 
 var propKeys = Object.keys(defaultProps);
@@ -588,7 +593,7 @@ var Tooltip = function (_Component) {
   }, {
     key: '_initTippy',
     value: function _initTippy() {
-      if (typeof window === 'undefined' || typeof document === 'undefined') {
+      if (typeof window === 'undefined' || typeof document === 'undefined' || !_globals.Browser.SUPPORTED) {
         return;
       }
       if (!this.props.disabled) {
@@ -630,7 +635,8 @@ var Tooltip = function (_Component) {
           useContext: this.props.useContext,
           reactInstance: this.props.useContext ? this : undefined,
           performance: true,
-          html: this.props.rawTemplate ? this.props.rawTemplate : undefined
+          html: this.props.rawTemplate ? this.props.rawTemplate : undefined,
+          zIndex: this.props.zIndex
         });
         if (this.props.open) {
           this.showTooltip();
