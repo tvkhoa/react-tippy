@@ -388,9 +388,9 @@ var _tippy = __webpack_require__(30);
 
 var _tippy2 = _interopRequireDefault(_tippy);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _globals = __webpack_require__(0);
 
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -431,9 +431,9 @@ var defaultProps = {
   onRequestClose: function onRequestClose() {},
   sticky: false,
   stickyDuration: 200,
-  tag: 'div',
   touchHold: false,
-  unmountHTMLWhenHide: false
+  unmountHTMLWhenHide: false,
+  zIndex: 9999
 };
 
 var propKeys = Object.keys(defaultProps);
@@ -593,7 +593,7 @@ var Tooltip = function (_Component) {
   }, {
     key: '_initTippy',
     value: function _initTippy() {
-      if (typeof window === 'undefined' || typeof document === 'undefined') {
+      if (typeof window === 'undefined' || typeof document === 'undefined' || !_globals.Browser.SUPPORTED) {
         return;
       }
       if (!this.props.disabled) {
@@ -630,13 +630,13 @@ var Tooltip = function (_Component) {
           open: this.props.open,
           sticky: this.props.sticky,
           stickyDuration: this.props.stickyDuration,
-          tag: this.props.tag,
           touchHold: this.props.touchHold,
           onRequestClose: this.props.onRequestClose,
           useContext: this.props.useContext,
           reactInstance: this.props.useContext ? this : undefined,
           performance: true,
-          html: this.props.rawTemplate ? this.props.rawTemplate : undefined
+          html: this.props.rawTemplate ? this.props.rawTemplate : undefined,
+          zIndex: this.props.zIndex
         });
         if (this.props.open) {
           this.showTooltip();
@@ -664,12 +664,8 @@ var Tooltip = function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      var _props = this.props,
-          Tag = _props.tag,
-          attributes = _objectWithoutProperties(_props, ['tag']);
-
       return _react2.default.createElement(
-        Tag,
+        'div',
         {
           ref: function ref(tooltip) {
             _this3.tooltipDOM = tooltip;
@@ -735,6 +731,7 @@ function followCursorHandler(e) {
   var refData = (0, _find2.default)(_globals.Store, function (refData) {
     return refData.el === _this;
   });
+  if (!refData) return;
 
   var popper = refData.popper,
       offset = refData.settings.offset;
@@ -987,6 +984,8 @@ function bindEventListeners() {
       var ref = (0, _find2.default)(_globals.Store, function (ref) {
         return ref.popper === popper;
       });
+      if (!ref) return;
+
       var interactive = ref.settings.interactive;
 
       if (interactive) return;
@@ -996,6 +995,8 @@ function bindEventListeners() {
       var _ref = (0, _find2.default)(_globals.Store, function (ref) {
         return ref.el === el;
       });
+      if (!_ref) return;
+
       var _ref$settings = _ref.settings,
           hideOnClick = _ref$settings.hideOnClick,
           multiple = _ref$settings.multiple,
@@ -2153,6 +2154,8 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
+
       var newSettings = _extends({}, data.settings, _defineProperty({}, name, value));
       data.settings = newSettings;
     }
@@ -2170,6 +2173,7 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
 
       var _data$settings = data.settings,
           useContext = _data$settings.useContext,
@@ -2197,6 +2201,7 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
 
       var _getInnerElements = (0, _getInnerElements5.default)(popper),
           tooltip = _getInnerElements.tooltip,
@@ -2211,7 +2216,7 @@ var Tippy = function () {
       this.callbacks.show.call(popper);
 
       // Custom react
-      if (data && data.settings && data.settings.open === false) {
+      if (data.settings && data.settings.open === false) {
         return;
       }
 
@@ -2312,6 +2317,7 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
 
       var _getInnerElements2 = (0, _getInnerElements5.default)(popper),
           tooltip = _getInnerElements2.tooltip,
@@ -2322,7 +2328,7 @@ var Tippy = function () {
       // Prevent hide if open
 
 
-      if (data.settings.disabled === false && data.settings.open) {
+      if (data.settings.disabled === false && data && data.settings.open) {
         return;
       }
 
@@ -2399,6 +2405,7 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
 
       var _getInnerElements3 = (0, _getInnerElements5.default)(popper),
           content = _getInnerElements3.content;
@@ -2433,6 +2440,7 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
 
       var el = data.el,
           popperInstance = data.popperInstance,
