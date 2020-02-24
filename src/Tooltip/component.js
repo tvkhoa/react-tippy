@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import tippy from './js/tippy';
+import {Browser} from './js/core/globals';
 
 const defaultProps = {
   html: null,
@@ -37,9 +38,10 @@ const defaultProps = {
   tag: 'div',
   touchHold: false,
   unmountHTMLWhenHide: false,
+  zIndex: 9999
 };
 
-const propKeys = Object.keys(defaultProps)
+const propKeys = Object.keys(defaultProps);
 
 const detectPropsChanged = (props, prevProps) => {
   const result = [];
@@ -178,7 +180,7 @@ class Tooltip extends Component {
   }
 
   _initTippy() {
-    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+      if (typeof window === 'undefined' || typeof document === 'undefined' || !Browser.SUPPORTED) {
       return;
     }
     if (!this.props.disabled) {
@@ -222,6 +224,7 @@ class Tooltip extends Component {
         reactInstance: this.props.useContext ? this : undefined,
         performance: true,
         html: this.props.rawTemplate ? this.props.rawTemplate : undefined,
+        zIndex: this.props.zIndex
       });
       if (this.props.open) {
         this.showTooltip();

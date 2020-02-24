@@ -11,6 +11,7 @@ import closest          from '../utils/closest'
 */
 export default function followCursorHandler(e) {
   const refData = find(Store, refData => refData.el === this)
+  if (!refData) return;
 
   const {
     popper,
