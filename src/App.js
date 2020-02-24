@@ -98,6 +98,7 @@ const Header = () => (
 
 const HeaderWithTootip = withTooltip(Header, {
   title: 'Welcome to React with tooltip',
+  tag: 'a'
 });
 
 const mapStateToProps = (state) => ({
@@ -141,6 +142,18 @@ class App extends Component {
         <NormalHeader />
         <hr />
         <HeaderWithTootip />
+        <hr />
+        <Tooltip
+          // options
+          title="Welcome to React"
+          tag="span"
+          trigger="mouseenter focus click"
+          duration={300}
+        >
+          <p>
+            Hover here to show popup
+          </p>
+        </Tooltip>
         <hr />
         <Tooltip
           // options
