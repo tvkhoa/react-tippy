@@ -50,6 +50,7 @@ export const Defaults = {
   distance: 10,
   offset: 0,
   hideOnClick: true,
+  hideOnScroll: false,
   multiple: false,
   followCursor: false,
   inertia: false,

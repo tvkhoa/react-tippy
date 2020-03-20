@@ -20,6 +20,7 @@ export default function getEventListenerHandlers(el, popper, settings) {
     interactiveBorder,
     distance,
     hideOnClick,
+    hideOnScroll,
     trigger,
     touchHold,
     touchWait
@@ -94,6 +95,7 @@ export default function getEventListenerHandlers(el, popper, settings) {
         const triggerHide = () => {
           document.body.removeEventListener('mouseleave', hide)
           document.removeEventListener('mousemove', handleMousemove)
+          document.removeEventListener('scroll', hide);
           hide()
         }
 
@@ -113,6 +115,10 @@ export default function getEventListenerHandlers(el, popper, settings) {
         if (cursorIsOutsideInteractiveBorder(event, popper, settings)) {
           triggerHide()
         }
+      }
+
+      if (hideOnScroll) {
+        document.addEventListener('scroll', hide);
       }
 
       document.body.addEventListener('mouseleave', hide)
