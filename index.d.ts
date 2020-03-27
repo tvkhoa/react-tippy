@@ -49,7 +49,7 @@ export interface TooltipProps {
   unmountHTMLWhenHide?: boolean;
   size?: Size;
   sticky?: boolean;
-  stickyDuration?: boolean;
+  stickyDuration?: number;
   beforeShown?: () => void;
   shown?: () => void;
   beforeHidden?: () => void;
