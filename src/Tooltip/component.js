@@ -38,6 +38,7 @@ const defaultProps = {
   tag: 'div',
   touchHold: false,
   unmountHTMLWhenHide: false,
+  popperContainer: () => document.body,
   zIndex: 9999
 };
 
@@ -224,6 +225,7 @@ class Tooltip extends Component {
         reactInstance: this.props.useContext ? this : undefined,
         performance: true,
         html: this.props.rawTemplate ? this.props.rawTemplate : undefined,
+        appendTo: this.props.popperContainer,
         zIndex: this.props.zIndex
       });
       if (this.props.open) {

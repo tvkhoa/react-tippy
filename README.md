@@ -121,6 +121,7 @@ const HeaderWithTooltip = withTooltip(Header, {
 |theme|`dark`|`dark` `light` `transparent`|The CSS styling theme.|
 |className|''|string|className of container|
 |style|{}|React inline style (object)|style of container|
+|popperContainer|undefined|HtmlElement|Top element that will contain the undelying tooltips (defaults to `document.body` if undefined)|
 
 
 ## Custom tooltip content
