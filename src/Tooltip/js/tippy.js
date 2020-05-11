@@ -133,11 +133,11 @@ class Tippy {
 
     const {
       useContext,
-      setReactDOMRef,
+      setReactDOMValue,
     } = data.settings;
 
     if (useContext) {
-      setReactDOMRef(
+      setReactDOMValue(
         ReactDOM.createPortal(
           updatedContent,
           tooltipContent,

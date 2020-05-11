@@ -67,7 +67,7 @@ class Tooltip extends Component {
     this.updateSettings = this._updateSettings.bind(this);
 
     this.state = {
-      reactDOMRef: null,
+      reactDOMValue: null,
     }
   }
 
@@ -222,7 +222,7 @@ class Tooltip extends Component {
         onHidden: this.props.onHidden,
         distance: this.props.distance,
         reactDOM: this.props.html,
-        setReactDOMRef: newReactDOM => this.setState({ reactDOMRef: newReactDOM }),
+        setReactDOMValue: newReactDOM => this.setState({ reactDOMValue: newReactDOM }),
         unmountHTMLWhenHide: this.props.unmountHTMLWhenHide,
         open: this.props.open,
         sticky: this.props.sticky,
@@ -278,40 +278,42 @@ class Tooltip extends Component {
             {this.props.children}
 
         </Tag>
-        <div
-          onClick={stopPortalEvent}
-          onContextMenu={stopPortalEvent}
-          onDoubleClick={stopPortalEvent}
-          onDrag={stopPortalEvent}
-          onDragEnd={stopPortalEvent}
-          onDragEnter={stopPortalEvent}
-          onDragExit={stopPortalEvent}
-          onDragLeave={stopPortalEvent}
-          onDragOver={stopPortalEvent}
-          onDragStart={stopPortalEvent}
-          onDrop={stopPortalEvent}
-          onMouseDown={stopPortalEvent}
-          onMouseEnter={stopPortalEvent}
-          onMouseLeave={stopPortalEvent}
-          onMouseMove={stopPortalEvent}
-          onMouseOver={stopPortalEvent}
-          onMouseOut={stopPortalEvent}
-          onMouseUp={stopPortalEvent}
-  
-          onKeyDown={stopPortalEvent}
-          onKeyPress={stopPortalEvent}
-          onKeyUp={stopPortalEvent}
-  
-          onFocus={stopPortalEvent}
-          onBlur={stopPortalEvent}
-  
-          onChange={stopPortalEvent}
-          onInput={stopPortalEvent}
-          onInvalid={stopPortalEvent}
-          onSubmit={stopPortalEvent}
-        >
-          {this.state.reactDOMRef}
-        </div>
+        {this.state.reactDOMValue && (
+          <div
+            onClick={stopPortalEvent}
+            onContextMenu={stopPortalEvent}
+            onDoubleClick={stopPortalEvent}
+            onDrag={stopPortalEvent}
+            onDragEnd={stopPortalEvent}
+            onDragEnter={stopPortalEvent}
+            onDragExit={stopPortalEvent}
+            onDragLeave={stopPortalEvent}
+            onDragOver={stopPortalEvent}
+            onDragStart={stopPortalEvent}
+            onDrop={stopPortalEvent}
+            onMouseDown={stopPortalEvent}
+            onMouseEnter={stopPortalEvent}
+            onMouseLeave={stopPortalEvent}
+            onMouseMove={stopPortalEvent}
+            onMouseOver={stopPortalEvent}
+            onMouseOut={stopPortalEvent}
+            onMouseUp={stopPortalEvent}
+    
+            onKeyDown={stopPortalEvent}
+            onKeyPress={stopPortalEvent}
+            onKeyUp={stopPortalEvent}
+    
+            onFocus={stopPortalEvent}
+            onBlur={stopPortalEvent}
+    
+            onChange={stopPortalEvent}
+            onInput={stopPortalEvent}
+            onInvalid={stopPortalEvent}
+            onSubmit={stopPortalEvent}
+          >
+            {this.state.reactDOMValue}
+          </div>
+        )}
       </React.Fragment>
     );
   }
