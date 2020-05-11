@@ -470,7 +470,7 @@ var Tooltip = function (_Component) {
     _this.updateSettings = _this._updateSettings.bind(_this);
 
     _this.state = {
-      reactDOMRef: null
+      reactDOMValue: null
     };
     return _this;
   }
@@ -640,8 +640,8 @@ var Tooltip = function (_Component) {
           onHidden: this.props.onHidden,
           distance: this.props.distance,
           reactDOM: this.props.html,
-          setReactDOMRef: function setReactDOMRef(newReactDOM) {
-            return _this3.setState({ reactDOMRef: newReactDOM });
+          setReactDOMValue: function setReactDOMValue(newReactDOM) {
+            return _this3.setState({ reactDOMValue: newReactDOM });
           },
           unmountHTMLWhenHide: this.props.unmountHTMLWhenHide,
           open: this.props.open,
@@ -703,7 +703,7 @@ var Tooltip = function (_Component) {
           },
           this.props.children
         ),
-        _react2.default.createElement(
+        this.state.reactDOMValue && _react2.default.createElement(
           'div',
           {
             onClick: stopPortalEvent,
@@ -737,7 +737,7 @@ var Tooltip = function (_Component) {
             onInvalid: stopPortalEvent,
             onSubmit: stopPortalEvent
           },
-          this.state.reactDOMRef
+          this.state.reactDOMValue
         )
       );
     }
@@ -2239,11 +2239,11 @@ var Tippy = function () {
 
       var _data$settings = data.settings,
           useContext = _data$settings.useContext,
-          setReactDOMRef = _data$settings.setReactDOMRef;
+          setReactDOMValue = _data$settings.setReactDOMValue;
 
 
       if (useContext) {
-        setReactDOMRef(_reactDom2.default.createPortal(updatedContent, tooltipContent));
+        setReactDOMValue(_reactDom2.default.createPortal(updatedContent, tooltipContent));
       } else {
         _reactDom2.default.render(updatedContent, tooltipContent);
       }
