@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import tippy from './js/tippy';
 import {Browser} from './js/core/globals';
 
+const stopPortalEvent = e => e.stopPropagation();
+
 const defaultProps = {
   html: null,
   position: 'top',
@@ -262,7 +264,6 @@ class Tooltip extends Component {
 
     return (
       <React.Fragment>
-        {this.state.reactDOMRef}
         <Tag
           ref={(tooltip) =>
             { this.tooltipDOM = tooltip; }}
@@ -277,6 +278,40 @@ class Tooltip extends Component {
             {this.props.children}
 
         </Tag>
+        <div
+          onClick={stopPortalEvent}
+          onContextMenu={stopPortalEvent}
+          onDoubleClick={stopPortalEvent}
+          onDrag={stopPortalEvent}
+          onDragEnd={stopPortalEvent}
+          onDragEnter={stopPortalEvent}
+          onDragExit={stopPortalEvent}
+          onDragLeave={stopPortalEvent}
+          onDragOver={stopPortalEvent}
+          onDragStart={stopPortalEvent}
+          onDrop={stopPortalEvent}
+          onMouseDown={stopPortalEvent}
+          onMouseEnter={stopPortalEvent}
+          onMouseLeave={stopPortalEvent}
+          onMouseMove={stopPortalEvent}
+          onMouseOver={stopPortalEvent}
+          onMouseOut={stopPortalEvent}
+          onMouseUp={stopPortalEvent}
+  
+          onKeyDown={stopPortalEvent}
+          onKeyPress={stopPortalEvent}
+          onKeyUp={stopPortalEvent}
+  
+          onFocus={stopPortalEvent}
+          onBlur={stopPortalEvent}
+  
+          onChange={stopPortalEvent}
+          onInput={stopPortalEvent}
+          onInvalid={stopPortalEvent}
+          onSubmit={stopPortalEvent}
+        >
+          {this.state.reactDOMRef}
+        </div>
       </React.Fragment>
     );
   }
