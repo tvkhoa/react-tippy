@@ -392,13 +392,15 @@ var _globals = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var stopPortalEvent = function stopPortalEvent(e) {
+  return e.stopPropagation();
+};
 
 var defaultProps = {
   html: null,
@@ -466,6 +468,10 @@ var Tooltip = function (_Component) {
     _this.showTooltip = _this._showTooltip.bind(_this);
     _this.hideTooltip = _this._hideTooltip.bind(_this);
     _this.updateSettings = _this._updateSettings.bind(_this);
+
+    _this.state = {
+      reactDOMRef: null
+    };
     return _this;
   }
 
@@ -596,11 +602,16 @@ var Tooltip = function (_Component) {
   }, {
     key: '_initTippy',
     value: function _initTippy() {
+      var _this3 = this;
+
       if (typeof window === 'undefined' || typeof document === 'undefined' || !_globals.Browser.SUPPORTED) {
         return;
       }
       if (!this.props.disabled) {
-        this.tooltipDOM.setAttribute('title', this.props.title);
+        if (this.props.title) {
+          this.tooltipDOM.setAttribute('title', this.props.title);
+        }
+
         this.tippy = (0, _tippy2.default)(this.tooltipDOM, {
           disabled: this.props.disabled,
           position: this.props.position,
@@ -629,6 +640,9 @@ var Tooltip = function (_Component) {
           onHidden: this.props.onHidden,
           distance: this.props.distance,
           reactDOM: this.props.html,
+          setReactDOMRef: function setReactDOMRef(newReactDOM) {
+            return _this3.setState({ reactDOMRef: newReactDOM });
+          },
           unmountHTMLWhenHide: this.props.unmountHTMLWhenHide,
           open: this.props.open,
           sticky: this.props.sticky,
@@ -666,26 +680,65 @@ var Tooltip = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
-      var _props = this.props,
-          Tag = _props.tag,
-          attributes = _objectWithoutProperties(_props, ['tag']);
+      var Tag = this.props.tag;
+
 
       return _react2.default.createElement(
-        Tag,
-        {
-          ref: function ref(tooltip) {
-            _this3.tooltipDOM = tooltip;
+        _react2.default.Fragment,
+        null,
+        _react2.default.createElement(
+          Tag,
+          {
+            ref: function ref(tooltip) {
+              _this4.tooltipDOM = tooltip;
+            },
+            title: this.props.title,
+            className: this.props.className,
+            tabIndex: this.props.tabIndex,
+            style: _extends({
+              display: 'inline'
+            }, this.props.style)
           },
-          title: this.props.title,
-          className: this.props.className,
-          tabIndex: this.props.tabIndex,
-          style: _extends({
-            display: 'inline'
-          }, this.props.style)
-        },
-        this.props.children
+          this.props.children
+        ),
+        _react2.default.createElement(
+          'div',
+          {
+            onClick: stopPortalEvent,
+            onContextMenu: stopPortalEvent,
+            onDoubleClick: stopPortalEvent,
+            onDrag: stopPortalEvent,
+            onDragEnd: stopPortalEvent,
+            onDragEnter: stopPortalEvent,
+            onDragExit: stopPortalEvent,
+            onDragLeave: stopPortalEvent,
+            onDragOver: stopPortalEvent,
+            onDragStart: stopPortalEvent,
+            onDrop: stopPortalEvent,
+            onMouseDown: stopPortalEvent,
+            onMouseEnter: stopPortalEvent,
+            onMouseLeave: stopPortalEvent,
+            onMouseMove: stopPortalEvent,
+            onMouseOver: stopPortalEvent,
+            onMouseOut: stopPortalEvent,
+            onMouseUp: stopPortalEvent,
+
+            onKeyDown: stopPortalEvent,
+            onKeyPress: stopPortalEvent,
+            onKeyUp: stopPortalEvent,
+
+            onFocus: stopPortalEvent,
+            onBlur: stopPortalEvent,
+
+            onChange: stopPortalEvent,
+            onInput: stopPortalEvent,
+            onInvalid: stopPortalEvent,
+            onSubmit: stopPortalEvent
+          },
+          this.state.reactDOMRef
+        )
       );
     }
   }]);
@@ -1324,12 +1377,13 @@ function createTooltips(els) {
     var settings = (0, _evaluateSettings2.default)(_this.settings.performance ? _this.settings : (0, _getIndividualSettings2.default)(el, _this.settings));
 
     var html = settings.html,
+        reactDOM = settings.reactDOM,
         trigger = settings.trigger,
         touchHold = settings.touchHold;
 
 
     var title = el.getAttribute('title');
-    if (!title && !html) return a;
+    if (!title && !html && !reactDOM) return a;
 
     el.setAttribute('data-tooltipped', '');
     el.setAttribute('aria-describedby', 'tippy-tooltip-' + id);
@@ -2185,10 +2239,11 @@ var Tippy = function () {
 
       var _data$settings = data.settings,
           useContext = _data$settings.useContext,
-          reactInstance = _data$settings.reactInstance;
+          setReactDOMRef = _data$settings.setReactDOMRef;
+
 
       if (useContext) {
-        _reactDom2.default.unstable_renderSubtreeIntoContainer(data.settings.reactInstance, updatedContent, tooltipContent);
+        setReactDOMRef(_reactDom2.default.createPortal(updatedContent, tooltipContent));
       } else {
         _reactDom2.default.render(updatedContent, tooltipContent);
       }
