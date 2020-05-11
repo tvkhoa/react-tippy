@@ -63,6 +63,10 @@ class Tooltip extends Component {
     this.showTooltip = this._showTooltip.bind(this);
     this.hideTooltip = this._hideTooltip.bind(this);
     this.updateSettings = this._updateSettings.bind(this);
+
+    this.state = {
+      reactDOMRef: null,
+    }
   }
 
   componentDidMount() {
@@ -184,7 +188,10 @@ class Tooltip extends Component {
       return;
     }
     if (!this.props.disabled) {
-      this.tooltipDOM.setAttribute('title', this.props.title);
+      if (this.props.title) {
+        this.tooltipDOM.setAttribute('title', this.props.title);
+      }
+
       this.tippy = tippy(this.tooltipDOM, {
         disabled: this.props.disabled,
         position: this.props.position,
@@ -213,6 +220,7 @@ class Tooltip extends Component {
         onHidden: this.props.onHidden,
         distance: this.props.distance,
         reactDOM: this.props.html,
+        setReactDOMRef: newReactDOM => this.setState({ reactDOMRef: newReactDOM }),
         unmountHTMLWhenHide: this.props.unmountHTMLWhenHide,
         open: this.props.open,
         sticky: this.props.sticky,
@@ -250,24 +258,26 @@ class Tooltip extends Component {
   render() {
     let {
       tag: Tag,
-      ...attributes
     } = this.props;
 
     return (
-      <Tag
-        ref={(tooltip) =>
-          { this.tooltipDOM = tooltip; }}
-          title={this.props.title}
-          className={this.props.className}
-          tabIndex={this.props.tabIndex}
-          style={{
-            display: 'inline',
-              ...this.props.style
-          }}
-        >
-          {this.props.children}
+      <React.Fragment>
+        {this.state.reactDOMRef}
+        <Tag
+          ref={(tooltip) =>
+            { this.tooltipDOM = tooltip; }}
+            title={this.props.title}
+            className={this.props.className}
+            tabIndex={this.props.tabIndex}
+            style={{
+              display: 'inline',
+                ...this.props.style
+            }}
+          >
+            {this.props.children}
 
-      </Tag>
+        </Tag>
+      </React.Fragment>
     );
   }
 }

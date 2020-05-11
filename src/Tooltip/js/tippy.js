@@ -133,13 +133,15 @@ class Tippy {
 
     const {
       useContext,
-      reactInstance,
+      setReactDOMRef,
     } = data.settings;
+
     if (useContext) {
-      ReactDOM.unstable_renderSubtreeIntoContainer(
-        data.settings.reactInstance,
-        updatedContent,
-        tooltipContent,
+      setReactDOMRef(
+        ReactDOM.createPortal(
+          updatedContent,
+          tooltipContent,
+        )
       );
     } else {
       ReactDOM.render(
