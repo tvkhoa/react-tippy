@@ -1,5 +1,7 @@
 ## React Tippy
 
+[![React Version](https://img.shields.io/badge/react-16.x-blue)](https://reactjs.org/)
+
 A lightweight tooltip for React. Demo at [Demo page here...](https://tvkhoa.github.io/testlib)
 
 Based on `tippy.js` and powered by `Popper.js`

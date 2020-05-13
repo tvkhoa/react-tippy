@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import tippy from './js/tippy';
 import {Browser} from './js/core/globals';
 
+const stopPortalEvent = e => e.stopPropagation();
+
 const defaultProps = {
   html: null,
   position: 'top',
@@ -63,6 +65,10 @@ class Tooltip extends Component {
     this.showTooltip = this._showTooltip.bind(this);
     this.hideTooltip = this._hideTooltip.bind(this);
     this.updateSettings = this._updateSettings.bind(this);
+
+    this.state = {
+      reactDOMValue: null,
+    }
   }
 
   componentDidMount() {
@@ -184,7 +190,10 @@ class Tooltip extends Component {
       return;
     }
     if (!this.props.disabled) {
-      this.tooltipDOM.setAttribute('title', this.props.title);
+      if (this.props.title) {
+        this.tooltipDOM.setAttribute('title', this.props.title);
+      }
+
       this.tippy = tippy(this.tooltipDOM, {
         disabled: this.props.disabled,
         position: this.props.position,
@@ -213,6 +222,7 @@ class Tooltip extends Component {
         onHidden: this.props.onHidden,
         distance: this.props.distance,
         reactDOM: this.props.html,
+        setReactDOMValue: newReactDOM => this.setState({ reactDOMValue: newReactDOM }),
         unmountHTMLWhenHide: this.props.unmountHTMLWhenHide,
         open: this.props.open,
         sticky: this.props.sticky,
@@ -250,24 +260,61 @@ class Tooltip extends Component {
   render() {
     let {
       tag: Tag,
-      ...attributes
     } = this.props;
 
     return (
-      <Tag
-        ref={(tooltip) =>
-          { this.tooltipDOM = tooltip; }}
-          title={this.props.title}
-          className={this.props.className}
-          tabIndex={this.props.tabIndex}
-          style={{
-            display: 'inline',
-              ...this.props.style
-          }}
-        >
-          {this.props.children}
+      <React.Fragment>
+        <Tag
+          ref={(tooltip) =>
+            { this.tooltipDOM = tooltip; }}
+            title={this.props.title}
+            className={this.props.className}
+            tabIndex={this.props.tabIndex}
+            style={{
+              display: 'inline',
+                ...this.props.style
+            }}
+          >
+            {this.props.children}
 
-      </Tag>
+        </Tag>
+        {this.state.reactDOMValue && (
+          <div
+            onClick={stopPortalEvent}
+            onContextMenu={stopPortalEvent}
+            onDoubleClick={stopPortalEvent}
+            onDrag={stopPortalEvent}
+            onDragEnd={stopPortalEvent}
+            onDragEnter={stopPortalEvent}
+            onDragExit={stopPortalEvent}
+            onDragLeave={stopPortalEvent}
+            onDragOver={stopPortalEvent}
+            onDragStart={stopPortalEvent}
+            onDrop={stopPortalEvent}
+            onMouseDown={stopPortalEvent}
+            onMouseEnter={stopPortalEvent}
+            onMouseLeave={stopPortalEvent}
+            onMouseMove={stopPortalEvent}
+            onMouseOver={stopPortalEvent}
+            onMouseOut={stopPortalEvent}
+            onMouseUp={stopPortalEvent}
+    
+            onKeyDown={stopPortalEvent}
+            onKeyPress={stopPortalEvent}
+            onKeyUp={stopPortalEvent}
+    
+            onFocus={stopPortalEvent}
+            onBlur={stopPortalEvent}
+    
+            onChange={stopPortalEvent}
+            onInput={stopPortalEvent}
+            onInvalid={stopPortalEvent}
+            onSubmit={stopPortalEvent}
+          >
+            {this.state.reactDOMValue}
+          </div>
+        )}
+      </React.Fragment>
     );
   }
 }
