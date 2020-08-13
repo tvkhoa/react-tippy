@@ -85,7 +85,7 @@ export default function createPopperElement(id, title, settings) {
     tooltip.setAttribute('data-template-id', templateId)
 
   } else {
-    content.innerHTML = title
+    content.innerHTML = _.escape(title)
   }
 
   // Init distance. Further updates are made in the popper instance's `onUpdate()` method
