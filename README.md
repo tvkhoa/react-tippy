@@ -8,7 +8,6 @@ Based on `tippy.js` and powered by `Popper.js`
 
 ![Example](https://raw.githubusercontent.com/tvkhoa/react-tippy/master/doc/doc.gif)
 
-
 ## Why you should use it?
 
 It is designed to work friendly with React, it provides `<Tooltip>` element or a higher-order component.
@@ -17,13 +16,10 @@ It uses `React DOM` to render tooltip content. Therefore, you can fully use it i
 
 It is an enhancement of Tippy.js for using in React.
 
-
-
 ## Getting Started
 
 ```
 yarn add react-tippy
-
 ```
 
 ## How to use
@@ -32,7 +28,6 @@ First, you need import css
 
 ```javascript
 import 'react-tippy/dist/tippy.css'
-
 ```
 
 There are 2 ways for you to use react Tippy
@@ -44,7 +39,6 @@ import {
   Tooltip,
 } from 'react-tippy';
 
-
 <Tooltip
   // options
   title="Welcome to React"
@@ -55,13 +49,11 @@ import {
     Click here to show popup
   </p>
 </Tooltip>
-
 ```
 
 ### High Order Component
 
 `withTooltip(Component, options)`
-
 
 ```javascript
 import {
@@ -76,9 +68,7 @@ const Header = () => (
 const HeaderWithTooltip = withTooltip(Header, {
   title: 'Welcome to React with tooltip',
 });
-
 ```
-
 
 ## Props
 
@@ -203,7 +193,6 @@ Tippy works on touch devices almost the same as on desktop/mouse devices. Howeve
 
 Tooltips have ARIA labelling to ensure accessibility.
 
-
 # Troubleshoot
 
 ## I cannot connect html props with redux connect. Or can I use context in tooltip content?
@@ -233,7 +222,6 @@ html={(
   </div>
 )}
 ```
-
 
 # License
 MIT. Also check Popper.js' license.
