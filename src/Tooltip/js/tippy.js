@@ -169,7 +169,9 @@ class Tippy {
       return
     }
 
-    this.callbacks.show.call(popper)
+    if (this.callbacks.show.call(popper, data.el) === false) {
+      return
+    }
 
     // Custom react
     if (data.settings && data.settings.open === false) {
