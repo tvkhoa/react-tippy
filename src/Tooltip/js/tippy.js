@@ -254,7 +254,9 @@ class Tippy {
         // Prevents shown() from firing more than once from early transition cancellations
         data._onShownFired = true
 
-        this.callbacks.shown.call(popper)
+        if (typeof this.callbacks.shown === 'function') {
+          this.callbacks.shown.call(popper)
+        }
       })
     })
   }
