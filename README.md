@@ -103,6 +103,7 @@ const HeaderWithTooltip = withTooltip(Header, {
 |distance|10|Any number (pixels)|Specifies how far away the tooltip is from its element.|
 |offset|0|Any number (pixels)|Offsets the tooltip on its opposite axis. For position top and bottom, it acts as offsetX. For position left and right, it acts as offsetY.|
 |hideOnClick|`true`|`true` `false` `'persistent'`|Specifies whether to hide a tooltip upon clicking its element after hovering over.|
+|hideOnScroll|`false`|`true` `false`|Specifies whether to hide a tooltip on scroll event.|
 |multiple|`false`|`true` `false`|Specifies whether to allow multiple tooltips open on the page (click trigger only).|
 |followCursor|`false`|`true` `false`|Specifies whether to follow the user's mouse cursor (mouse devices only).|
 |inertia|`false`|`true` `false`|Modifies the transition-timing-function with a cubic bezier to create a "slingshot" intertial effect.|

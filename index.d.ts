@@ -40,6 +40,7 @@ export interface TooltipProps {
   distance?: number;
   offset?: number;
   hideOnClick?: boolean | "persistent";
+  hideOnScroll?: boolean;
   multiple?: boolean;
   followCursor?: boolean;
   inertia?: boolean;
