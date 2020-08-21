@@ -401,9 +401,6 @@ class Tippy {
     // Remove Tippy-only event listeners from tooltipped element
     listeners.forEach(listener => el.removeEventListener(listener.event, listener.handler))
 
-    // Restore original title
-    el.setAttribute('title', el.getAttribute('data-original-title'))
-
     el.removeAttribute('data-original-title')
     el.removeAttribute('data-tooltipped')
     el.removeAttribute('aria-describedby')
