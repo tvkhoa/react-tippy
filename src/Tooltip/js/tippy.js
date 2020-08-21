@@ -213,6 +213,7 @@ class Tippy {
 
     popper.style.visibility = 'visible'
     popper.setAttribute('aria-hidden', 'false')
+    el.setAttribute('aria-describedby', popper.id)
 
     // Wait for popper's position to update
     defer(() => {
@@ -307,6 +308,7 @@ class Tippy {
 
     popper.style.visibility = 'hidden'
     popper.setAttribute('aria-hidden', 'true')
+    el.removeAttribute('aria-describedby')
 
     applyTransitionDuration([tooltip, circle, circle ? content : null], _duration)
 
