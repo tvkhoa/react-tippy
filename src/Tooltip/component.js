@@ -280,6 +280,9 @@ class Tooltip extends Component {
         </Tag>
         {this.state.reactDOMValue && (
           <div
+            style={{
+              display: 'inline'
+            }}
             onClick={stopPortalEvent}
             onContextMenu={stopPortalEvent}
             onDoubleClick={stopPortalEvent}

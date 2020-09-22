@@ -706,6 +706,9 @@ var Tooltip = function (_Component) {
         this.state.reactDOMValue && _react2.default.createElement(
           'div',
           {
+            style: {
+              display: 'inline'
+            },
             onClick: stopPortalEvent,
             onContextMenu: stopPortalEvent,
             onDoubleClick: stopPortalEvent,
@@ -2357,7 +2360,9 @@ var Tippy = function () {
           // Prevents shown() from firing more than once from early transition cancellations
           data._onShownFired = true;
 
-          _this.callbacks.shown.call(popper);
+          if (typeof _this.callbacks.shown === 'function') {
+            _this.callbacks.shown.call(popper);
+          }
         });
       });
     }
