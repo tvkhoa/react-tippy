@@ -29,7 +29,7 @@ export interface TooltipProps {
   tabIndex?: number;
   interactive?: boolean;
   interactiveBorder?: number;
-  delay?: number;
+  delay?: number | [number, number];
   hideDelay?: number;
   animation?: Animation;
   arrow?: boolean;
