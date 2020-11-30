@@ -48,7 +48,7 @@ import {
 <Tooltip
   // options
   title="Welcome to React"
-  position="bottom"
+  placement="bottom"
   trigger="click"
 >
   <p>
@@ -88,7 +88,7 @@ const HeaderWithTooltip = withTooltip(Header, {
 |open|`undefined`|`true` `false`|Just only use it if you want to `show/hide it manually`. Usually, you don't need it|
 |useContext|`undefined`|`true` `false`|Define that you're using context in your tooltip content (or `html` props). It's useful when you want your tooltip content can connect to redux store|
 |onRequestClose|`noop function`|Function|Just only use it if you want to `show/hide it manually`. This event is fired when you click outside of your tooltip, should be used with the prop `interaction` to keep your tooltip showing|
-|position|`top`|`top` `bottom` `left` `right`|Specifies which direction to position the tooltip on the element. Add the suffix `-start` or `-end` to shift the position. `top-end` is an example.|
+|placement|`top`|`top` `bottom` `left` `right`|Specifies which direction to position the tooltip on the element. Add the suffix `-start` or `-end` to shift the position. `top-end` is an example.|
 |trigger|`mouseenter focus`|`mouseenter` `focus` `click` `manual`|Specifies which type of events will trigger a tooltip to show. Separate each by a space. mouseenter is for hovering and touch on mobile, and focus is for keyboard navigation. Use manual if you want to show/hide the tooltip manually/programmatically (see below).|
 |tabIndex|`undefined`|number|set tabIndex so element can receive focus|
 |interactive|`false`|`true` `false`|Makes a tooltip interactive, i.e. will not close when the user hovers over or clicks on the tooltip. This lets you create a popover (similar to Bootstrap) when used in conjunction with a click trigger.|
@@ -101,7 +101,7 @@ const HeaderWithTooltip = withTooltip(Header, {
 |animateFill|`true`|`true` `false`|Adds a material design-esque filling animation. This is disabled if you have arrow set to true.|
 |duration|375|Any integer >= 0 (milliseconds)|Specifies how long the transition animation takes to complete when showing a tooltip.|
 |distance|10|Any number (pixels)|Specifies how far away the tooltip is from its element.|
-|offset|0|Any number (pixels)|Offsets the tooltip on its opposite axis. For position top and bottom, it acts as offsetX. For position left and right, it acts as offsetY.|
+|offset|0|Any number (pixels)|Offsets the tooltip on its opposite axis. For placement top and bottom, it acts as offsetX. For placement left and right, it acts as offsetY.|
 |hideOnClick|`true`|`true` `false` `'persistent'`|Specifies whether to hide a tooltip upon clicking its element after hovering over.|
 |multiple|`false`|`true` `false`|Specifies whether to allow multiple tooltips open on the page (click trigger only).|
 |followCursor|`false`|`true` `false`|Specifies whether to follow the user's mouse cursor (mouse devices only).|
