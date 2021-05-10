@@ -195,7 +195,7 @@ class Tippy {
     } = data
 
     if (dynamicTitle) {
-      const title = el.getAttribute('title')
+      const title = el.getAttribute('rt-title')
       if (title) {
         content.innerHTML = title
         removeTitle(el)
@@ -370,7 +370,7 @@ class Tippy {
 
     content.innerHTML = html
       ? document.getElementById(html.replace('#', '')).innerHTML
-      : el.getAttribute('title') || el.getAttribute('data-original-title')
+      : el.getAttribute('rt-title') || el.getAttribute('data-original-rt-title')
 
     if (!html) removeTitle(el)
   }
@@ -402,9 +402,9 @@ class Tippy {
     listeners.forEach(listener => el.removeEventListener(listener.event, listener.handler))
 
     // Restore original title
-    el.setAttribute('title', el.getAttribute('data-original-title'))
+    el.setAttribute('rt-title', el.getAttribute('data-original-rt-title'))
 
-    el.removeAttribute('data-original-title')
+    el.removeAttribute('data-original-rt-title')
     el.removeAttribute('data-tooltipped')
     el.removeAttribute('aria-describedby')
 

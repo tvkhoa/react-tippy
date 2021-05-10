@@ -6,8 +6,6 @@ import evaluateSettings         from './evaluateSettings'
 
 import removeTitle from '../utils/removeTitle'
 
-import { Store } from './globals'
-
 let idCounter = 1
 
 /**
@@ -27,7 +25,7 @@ export default function createTooltips(els) {
 
     const { html, reactDOM, trigger, touchHold } = settings
 
-    const title = el.getAttribute('title')
+    const title = el.getAttribute('rt-title')
     if (!title && !html && !reactDOM) return a
 
     el.setAttribute('data-tooltipped', '')

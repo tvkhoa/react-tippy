@@ -4,7 +4,7 @@ import getOffsetDistanceInPx from '../utils/getOffsetDistanceInPx'
 /**
 * Creates a popper element then returns it
 * @param {Number} id - the popper id
-* @param {String} title - the tooltip's `title` attribute
+* @param {String} title - the tooltip's `rt-title` attribute
 * @param {Object} settings - individual settings
 * @return {Element} - the popper element
 */

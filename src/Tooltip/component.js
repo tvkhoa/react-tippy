@@ -191,7 +191,7 @@ class Tooltip extends Component {
     }
     if (!this.props.disabled) {
       if (this.props.title) {
-        this.tooltipDOM.setAttribute('title', this.props.title);
+        this.tooltipDOM.setAttribute('rt-title', this.props.title);
       }
 
       this.tippy = tippy(this.tooltipDOM, {
@@ -267,7 +267,7 @@ class Tooltip extends Component {
         <Tag
           ref={(tooltip) =>
             { this.tooltipDOM = tooltip; }}
-            title={this.props.title}
+            rt-title={this.props.title}
             className={this.props.className}
             tabIndex={this.props.tabIndex}
             style={{
@@ -298,14 +298,14 @@ class Tooltip extends Component {
             onMouseOver={stopPortalEvent}
             onMouseOut={stopPortalEvent}
             onMouseUp={stopPortalEvent}
-    
+
             onKeyDown={stopPortalEvent}
             onKeyPress={stopPortalEvent}
             onKeyUp={stopPortalEvent}
-    
+
             onFocus={stopPortalEvent}
             onBlur={stopPortalEvent}
-    
+
             onChange={stopPortalEvent}
             onInput={stopPortalEvent}
             onInvalid={stopPortalEvent}
