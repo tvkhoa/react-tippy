@@ -57,6 +57,7 @@ export interface TooltipProps {
   theme?: Theme;
   className?: string;
   style?: React.CSSProperties;
+  zIndex?: number;
 }
 
 export class Tooltip extends React.Component<TooltipProps> {}
