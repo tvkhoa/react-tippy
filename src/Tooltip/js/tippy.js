@@ -402,7 +402,8 @@ class Tippy {
     listeners.forEach(listener => el.removeEventListener(listener.event, listener.handler))
 
     // Restore original title
-    el.setAttribute('title', el.getAttribute('data-original-title'))
+    const originalTitle = el.getAttribute('data-original-title')
+    if (originalTitle) el.setAttribute('title', originalTitle)
 
     el.removeAttribute('data-original-title')
     el.removeAttribute('data-tooltipped')
