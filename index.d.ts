@@ -19,47 +19,56 @@ export type Size = "small" | "regular" | "big";
 export type Theme = "dark" | "light" | "transparent";
 
 export interface TooltipProps {
-  title?: string;
-  disabled?: boolean;
-  open?: boolean;
-  useContext?: boolean;
-  onRequestClose?: () => void;
+  html?: React.ReactElement<any>;
   position?: Position;
-  trigger?: Trigger;
-  tabIndex?: number;
-  interactive?: boolean;
-  interactiveBorder?: number;
-  delay?: number;
-  hideDelay?: number;
   animation?: Animation;
+  animateFill?: boolean;
   arrow?: boolean;
   arrowSize?: Size;
-  animateFill?: boolean;
+  delay?: number;
+  hideDelay?: number;
+  trigger?: Trigger;
   duration?: number;
   hideDuration?: number;
-  distance?: number;
+  interactive?: boolean;
+  interactiveBorder?: number;
+  theme?: Theme;
   offset?: number;
   hideOnClick?: boolean | "persistent";
   multiple?: boolean;
   followCursor?: boolean;
   inertia?: boolean;
-  transitionFlip?: boolean;
   popperOptions?: any;
-  html?: React.ReactElement<any>;
-  unmountHTMLWhenHide?: boolean;
+  onShow: () => void,
+  onShown: () => void,
+  onHide: () => void,
+  onHidden: () => void,
+  disabled?: boolean;
   size?: Size;
+  className?: string;
+  style?: React.CSSProperties;
+  distance?: number;
+  onRequestClose?: () => void;
   sticky?: boolean;
   stickyDuration?: boolean;
+  tag?: 'div' | 'span' | 'a';
+  touchHold?: boolean;
+  unmountHTMLWhenHide?: boolean;
+  zIndex?: number;
+  rawTemplate?: any;
+  title?: string;
+  open?: boolean;
+  useContext?: boolean;
+  tabIndex?: number;
+  transitionFlip?: boolean;
+  unmountHTMLWhenHide?: boolean;
   beforeShown?: () => void;
   shown?: () => void;
   beforeHidden?: () => void;
   hidden?: () => void;
-  theme?: Theme;
-  className?: string;
-  style?: React.CSSProperties;
 }
 
-export class Tooltip extends React.Component<TooltipProps> {}
+export class Tooltip extends React.Component<TooltipProps> { }
 
 export declare function withTooltip<P>(
   component: React.ComponentType<P>,

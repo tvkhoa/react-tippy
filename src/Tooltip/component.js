@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import tippy from './js/tippy';
-import {Browser} from './js/core/globals';
+import { Browser } from './js/core/globals';
 
 const stopPortalEvent = e => e.stopPropagation();
 
@@ -10,6 +10,7 @@ const defaultProps = {
   animation: 'shift',
   animateFill: true,
   arrow: false,
+  arrowSize: 'regular',
   delay: 0,
   hideDelay: 0,
   trigger: 'mouseenter focus',
@@ -24,17 +25,16 @@ const defaultProps = {
   followCursor: false,
   inertia: false,
   popperOptions: {},
-  onShow: () => {},
-  onShown: () => {},
-  onHide: () => {},
-  onHidden: () => {},
+  onShow: () => { },
+  onShown: () => { },
+  onHide: () => { },
+  onHidden: () => { },
   disabled: false,
-  arrowSize: 'regular',
   size: 'regular',
   className: '',
   style: {},
   distance: 10,
-  onRequestClose: () => {},
+  onRequestClose: () => { },
   sticky: false,
   stickyDuration: 200,
   tag: 'div',
@@ -72,14 +72,14 @@ class Tooltip extends Component {
   }
 
   componentDidMount() {
-    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
     this.initTippy();
   }
 
   componentWillUnmount() {
-    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
     this.destroyTippy();
@@ -87,7 +87,7 @@ class Tooltip extends Component {
 
   componentDidUpdate(prevProps) {
     // enable and disabled
-    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
     if (this.props.disabled === false && prevProps.disabled === true) {
@@ -132,7 +132,7 @@ class Tooltip extends Component {
   }
 
   _showTooltip() {
-    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
     if (this.tippy) {
@@ -142,7 +142,7 @@ class Tooltip extends Component {
   }
 
   _hideTooltip() {
-    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
     if (this.tippy) {
@@ -152,7 +152,7 @@ class Tooltip extends Component {
   }
 
   _updateSettings(name, value) {
-    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
     if (this.tippy) {
@@ -162,7 +162,7 @@ class Tooltip extends Component {
   }
 
   _updateReactDom() {
-    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
     if (this.tippy) {
@@ -176,7 +176,7 @@ class Tooltip extends Component {
   }
 
   _updateTippy() {
-    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
     if (this.tippy) {
@@ -186,7 +186,7 @@ class Tooltip extends Component {
   }
 
   _initTippy() {
-      if (typeof window === 'undefined' || typeof document === 'undefined' || !Browser.SUPPORTED) {
+    if (typeof window === 'undefined' || typeof document === 'undefined' || !Browser.SUPPORTED) {
       return;
     }
     if (!this.props.disabled) {
@@ -245,7 +245,7 @@ class Tooltip extends Component {
   }
 
   _destroyTippy() {
-    if (typeof window === 'undefined' || typeof document === 'undefined' ) {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
     if (this.tippy) {
@@ -265,17 +265,16 @@ class Tooltip extends Component {
     return (
       <React.Fragment>
         <Tag
-          ref={(tooltip) =>
-            { this.tooltipDOM = tooltip; }}
-            title={this.props.title}
-            className={this.props.className}
-            tabIndex={this.props.tabIndex}
-            style={{
-              display: 'inline',
-                ...this.props.style
-            }}
-          >
-            {this.props.children}
+          ref={(tooltip) => { this.tooltipDOM = tooltip; }}
+          title={this.props.title}
+          className={this.props.className}
+          tabIndex={this.props.tabIndex}
+          style={{
+            display: 'inline',
+            ...this.props.style
+          }}
+        >
+          {this.props.children}
 
         </Tag>
         {this.state.reactDOMValue && (
@@ -298,14 +297,14 @@ class Tooltip extends Component {
             onMouseOver={stopPortalEvent}
             onMouseOut={stopPortalEvent}
             onMouseUp={stopPortalEvent}
-    
+
             onKeyDown={stopPortalEvent}
             onKeyPress={stopPortalEvent}
             onKeyUp={stopPortalEvent}
-    
+
             onFocus={stopPortalEvent}
             onBlur={stopPortalEvent}
-    
+
             onChange={stopPortalEvent}
             onInput={stopPortalEvent}
             onInvalid={stopPortalEvent}
