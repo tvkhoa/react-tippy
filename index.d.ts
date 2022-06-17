@@ -59,7 +59,7 @@ export interface TooltipProps {
   style?: React.CSSProperties;
 }
 
-export class Tooltip extends React.Component<TooltipProps> {}
+export class Tooltip extends React.Component<React.PropsWithChildren<TooltipProps>> {}
 
 export declare function withTooltip<P>(
   component: React.ComponentType<P>,
