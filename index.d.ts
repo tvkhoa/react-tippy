@@ -55,6 +55,7 @@ export interface TooltipProps {
   beforeHidden?: () => void;
   hidden?: () => void;
   theme?: Theme;
+  children?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
 }
