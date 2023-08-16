@@ -29,6 +29,7 @@ import onTransitionEnd     from './core/onTransitionEnd'
 import mountPopper         from './core/mountPopper'
 import makeSticky          from './core/makeSticky'
 import createTooltips      from './core/createTooltips'
+import evaluateSettings from './core/evaluateSettings'
 
 /**
 * @param {String|Element|Element[]} selector
@@ -118,7 +119,7 @@ class Tippy {
       ...data.settings,
       [name]: value,
     }
-    data.settings = newSettings;
+    data.settings = evaluateSettings(newSettings);
   };
 
   /**
