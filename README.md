@@ -122,6 +122,7 @@ const HeaderWithTooltip = withTooltip(Header, {
 |onHidden|noop|function|Callback when the tooltip has fully transitioned out and is hidden|
 |theme|`dark`|`dark` `light` `transparent`|The CSS styling theme.|
 |className|''|string|className of container|
+|appendTo|`document.body`|`function` `dom element`|Destination element for attaching the tooltip. You can pass DOM element or callback function which returns dom element|
 |style|{}|React inline style (object)|style of container|
 
 
